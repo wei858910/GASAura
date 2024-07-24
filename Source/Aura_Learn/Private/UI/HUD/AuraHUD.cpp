@@ -9,12 +9,11 @@
 
 UOverlayWidgetController* AAuraHUD::GetOverlaiController(const FWidgetControllerParams& WCParams = FWidgetControllerParams())
 {
-	static TObjectPtr<UOverlayWidgetController>InstanceController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
-	static bool bIsFirst{ true };//因为首次得设置WCParams 所以还得来个变量
-	if(bIsFirst)
+	if (!IsValid(InstanceController))
 	{
+		InstanceController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		InstanceController->SetWidgetControllerParams(WCParams);
-		bIsFirst = false;
+		InstanceController->BindCallbackToDependencies(); //绑定GAS属性变化的代理到将被通知的函数
 	}
 
 	return InstanceController;
