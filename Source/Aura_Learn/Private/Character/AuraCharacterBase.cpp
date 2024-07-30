@@ -2,6 +2,8 @@
 
 #include "Character/AuraCharacterBase.h"
 
+#include "AbilitySystemComponent.h"
+
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false; 
@@ -21,4 +23,24 @@ void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& InitializeGEClass, float Level) const
+{
+	if (!IsValid(InitializeGEClass) || !IsValid(AbilitySystemComponent))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DefaultSecondaryAtributes Not Setup Form AAuraCharacterBase!!!"))
+		return;
+	}
+	auto InitGESpec = AbilitySystemComponent->MakeEffectContext();
+	InitGESpec.AddSourceObject(this);
+	auto InitGEHandle = AbilitySystemComponent->MakeOutgoingSpec(InitializeGEClass, Level, InitGESpec);
+	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*InitGEHandle.Data.Get());
+}
+
+void AAuraCharacterBase::InitDefaultAttribute() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAtributes);
+	ApplyEffectToSelf(DefaultSecondaryAtributes);
+	ApplyEffectToSelf(DefaultVitalAtributes);
 }
