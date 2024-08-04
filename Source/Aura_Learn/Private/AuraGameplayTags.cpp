@@ -1,4 +1,4 @@
-﻿// 学习使用
+// 学习使用
 
 
 #include "AuraGameplayTags.h"
@@ -12,6 +12,80 @@ FAuraGmaeplayTags& FAuraGmaeplayTags::GetInstance()
 
 void FAuraGmaeplayTags::InitNaviveGameplayTags()
 {
-	FAuraGmaeplayTags::GetInstance().Attribute_Secondary_Armor=UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"), FString("减少所受伤害，提高格挡几率"));//CPP中像项目添加Tag的方式
+	/*
+ * Primary Attributes
+ */
+	GetInstance().Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Strength"),
+		FString("增加物理伤害")
+	);
 
+	GetInstance().Attributes_Primary_Intelligence = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Intelligence"),
+		FString("增加魔法伤害")
+	);
+
+	GetInstance().Attributes_Primary_Resilience = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Resilience"),
+		FString("增加护甲和护甲穿透")
+	);
+
+	GetInstance().Attributes_Primary_Vigor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Vigor"),
+		FString("增强血量")
+	);
+
+	/*
+	 * Secondary Attributes
+	 */
+
+	GetInstance().Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.Armor"),
+		FString("减少受到的伤害，提高格挡几率")
+	);
+
+	GetInstance().Attributes_Secondary_ArmorPenetration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.ArmorPenetration"),
+		FString("无视敌方百分比护甲，增加暴击几率")
+	);
+
+	GetInstance().Attributes_Secondary_BlockChance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.BlockChance"),
+		FString("有几率将受到的伤害减半")
+	);
+
+	GetInstance().Attributes_Secondary_CriticalHitChance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.CriticalHitChance"),
+		FString("有几率使伤害加倍并获得重击加成")
+	);
+
+	GetInstance().Attributes_Secondary_CriticalHitDamage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.CriticalHitDamage"),
+		FString("Bonus damage added when a critical hit is scored")
+	);
+
+	GetInstance().Attributes_Secondary_CriticalHitResistance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.CriticalHitResistance"),
+		FString("命中要害时增加额外伤害")
+	);
+
+	GetInstance().Attributes_Secondary_HealthRegeneration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.HealthRegeneration"),
+		FString("每 1 秒再生的健康值")
+	);
+
+	GetInstance().Attributes_Secondary_ManaRegeneration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.ManaRegeneration"),
+		FString("每 1 秒再生的法力值")
+	);
+
+	GetInstance().Attributes_Secondary_MaxHealth = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.MaxHealth"),
+		FString("可获得的最大健康值")
+	);
+
+	GetInstance().Attributes_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.MaxMana"),
+		FString("可获得的最大法力值")
+	);
 }
