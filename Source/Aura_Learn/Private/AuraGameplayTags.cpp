@@ -88,4 +88,30 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 		FName("Attributes.Secondary.MaxMana"),
 		FString("可获得的最大法力值")
 	);
+
+	/*输入*/
+	GetInstance().InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.LMB"),
+		FString("鼠标左键")
+	);
+	GetInstance().InputTag_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.RMB"),
+		FString("鼠标右键")
+	);
+	GetInstance().InputTag_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.1"),
+		FString("键盘1键")
+	);
+	GetInstance().InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.2"),
+		FString("键盘2键")
+	);
+	GetInstance().InputTag_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.3"),
+		FString("键盘3键")
+	);
+	GetInstance().InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.4"),
+		FString("键盘4键")
+	);
 }

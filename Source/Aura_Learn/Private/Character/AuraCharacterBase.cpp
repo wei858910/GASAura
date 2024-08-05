@@ -3,6 +3,7 @@
 #include "Character/AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -43,4 +44,11 @@ void AAuraCharacterBase::InitDefaultAttribute() const
 	ApplyEffectToSelf(DefaultPrimaryAtributes);
 	ApplyEffectToSelf(DefaultSecondaryAtributes);
 	ApplyEffectToSelf(DefaultVitalAtributes);
+}
+
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	auto GAS = Cast<UAuraAbilitySystemComponent>(GetAbilitySystemComponent());
+	if ((!HasAuthority())||!IsValid(GAS))return; //Actor是否有网络权限（就是是否为服务端的实例）
+	GAS->AddCharacterAbilities(StartupAbilities);
 }
