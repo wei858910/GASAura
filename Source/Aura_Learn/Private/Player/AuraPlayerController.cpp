@@ -84,7 +84,7 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
+	
 	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit); //检测返回鼠标指针下的对象
 	if (!CursorHit.bBlockingHit)return;
 
@@ -129,7 +129,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 			for (const auto& CurPoint : NavPath->PathPoints)
 			{
 				Spline->AddSplinePoint(CurPoint, ESplineCoordinateSpace::World);
-				DrawDebugSphere(GetWorld(), CurPoint, 10.f, 8, FColor::Green, false, 3.f);
 			}
 			bAutoRunning = true;
 
@@ -158,10 +157,10 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 
 	
 	FllowTime += GetWorld()->GetDeltaSeconds();//累加每帧间的时间差值 相当于每秒+1
-	FHitResult Hit;
-	if(GetHitResultUnderCursor(ECC_Visibility,false,Hit))
+
+	if(CursorHit.bBlockingHit)
 	{
-		CachedDestination = Hit.ImpactPoint;
+		CachedDestination = CursorHit.ImpactPoint;
 	}
 
 	if(auto ControledPawn=GetPawn())
