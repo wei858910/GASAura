@@ -4,6 +4,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Player/AuraPlayerController.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -27,6 +28,11 @@ FVector AAuraCharacterBase::GetCombatSocktLocation()
 		return Weapon->GetSocketLocation(WeaponTipSocketName);
 	}
 	return ICombatInterface::GetCombatSocktLocation();
+}
+
+FHitResult* AAuraCharacterBase::GetCursorHitRes()
+{
+	return &(Cast<AAuraPlayerController>(GetController())->CursorHit);
 }
 
 void AAuraCharacterBase::BeginPlay()

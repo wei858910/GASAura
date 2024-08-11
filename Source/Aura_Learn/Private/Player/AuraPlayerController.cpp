@@ -117,28 +117,31 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	{
 		GetAuraASC()->AbilityInputTagReleased(InputTag);
 	}
-
-	auto ControlledPawn = GetPawn();
-	if (FllowTime <= ShortPressThreshold && IsValid(ControlledPawn)) //点击移动 生成路径
+	else //生成导航路径
 	{
-		if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
-			this, ControlledPawn->GetActorLocation(), CachedDestination))
+		auto ControlledPawn = GetPawn();
+		if (FllowTime <= ShortPressThreshold && IsValid(ControlledPawn)) //点击移动 生成路径
 		{
-			Spline->ClearSplinePoints();
-
-			for (const auto& CurPoint : NavPath->PathPoints)
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+				this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
-				Spline->AddSplinePoint(CurPoint, ESplineCoordinateSpace::World);
-			}
-			bAutoRunning = true;
+				Spline->ClearSplinePoints();
 
-			if (NavPath->PathPoints.Num() > 0)
-			{
-				CachedDestination = NavPath->PathPoints.Last(); //点击的点可能永远达不到，但是导航生成的点可以达到
+				for (const auto& CurPoint : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(CurPoint, ESplineCoordinateSpace::World);
+				}
 				bAutoRunning = true;
+
+				if (NavPath->PathPoints.Num() > 0)
+				{
+					CachedDestination = NavPath->PathPoints.Last(); //点击的点可能永远达不到，但是导航生成的点可以达到
+					bAutoRunning = true;
+				}
 			}
 		}
 	}
+
 	FllowTime = 0.f;
 	bTargeting = false;
 }
