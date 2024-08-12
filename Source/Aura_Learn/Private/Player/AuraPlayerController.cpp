@@ -52,6 +52,9 @@ void AAuraPlayerController::SetupInputComponent()
 	//绑定输入动作到函数
 	AuraInputCmpt->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 
+	AuraInputCmpt->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputCmpt->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
+
 	//绑定回调函数到InputAction
 	AuraInputCmpt->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
@@ -113,7 +116,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	if (!IsValid(GetAuraASC()))return;
 
 	//放掉的是左键 或者存在交互物？
-	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB) || bTargeting)
+	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB) || bTargeting||bShiftKeyDown)
 	{
 		GetAuraASC()->AbilityInputTagReleased(InputTag);
 	}
@@ -140,18 +143,18 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				}
 			}
 		}
+		FllowTime = 0.f;
+		bTargeting = false;
 	}
 
-	FllowTime = 0.f;
-	bTargeting = false;
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!IsValid(GetAuraASC()))return;
 
-	//如果并非左键 或者存在交互对象 则执行技能
-	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB)||bTargeting)
+	//如果并非左键 或者存在交互对象 或者按住shift则执行技能
+	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB)||bTargeting||bShiftKeyDown)
 	{
 		GetAuraASC()->AbilityInputTagHeld(InputTag);
 
