@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura_Learn/Aura_Learn.h"
+#include "Components/CapsuleComponent.h"
 #include "Player/AuraPlayerController.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
@@ -15,6 +16,8 @@ AAuraCharacterBase::AAuraCharacterBase()
 	//武器设置
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));//武器绑定到武器插槽
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);//关闭武器碰撞
+
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
 
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);//生成重叠碰撞检测事件
