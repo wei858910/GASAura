@@ -42,6 +42,37 @@ FHitResult* AAuraCharacterBase::GetCursorHitRes()
 	return &(Cast<AAuraPlayerController>(GetController())->CursorHit);
 }
 
+UAnimMontage* AAuraCharacterBase::GetHitRecatMontag_Implementation() const
+{
+	return HitReactMontage;
+}
+
+void AAuraCharacterBase::Die()
+{
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
+
+	MulticastHandleDeath();
+}
+
+void AAuraCharacterBase::MulticastHandleDeath_Implementation()
+{
+
+	//开启布娃娃
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);//仅物理通道碰撞
+
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Dissolve();
+
+}
+
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -73,4 +104,23 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	auto GAS = Cast<UAuraAbilitySystemComponent>(GetAbilitySystemComponent());
 	if ((!HasAuthority())||!IsValid(GAS))return; //Actor是否有网络权限（就是是否为服务端的实例）
 	GAS->AddCharacterAbilities(StartupAbilities);
+}
+
+void AAuraCharacterBase::Dissolve()
+{
+	UMaterialInstanceDynamic* DynamicMatInst{ nullptr };
+	if(IsValid(DissolveMaterialOfMesh))
+	{
+		DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialOfMesh, this);
+		GetMesh()->SetMaterial(0, DynamicMatInst);
+
+		StartDissolveTimlineOfMesh(DynamicMatInst);
+	}
+	if(IsValid(DissolveMaterialOfWeapon))
+	{
+		DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialOfWeapon, this);
+		Weapon->SetMaterial(0, DynamicMatInst);
+
+		StartDissolveTimlineOfWeapon(DynamicMatInst);
+	}
 }

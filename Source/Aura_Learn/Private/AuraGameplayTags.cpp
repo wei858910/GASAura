@@ -1,4 +1,4 @@
-// 学习使用
+﻿// 学习使用
 
 
 #include "AuraGameplayTags.h"
@@ -114,4 +114,16 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 		FName("InputTag.4"),
 		FString("键盘4键")
 	);
+
+
+	GetInstance().Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage"),
+		FString("伤害标签")
+	);
+
+	GetInstance().EffectHitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effects.HitReact"),
+		FString("伤害标签")
+	);
+
 }
