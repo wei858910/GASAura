@@ -13,11 +13,29 @@
 #include "Interaction/EnemyInterface.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
+#include "GameFramework/Character.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController():
 	Spline(CreateDefaultSubobject<USplineComponent>("Spline"))
 {
 	bReplicates = true;//允许复制 复制基本指的是当一个实体在服务器上发生变化时，该变化会被发送至每个客户端
+}
+
+void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	if(IsValid(DamageTextComponentClass)&&IsValid(TargetCharacter))
+	{
+		//TODO::找到并非每次都创建新的 方法 (对象池?)
+		auto DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();//注册此组件，创建任何渲染/物理状态  动态创建可以用此
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);//
+
+		DamageText->SetDamageText(DamageAmount);
+	}
+
 }
 
 void AAuraPlayerController::BeginPlay()
