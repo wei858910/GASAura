@@ -46,6 +46,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "默认角色类型属性")
 	TArray<TSubclassOf<UGameplayAbility>> CommonAbilyties;
 
+	UPROPERTY(EditDefaultsOnly, Category = "默认角色类型属性|伤害",DisplayName="影响伤害系数表")
+	TObjectPtr<UCurveTable> DamageCalculationCoefficients;
+
 	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterType);
+
 
 };

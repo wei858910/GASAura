@@ -4,10 +4,16 @@
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
+#include "AbilitySystem/AuraAbilitySystemBPLibary.h"
+#include "Interaction/CombatInterface.h"
 
 UExecCalc_Damage::UExecCalc_Damage()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ArmorPenetrationDef);
+	RelevantAttributesToCapture.Add(DamageStatics().BlockChanceDef);
+
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -20,8 +26,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
 	//获取目标和源Actor
-	const AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
-	const AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
+	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
+	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
 
 	//获取挂载此类的GE实例
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
@@ -33,11 +39,42 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	float Armor{ 0.f };
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, Armor);
-	Armor=FMath::Max(0.f, Armor);
-	++Armor;
+	//通过caller获取伤害值
+	float Damage = Spec.GetSetByCallerMagnitude(FAuraGmaeplayTags::GetInstance().Damage);
 
-	FGameplayModifierEvaluatedData AromorData(DamageStatics().ArmorProperty, EGameplayModOp::Additive, Armor);
-	OutExecutionOutput.AddOutputModifier(AromorData);
+	//将格挡机会参与计算
+	float BlockChance{ 0.f };
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluationParameters, BlockChance);
+	BlockChance=FMath::Max(0.f, BlockChance);
+	bool bBlock= BlockChance>FMath::RandRange(0, 100);
+	Damage = bBlock ? Damage / 2 : Damage;
+
+	/**
+	 *  护甲穿透将影响护甲的防护效果
+	 */
+	float TargetArmor{ 0.f };
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, TargetArmor);
+	TargetArmor = FMath::Max(0.f, TargetArmor);
+
+	float SourceArmorPenetration{ 0.f };
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef, EvaluationParameters, SourceArmorPenetration);
+	SourceArmorPenetration = FMath::Max(0.f, SourceArmorPenetration);
+
+	auto DefaultClassInfo=UAuraAbilitySystemBPLibary::GetCharacterClassInfo(SourceAvatar);
+
+	//获取表格曲线从表格曲线读值 分别是目标护甲的系数 和 源穿甲的系数
+	auto ArmorPenetrationCurve = DefaultClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());//获取对应曲线
+	auto SourceInterface=Cast<ICombatInterface>(SourceAvatar);
+	const float  ArmorPenetrationRatio = ArmorPenetrationCurve->Eval(SourceInterface->GetPlayerLevel());//从给定X读取Y
+
+	const float EffectiveArmor = TargetArmor * (100 - SourceArmorPenetration* ArmorPenetrationRatio) / 100.f;
+
+	auto ArmorCurve= DefaultClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectArmor"), FString());
+	auto TargetInterface = Cast<ICombatInterface>(TargetAvatar);
+	const float ArmorRatio = ArmorCurve->Eval(TargetInterface->GetPlayerLevel());
+
+	Damage *= (100-EffectiveArmor* ArmorRatio) / 100.f;
+
+	FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
+	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }
