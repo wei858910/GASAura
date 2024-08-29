@@ -13,7 +13,9 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorPenetrationDef);
 	RelevantAttributesToCapture.Add(DamageStatics().BlockChanceDef);
-
+	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitChanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitDamageDef);
+	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitResistanceDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -74,6 +76,28 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const float ArmorRatio = ArmorCurve->Eval(TargetInterface->GetPlayerLevel());
 
 	Damage *= (100-EffectiveArmor* ArmorRatio) / 100.f;
+
+	/**
+	 *  暴击
+	 */
+	float CriticalHitChance{ 0.f };
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitChanceDef, EvaluationParameters, CriticalHitChance);
+	CriticalHitChance = FMath::Max(0.f, CriticalHitChance);
+	const bool bCriticalHit = CriticalHitChance > FMath::RandRange(0, 100);
+	if(bCriticalHit)
+	{
+		float CriticalHitDamage{ 0.f };
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitDamageDef, EvaluationParameters, CriticalHitDamage);
+		CriticalHitDamage = FMath::Max(0.f, CriticalHitDamage);
+
+		float CriticalHitResistance{ 0.f };
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitResistanceDef, EvaluationParameters, CriticalHitResistance);
+		CriticalHitResistance = FMath::Max(0.f, CriticalHitResistance);
+
+		float CriticalHitResistanceRatio = CriticalHitResistance/(100 + CriticalHitResistance);//对数增长形式的系数，最终只能无限接近1
+		CriticalHitDamage = CriticalHitDamage - (CriticalHitDamage * CriticalHitResistanceRatio);
+		Damage += CriticalHitDamage*2.f;
+	}
 
 	FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
