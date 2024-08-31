@@ -22,7 +22,7 @@ AAuraPlayerController::AAuraPlayerController():
 	bReplicates = true;//允许复制 复制基本指的是当一个实体在服务器上发生变化时，该变化会被发送至每个客户端
 }
 
-void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter, const bool bBlocked, const bool bCriticalHit)
 {
 	if(IsValid(DamageTextComponentClass)&&IsValid(TargetCharacter))
 	{
@@ -33,7 +33,7 @@ void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, AChara
 
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);//
 
-		DamageText->SetDamageText(DamageAmount);
+		DamageText->SetDamageText(DamageAmount, bBlocked, bCriticalHit);
 	}
 
 }
@@ -113,7 +113,7 @@ void AAuraPlayerController::CursorTrace()
 	CurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
 	if (LastActor != nullptr)LastActor->UnHightlightActor();
-	if (CurrentActor != nullptr)CurrentActor->HighlightActor();
+	if (CurrentActor!=nullptr&&CurrentActor)CurrentActor->HighlightActor();
 	LastActor = CurrentActor;
 }
 

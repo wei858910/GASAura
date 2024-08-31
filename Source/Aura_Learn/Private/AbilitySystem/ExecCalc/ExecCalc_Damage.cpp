@@ -1,9 +1,7 @@
 ﻿// 学习使用
-
-
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
-
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemBPLibary.h"
 #include "Interaction/CombatInterface.h"
@@ -51,6 +49,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	bool bBlock= BlockChance>FMath::RandRange(0, 100);
 	Damage = bBlock ? Damage / 2 : Damage;
 
+	//GE 设置上下文内容
+	auto GEContext = Spec.GetContext();
+	UAuraAbilitySystemBPLibary::SetIsBlockedHit(GEContext, bBlock);
+
 	/**
 	 *  护甲穿透将影响护甲的防护效果
 	 */
@@ -84,8 +86,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitChanceDef, EvaluationParameters, CriticalHitChance);
 	CriticalHitChance = FMath::Max(0.f, CriticalHitChance);
 	const bool bCriticalHit = CriticalHitChance > FMath::RandRange(0, 100);
+
 	if(bCriticalHit)
 	{
+		UAuraAbilitySystemBPLibary::SetIsCriticalHit(GEContext, true);
+
 		float CriticalHitDamage{ 0.f };
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitDamageDef, EvaluationParameters, CriticalHitDamage);
 		CriticalHitDamage = FMath::Max(0.f, CriticalHitDamage);

@@ -32,7 +32,7 @@ public:
 	 *  Reliable 此函数将通过网络复制，并且一定会到达
 	 */
 	UFUNCTION(Client,Reliable)
-	void ShowDamage(float DamageAmount,ACharacter* TargetCharacter);
+	void ShowDamage(float DamageAmount,ACharacter* TargetCharacter, const bool bBlocked=false, const bool bCriticalHit=false);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

@@ -1,9 +1,5 @@
 #include "AuraAbilityTypes.h"
 
-UScriptStruct* FAuraGameEffectContext::GetScriptStruct() const
-{
-	return FGameplayEffectContext::GetScriptStruct();
-}
 
 bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
 {
@@ -57,6 +53,7 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 	}
 	Ar.SerializeBits(&RepBits, 9);
 
+	//对有标识的位 映射数据
 	if (RepBits & (1 << 0))
 	{
 		Ar << Instigator;
