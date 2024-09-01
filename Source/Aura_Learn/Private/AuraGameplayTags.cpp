@@ -12,9 +12,23 @@ FAuraGmaeplayTags& FAuraGmaeplayTags::GetInstance()
 
 void FAuraGmaeplayTags::InitNaviveGameplayTags()
 {
-	/*
- * Primary Attributes
- */
+	//Primary Attributes
+	GetInstance().InitPrimaryAttributeTags();
+
+	//Secondary Attributes
+	GetInstance().InitSecondaryAttributeTags();
+
+	/*输入*/
+	GetInstance().InitInputTags();
+
+	/*效果*/
+	GetInstance().InitEffectTags();
+
+	GetInstance().InitDamageTypesTags();
+}
+
+void FAuraGmaeplayTags::InitPrimaryAttributeTags()
+{
 	GetInstance().Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Strength"),
 		FString("增加物理伤害")
@@ -34,10 +48,10 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 		FName("Attributes.Primary.Vigor"),
 		FString("增强血量")
 	);
+}
 
-	/*
-	 * Secondary Attributes
-	 */
+void FAuraGmaeplayTags::InitSecondaryAttributeTags()
+{
 
 	GetInstance().Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.Armor"),
@@ -88,8 +102,10 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 		FName("Attributes.Secondary.MaxMana"),
 		FString("可获得的最大法力值")
 	);
+}
 
-	/*输入*/
+void FAuraGmaeplayTags::InitInputTags()
+{
 	GetInstance().InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.LMB"),
 		FString("鼠标左键")
@@ -114,13 +130,61 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 		FName("InputTag.4"),
 		FString("键盘4键")
 	);
+}
 
-
+void FAuraGmaeplayTags::InitDamageTypesTags()
+{
 	GetInstance().Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage"),
 		FString("伤害标签")
 	);
 
+	/*伤害类型*/
+	GetInstance().Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Fire"),
+		FString("火性伤害")
+	);
+	GetInstance().Damage_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Lightning"),
+		FString("带雷伤害")
+	);
+	GetInstance().Damage_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Arcane"),
+		FString("元素伤害")
+	);
+	GetInstance().Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Physical"),
+		FString("物理伤害")
+	);
+
+
+	/*伤害类型抗性*/
+	GetInstance().Attributes_Resistance_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Fire"),
+		FString("火性伤害抗性")
+	);
+	GetInstance().Attributes_Resistance_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Lightning"),
+		FString("带雷伤害抗性")
+	);
+	GetInstance().Attributes_Resistance_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Arcane"),
+		FString("元素伤害抗性")
+	);
+	GetInstance().Attributes_Resistance_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Physical"),
+		FString("物理伤害抗性")
+	);
+
+	/*伤害类型映射相应抵抗*/
+	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Fire, GetInstance().Attributes_Resistance_Fire);
+	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Lightning, GetInstance().Attributes_Resistance_Lightning);
+	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Arcane, GetInstance().Attributes_Resistance_Arcane);
+	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Physical, GetInstance().Attributes_Resistance_Physical);
+}
+
+void FAuraGmaeplayTags::InitEffectTags()
+{
 	GetInstance().EffectHitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Effects.HitReact"),
 		FString("伤害标签")

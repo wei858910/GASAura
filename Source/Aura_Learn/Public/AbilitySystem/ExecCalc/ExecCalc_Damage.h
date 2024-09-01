@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraGameplayTags.h"
 #include "GameplayEffectExecutionCalculation.h"
-#include "AbilitySystem/AuraAttributeSet.h"
 #include "ExecCalc_Damage.generated.h"
 
 struct AuraDamageStatics
@@ -15,20 +15,24 @@ struct AuraDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitChance)
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitDamage)
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitResistance)
-	AuraDamageStatics()
-	{
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, Armor, Target, false);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, ArmorPenetration, Source, false);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, BlockChance, Target, false);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, CriticalHitChance, Source, false);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, CriticalHitDamage, Source, false)
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, CriticalHitResistance, Target, false)
-	};
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArcaneResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalResistance)
+
+	AuraDamageStatics();
+	void InitTagToCaptureDef();
+
+	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition>TagToCaptureDef;//抗性类型映射相应的属性获取
 };
 
-static const AuraDamageStatics& DamageStatics()
+static const AuraDamageStatics& GetDamageStatics()
 {
 	static AuraDamageStatics DStatics;
+	if(DStatics.TagToCaptureDef.Num()<2)
+	{
+		DStatics.InitTagToCaptureDef();
+	}
 	return DStatics;
 }
 

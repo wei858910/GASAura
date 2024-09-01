@@ -24,7 +24,7 @@ AAuraPlayerController::AAuraPlayerController():
 
 void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter, const bool bBlocked, const bool bCriticalHit)
 {
-	if(IsValid(DamageTextComponentClass)&&IsValid(TargetCharacter))
+	if(IsValid(DamageTextComponentClass)&&IsValid(TargetCharacter)&&IsLocalController())//仅在客户端显示
 	{
 		//TODO::找到并非每次都创建新的 方法 (对象池?)
 		auto DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);

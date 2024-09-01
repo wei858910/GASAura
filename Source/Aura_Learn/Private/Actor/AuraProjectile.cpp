@@ -58,10 +58,16 @@ void AAuraProjectile::BeginPlay()
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+	if (DamageEffectSpecHandle.Data.IsValid()&&DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)return;//仅客户端运行会打中自己
 
-	if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
+	if(!bHit)//防止服务端已经击中，生成音效 复制给客户端时 客户端还生成音效
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+
+		if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
+	}
+
 	if(HasAuthority())
 	{
 		if(auto TargetAsc=UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
