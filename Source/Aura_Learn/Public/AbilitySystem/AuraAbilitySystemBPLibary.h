@@ -12,9 +12,7 @@ enum class ECharacterClass : uint8;
 struct FWidgetControllerParams;
 class UAttributeMenuWgtController;
 class UOverlayWidgetController;
-/**
- * 
- */
+
 UCLASS()
 class AURA_LEARN_API UAuraAbilitySystemBPLibary : public UBlueprintFunctionLibrary
 {
@@ -33,7 +31,7 @@ public:
 	static void InitializeDefaultAttributes(const UObject* WorldContenxt, ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC);//从CharacterClassInfo的配置获取信息初始化属性
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|CharacterClassDefaults")
-	static void GiveStartupAbilities(const UObject* WorldContenxt, UAbilitySystemComponent* ASC);//从CharacterClassInfo的配置获取初始的能力
+	static void GiveStartupAbilities(const UObject* WorldContenxt, UAbilitySystemComponent* ASC,const ECharacterClass CharacterClass);//从CharacterClassInfo的配置获取初始的能力
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContenx);//透过GameMode 访问CharacterClassInfo资产管理

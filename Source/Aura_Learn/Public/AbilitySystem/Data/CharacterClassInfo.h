@@ -22,10 +22,11 @@ struct FCharacterClassDefaultInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "角色默认")
 	TSubclassOf<UGameplayEffect> PrimaryAttributes;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = "角色默认")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };
 
 UCLASS()
@@ -44,7 +45,7 @@ public:
 	TMap<ECharacterClass, FCharacterClassDefaultInfo>CharacterClassInformation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "默认角色类型属性")
-	TArray<TSubclassOf<UGameplayAbility>> CommonAbilyties;
+	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
 
 	UPROPERTY(EditDefaultsOnly, Category = "默认角色类型属性|伤害",DisplayName="影响伤害系数表")
 	TObjectPtr<UCurveTable> DamageCalculationCoefficients;

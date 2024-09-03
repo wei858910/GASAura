@@ -25,6 +25,9 @@ void FAuraGmaeplayTags::InitNaviveGameplayTags()
 	GetInstance().InitEffectTags();
 
 	GetInstance().InitDamageTypesTags();
+
+	/*技能*/
+	GetInstance().InitSkillTags();
 }
 
 void FAuraGmaeplayTags::InitPrimaryAttributeTags()
@@ -190,4 +193,12 @@ void FAuraGmaeplayTags::InitEffectTags()
 		FString("伤害标签")
 	);
 
+}
+
+void FAuraGmaeplayTags::InitSkillTags()
+{
+	GetInstance().Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack"),
+		FString("基础攻击")
+	);
 }
