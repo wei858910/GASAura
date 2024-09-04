@@ -3,6 +3,7 @@
 #include "Character/AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/CapsuleComponent.h"
@@ -28,13 +29,25 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-FVector AAuraCharacterBase::GetCombatSocktLocation()
+FVector AAuraCharacterBase::GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag)
 {
-	if(IsValid(Weapon))
+	if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_Weapon))
 	{
-		return Weapon->GetSocketLocation(WeaponTipSocketName);
+		if (IsValid(Weapon))
+		{
+			return Weapon->GetSocketLocation(WeaponTipSocketName);
+		}
 	}
-	return ICombatInterface::GetCombatSocktLocation();
+	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandTipSocketName);
+	}
+
+	return FVector();
 }
 
 FHitResult* AAuraCharacterBase::GetCursorHitRes()
@@ -47,11 +60,25 @@ UAnimMontage* AAuraCharacterBase::GetHitRecatMontag_Implementation() const
 	return HitReactMontage;
 }
 
+bool AAuraCharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* AAuraCharacterBase::GetAvatar_Implementation()
+{
+	return this;
+}
 void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
 
 	MulticastHandleDeath();
+}
+
+TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() const
+{
+	return AttackMontages;
 }
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
@@ -71,6 +98,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 
 	Dissolve();
 
+	bDead = true;
 }
 
 void AAuraCharacterBase::BeginPlay()

@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+class UCombatInterface;
 class UAbilitySystemComponent;
 enum class ECharacterClass : uint8;
 struct FWidgetControllerParams;
@@ -47,4 +48,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|GameplayEffects")
 	static void SetIsCriticalHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,const bool Value);//设置GE中伤害是否暴击
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|GameplayMechanics")
+	static void GetLivePlayersWithRadius(const UObject* WorldContext, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& IgnoreActors,
+	                                     const FVector& Center, float Radius = 100.f); //寻找半径内的存活玩家
 };

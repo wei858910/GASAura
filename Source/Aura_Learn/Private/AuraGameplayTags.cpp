@@ -201,4 +201,17 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FName("Abilities.Attack"),
 		FString("基础攻击")
 	);
+
+	GetInstance().Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.Weapon"),
+		FString("武器攻击")
+	);
+	GetInstance().Montage_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.LeftHand"),
+		FString("左手攻击")
+	);
+	GetInstance().Montage_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.RightHand"),
+		FString("右手攻击")
+	);
 }

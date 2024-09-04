@@ -25,10 +25,13 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-	virtual FVector GetCombatSocktLocation() override;
+	virtual FVector GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
 	virtual FHitResult* GetCursorHitRes() override;
 
 	virtual UAnimMontage* GetHitRecatMontag_Implementation() const override; //获取受击动画
+
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation() override;
 
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
@@ -38,6 +41,11 @@ public:
 	virtual void MulticastHandleDeath(); //死亡时进行
 
 	virtual void Die() override;
+
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	TArray<FTaggedMontage> AttackMontages;
 
 protected:
 	virtual void BeginPlay() override;
@@ -70,8 +78,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon; //武器组件
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Combat", DisplayName = "武器判定插槽")
 	FName WeaponTipSocketName; //定位生成技能的插槽名字
+
+	UPROPERTY(EditAnywhere, Category = "Combat",DisplayName="左手判定插槽")
+	FName LeftHandSocketName; 
+
+	UPROPERTY(EditAnywhere, Category = "Combat", DisplayName = "右手判定插槽")
+	FName RightHandTipSocketName;
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -92,4 +106,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "CombatPower")
 	TObjectPtr<UAnimMontage> HitReactMontage{nullptr};
+
+	bool bDead{ false };
 };

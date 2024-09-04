@@ -121,6 +121,32 @@ bool UAuraAbilitySystemBPLibary::IsCriticalHit(const FGameplayEffectContextHandl
 	return false;
 }
 
+void UAuraAbilitySystemBPLibary::GetLivePlayersWithRadius(const UObject* WorldContext, TArray<AActor*>& OutOverlappingActors,
+                                                          const TArray<AActor*>& IgnoreActors, const FVector& Center, float Radius)
+{
+	/*无非就是生成个检测圆，进行范围内检测,筛选后装载*/
+
+	//碰撞查询参数
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActors(IgnoreActors);
+	if (auto World = GEngine->GetWorldFromContextObject(WorldContext, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		TArray<FOverlapResult> Results;
+		World->OverlapMultiByObjectType(Results, Center, FQuat::Identity,
+		                                FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects), /*所有动态物体*/
+		                                FCollisionShape::MakeSphere(Radius), QueryParams);
+
+		for (const auto& HitRes : Results)
+		{
+			if (!HitRes.GetActor()->Implements<UCombatInterface>())continue; //Actor是否实现了接口？
+			if (ICombatInterface::Execute_IsDead(HitRes.GetActor()))continue; //挂了就挂了
+			if (IgnoreActors.Contains(HitRes.GetActor()))continue;//不是忽略对象
+
+			OutOverlappingActors.AddUnique(ICombatInterface::Execute_GetAvatar(HitRes.GetActor()));
+		}
+	}
+}
+
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)
 {
 	if (auto GEContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))
