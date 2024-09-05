@@ -147,6 +147,15 @@ void UAuraAbilitySystemBPLibary::GetLivePlayersWithRadius(const UObject* WorldCo
 	}
 }
 
+bool UAuraAbilitySystemBPLibary::IsNotFriend(const AActor* FirstActor, const AActor* OtherActor, const FName Tag)
+{
+	if(IsValid(FirstActor)&&IsValid(OtherActor))
+	{
+		return !(FirstActor->ActorHasTag(Tag) && OtherActor->ActorHasTag(Tag));
+	}
+	return false;
+}
+
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)
 {
 	if (auto GEContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))
