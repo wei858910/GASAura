@@ -9,6 +9,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystem/AuraAbilitySystemBPLibary.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/AudioComponent.h"
 
@@ -59,7 +60,7 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveCompo
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (DamageEffectSpecHandle.Data.IsValid()&&DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)return;//仅客户端运行会打中自己
-
+	if (!UAuraAbilitySystemBPLibary::IsNotFriend(OtherActor, DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser(), "Enemy"))return;
 	if(!bHit)//防止服务端已经击中，生成音效 复制给客户端时 客户端还生成音效
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);

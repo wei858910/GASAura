@@ -75,7 +75,7 @@ protected:
 	TObjectPtr<UMaterialInstance> DissolveMaterialOfWeapon{ nullptr };
 
 protected:
-	UPROPERTY(EditAnywhere, Category="Combat")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon; //武器组件
 
 	UPROPERTY(EditAnywhere, Category = "Combat", DisplayName = "武器判定插槽")
