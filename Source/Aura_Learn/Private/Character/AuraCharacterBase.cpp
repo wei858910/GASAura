@@ -7,6 +7,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerController.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
@@ -31,18 +32,18 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 
 FVector AAuraCharacterBase::GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag)
 {
-	if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_Weapon))
+	if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().CombatSocket_Weapon))
 	{
 		if (IsValid(Weapon))
 		{
 			return Weapon->GetSocketLocation(WeaponTipSocketName);
 		}
 	}
-	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_LeftHand))
+	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().CombatSocket_LeftHand))
 	{
 		return GetMesh()->GetSocketLocation(LeftHandSocketName);
 	}
-	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Montage_Attack_RightHand))
+	else if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().CombatSocket_RightHand))
 	{
 		return GetMesh()->GetSocketLocation(RightHandTipSocketName);
 	}
@@ -69,6 +70,21 @@ AActor* AAuraCharacterBase::GetAvatar_Implementation()
 {
 	return this;
 }
+
+UNiagaraSystem* AAuraCharacterBase::GetBloodEffect_Implementation() const
+{
+	return BloodEffect;
+}
+
+FTaggedMontage AAuraCharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for(const auto& it:AttackMontages)
+	{
+		if (it.MontageTag == MontageTag)return it;
+	}
+	return FTaggedMontage{};
+}
+
 void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
@@ -83,6 +99,8 @@ TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() co
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
+
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(),GetActorRotation());
 
 	//开启布娃娃
 	Weapon->SetSimulatePhysics(true);

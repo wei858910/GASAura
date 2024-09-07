@@ -11,6 +11,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UNiagaraSystem;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -27,12 +28,11 @@ public:
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 	virtual FVector GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
 	virtual FHitResult* GetCursorHitRes() override;
-
 	virtual UAnimMontage* GetHitRecatMontag_Implementation() const override; //获取受击动画
-
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
-
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() const override;
+	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
 	 *  此函数将通过网络复制，并且一定会到达，即使出现带宽或网络错误。
@@ -108,4 +108,10 @@ protected:
 	TObjectPtr<UAnimMontage> HitReactMontage{nullptr};
 
 	bool bDead{ false };
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat",DisplayName="贱血特效")
+	UNiagaraSystem* BloodEffect; //贱血效果
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", DisplayName = "死亡音效")
+	USoundBase* DeathSound;
 };

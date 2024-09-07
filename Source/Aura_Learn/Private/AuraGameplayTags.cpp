@@ -202,16 +202,33 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("基础攻击")
 	);
 
-	GetInstance().Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Montage.Attack.Weapon"),
+	GetInstance().CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.Weapon"),
 		FString("武器攻击")
 	);
-	GetInstance().Montage_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Montage.Attack.LeftHand"),
+	GetInstance().CombatSocket_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.LeftHand"),
 		FString("左手攻击")
 	);
-	GetInstance().Montage_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Montage.Attack.RightHand"),
+	GetInstance().CombatSocket_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.RightHand"),
 		FString("右手攻击")
+	);
+
+	GetInstance().Montage_Attack_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.1"),
+		FString("攻击类蒙太奇1")
+	);
+	GetInstance().Montage_Attack_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.2"),
+		FString("攻击类蒙太奇2")
+	);
+	GetInstance().Montage_Attack_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.3"),
+		FString("攻击类蒙太奇3")
+	);
+	GetInstance().Montage_Attack_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.4"),
+		FString("攻击类蒙太奇4")
 	);
 }
