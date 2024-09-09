@@ -214,6 +214,10 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FName("CombatSocket.RightHand"),
 		FString("右手攻击")
 	);
+	GetInstance().CombatSocket_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("CombatSocket.Tail"),
+		FString("尾巴攻击")
+	);
 
 	GetInstance().Montage_Attack_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Montage.Attack.1"),

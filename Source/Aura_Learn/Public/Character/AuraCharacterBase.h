@@ -86,6 +86,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat", DisplayName = "右手判定插槽")
 	FName RightHandTipSocketName;
+	UPROPERTY(EditAnywhere, Category = "Combat", DisplayName = "尾部判定插槽")
+	FName TailSocketName;
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
