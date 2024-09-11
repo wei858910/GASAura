@@ -16,7 +16,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<FVector> GetSpwanLocation();//获取召唤物生成的位置
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="生成数量",Category="Summoning")
+	UFUNCTION(BlueprintPure, BlueprintCallable)//随机获取一个种子
+	TSubclassOf<AActor> GetRandomMinionClass();
+
+	UPROPERTY(EditDefaultsOnly, DisplayName = "生成数量", Category = "Summoning")
 	int16 NumMinions{ 2 };//准备生成多少个召唤物
 
 	UPROPERTY(EditDefaultsOnly, DisplayName = "召唤物库", Category = "Summoning")
@@ -30,6 +33,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, DisplayName = "召唤展开角度", Category = "Summoning")
 	float SpawnSpread{ 90.f };//生成展开角度
-
-
 };

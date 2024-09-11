@@ -33,6 +33,8 @@ public:
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() const override;
 	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
+	virtual int32 GetMinionCount_Implementation() override;
+	virtual int32 IncrementMinionCount_Implementation(int32 DeltaCount) override;
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
 	 *  此函数将通过网络复制，并且一定会到达，即使出现带宽或网络错误。
@@ -73,6 +75,8 @@ protected:
 	TObjectPtr<UMaterialInstance> DissolveMaterialOfMesh{nullptr};
 	UPROPERTY(DisplayName = "武器溶解材质", EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> DissolveMaterialOfWeapon{ nullptr };
+
+	int16 MinionCount {0};//召唤物的数量
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")

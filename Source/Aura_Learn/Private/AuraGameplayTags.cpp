@@ -202,6 +202,11 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("基础攻击")
 	);
 
+	GetInstance().Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Summon"),
+		FString("召唤")
+	);
+
 	GetInstance().CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("CombatSocket.Weapon"),
 		FString("武器攻击")

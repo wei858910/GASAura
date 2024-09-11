@@ -88,6 +88,17 @@ FTaggedMontage AAuraCharacterBase::GetTaggedMontageByTag_Implementation(const FG
 	return FTaggedMontage{};
 }
 
+int32 AAuraCharacterBase::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
+
+int32 AAuraCharacterBase::IncrementMinionCount_Implementation(int32 DeltaCount)
+{
+	MinionCount += DeltaCount;
+	return MinionCount;
+}
+
 void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
