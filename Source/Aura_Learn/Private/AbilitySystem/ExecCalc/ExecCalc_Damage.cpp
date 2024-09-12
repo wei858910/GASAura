@@ -90,7 +90,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 		}
 		//当前的抗性属性
 		const auto& CaptureDef = GetDamageStatics().TagToCaptureDef[DamageResistanceTag];//直接拿到当前的属性捕获类型 下面就方便直接获取值
-		if(float CurentTypeDamge = Spec.GetSetByCallerMagnitude(it.Key)) //从GE中找寻相应Tag的Modfiy 修饰符 获取其值
+		if(float CurentTypeDamge = Spec.GetSetByCallerMagnitude(it.Key,false)) //从GE中找寻相应Tag的Modfiy 修饰符 获取其值,没找到不给警告
 		{
 			float CurResistance{ 0.f };
 			ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvaluationParameters, CurResistance);
