@@ -109,6 +109,11 @@ void FAuraGmaeplayTags::InitSecondaryAttributeTags()
 
 void FAuraGmaeplayTags::InitInputTags()
 {
+	GetInstance().InputTag = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag"),
+		FString("输入")
+	);
+
 	GetInstance().InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.LMB"),
 		FString("鼠标左键")
@@ -197,6 +202,11 @@ void FAuraGmaeplayTags::InitEffectTags()
 
 void FAuraGmaeplayTags::InitSkillTags()
 {
+	GetInstance().Abilities = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities"),
+		FString("技能")
+	);
+
 	GetInstance().Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Attack"),
 		FString("基础攻击")
@@ -205,6 +215,11 @@ void FAuraGmaeplayTags::InitSkillTags()
 	GetInstance().Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Summon"),
 		FString("召唤")
+	);
+
+	GetInstance().Abilities_Fire_FireBlot = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Fire.FireBlot"),
+		FString("火焰火球")
 	);
 
 	GetInstance().CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
