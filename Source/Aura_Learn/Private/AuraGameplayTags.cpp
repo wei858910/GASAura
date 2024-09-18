@@ -255,4 +255,13 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FName("Montage.Attack.4"),
 		FString("攻击类蒙太奇4")
 	);
+
+	/**
+	 * 冷却Tag
+	 */
+	GetInstance().Cooldown_Fire_FireBlot = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Cooldown.Fire.FireBlot"),
+		FString("火焰火球冷却")
+	);
+
 }
