@@ -1,7 +1,6 @@
 ﻿// 学习使用
 
 #include "AbilitySystem/AuraAttributeSet.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
@@ -93,7 +92,7 @@ void UAuraAttributeSet::SendXPEvent(const FEffectProperties& Prop)
 	const auto XPReward = UAuraAbilitySystemBPLibary::
 		GetXpRewardForClassAndLevel(Prop.TargetCharacter,
 		                            ICombatInterface::Execute_GetCharacterClassType(Prop.TargetCharacter),
-		                            CombatInterface->GetPlayerLevel());
+		                            ICombatInterface::Execute_GetPlayerLevel(Prop.TargetCharacter));
 
 	FGameplayEventData Payload;
 	Payload.EventTag = FAuraGmaeplayTags::GetInstance().Attributes_Meta_IncomingXP;

@@ -129,13 +129,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//获取表格曲线从表格曲线读值 分别是目标护甲的系数 和 源穿甲的系数
 	auto ArmorPenetrationCurve = DefaultClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());//获取对应曲线
 	auto SourceInterface=Cast<ICombatInterface>(SourceAvatar);
-	const float  ArmorPenetrationRatio = ArmorPenetrationCurve->Eval(SourceInterface->GetPlayerLevel());//从给定X读取Y
+	const float  ArmorPenetrationRatio = ArmorPenetrationCurve->Eval(ICombatInterface::Execute_GetPlayerLevel(SourceAvatar));//从给定X读取Y
 
 	const float EffectiveArmor = TargetArmor * (100 - SourceArmorPenetration* ArmorPenetrationRatio) / 100.f;
 
 	auto ArmorCurve= DefaultClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectArmor"), FString());
 	auto TargetInterface = Cast<ICombatInterface>(TargetAvatar);
-	const float ArmorRatio = ArmorCurve->Eval(TargetInterface->GetPlayerLevel());
+	const float ArmorRatio = ArmorCurve->Eval(ICombatInterface::Execute_GetPlayerLevel(TargetAvatar));
 
 	Damage *= (100-EffectiveArmor* ArmorRatio) / 100.f;
 

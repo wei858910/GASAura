@@ -91,7 +91,7 @@ void UAuraAbilitySystemBPLibary::GiveStartupAbilities(const UObject* WorldConten
 		if(auto CombatInterface=Cast<ICombatInterface>(ASC->GetAvatarActor()))
 		{
 			
-			FGameplayAbilitySpec GASpec = FGameplayAbilitySpec(Abilities, CombatInterface->GetPlayerLevel());
+			FGameplayAbilitySpec GASpec = FGameplayAbilitySpec(Abilities, ICombatInterface::Execute_GetPlayerLevel(ASC->GetAvatarActor()));
 			ASC->GiveAbility(GASpec);
 
 		}
