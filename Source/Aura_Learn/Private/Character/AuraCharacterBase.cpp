@@ -99,6 +99,11 @@ int32 AAuraCharacterBase::IncrementMinionCount_Implementation(int32 DeltaCount)
 	return MinionCount;
 }
 
+ECharacterClass AAuraCharacterBase::GetCharacterClassType_Implementation()
+{
+	return CharacterClass;
+}
+
 void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
@@ -164,6 +169,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	auto GAS = Cast<UAuraAbilitySystemComponent>(GetAbilitySystemComponent());
 	if ((!HasAuthority())||!IsValid(GAS))return; //Actor是否有网络权限（就是是否为服务端的实例）
 	GAS->AddCharacterAbilities(StartupAbilities);
+	GAS->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void AAuraCharacterBase::Dissolve()

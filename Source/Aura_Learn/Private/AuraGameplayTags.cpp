@@ -105,6 +105,11 @@ void FAuraGmaeplayTags::InitSecondaryAttributeTags()
 		FName("Attributes.Secondary.MaxMana"),
 		FString("可获得的最大法力值")
 	);
+
+	GetInstance().Attributes_Meta_IncomingXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Meta.IncomingXP"),
+		FString("即将增加的经验")
+	);
 }
 
 void FAuraGmaeplayTags::InitInputTags()

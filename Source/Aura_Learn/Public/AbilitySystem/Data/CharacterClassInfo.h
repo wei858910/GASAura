@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ScalableFloat.h"
 #include "Engine/DataAsset.h"
 #include "CharacterClassInfo.generated.h"
 
@@ -24,6 +25,9 @@ struct FCharacterClassDefaultInfo
 
 	UPROPERTY(EditDefaultsOnly, Category = "角色默认")
 	TSubclassOf<UGameplayEffect> PrimaryAttributes;
+
+	UPROPERTY(EditDefaultsOnly, Category = "角色默认",DisplayName="奖励经验")
+	FScalableFloat XPReward{0};
 
 	UPROPERTY(EditDefaultsOnly, Category = "角色默认")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
