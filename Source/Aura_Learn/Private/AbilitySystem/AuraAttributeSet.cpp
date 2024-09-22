@@ -94,9 +94,11 @@ void UAuraAttributeSet::SendXPEvent(const FEffectProperties& Prop)
 		                            ICombatInterface::Execute_GetCharacterClassType(Prop.TargetCharacter),
 		                            ICombatInterface::Execute_GetPlayerLevel(Prop.TargetCharacter));
 
+	//数据装载
 	FGameplayEventData Payload;
 	Payload.EventTag = FAuraGmaeplayTags::GetInstance().Attributes_Meta_IncomingXP;
 	Payload.EventMagnitude = XPReward;
+
 	//向等待事件tag的任务出发出通知
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Prop.SourceAvatarActor, FAuraGmaeplayTags::GetInstance().Attributes_Meta_IncomingXP, Payload);
 }
@@ -149,10 +151,30 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		const float LocalIncomingXP = GetIncomingXP();
 		SetIncomingXP(0.f);
 
-		//TODO::升级吗
-
+		//SourceActor为拥有者，从GA_ListenForEvent 应用 GE_EventBasedEffect , 添加 到 IncomingXP
 		if(Props.SourceAvatarActor->Implements<UPlayerInterface>())
 		{
+
+			//检测升级
+			const int32 CurrentXP = IPlayerInterface::Execute_GetXP(Props.SourceAvatarActor);
+			const auto CurrentLevel = ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor);
+			const auto NewLevel=IPlayerInterface::Execute_FindLevelFromXP(Props.SourceAvatarActor, CurrentXP+LocalIncomingXP);
+
+			int8 LevelUpNum = NewLevel - CurrentLevel;
+			//升级
+			for (; LevelUpNum > 0; LevelUpNum--)
+			{
+
+				//升级奖励赋予
+				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceAvatarActor, ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor));
+				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceAvatarActor, ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor));
+
+				IPlayerInterface::Execute_LevelUp(Props.SourceAvatarActor);
+
+				//需要刷新的状态
+				SetHealth(GetMaxHealth());
+				SetMana(GetMaxMana());
+			}
 			IPlayerInterface::Execute_AddToXP(Props.SourceAvatarActor, LocalIncomingXP);
 		}
 
