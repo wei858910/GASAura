@@ -171,13 +171,29 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 				IPlayerInterface::Execute_LevelUp(Props.SourceAvatarActor);
 
-				//需要刷新的状态
-				SetHealth(GetMaxHealth());
-				SetMana(GetMaxMana());
+				//需要刷新的状态 PostAttributeChange 进行刷新
+				bTopOffHealth = true;
+				bTopOffMana = true;
+
 			}
 			IPlayerInterface::Execute_AddToXP(Props.SourceAvatarActor, LocalIncomingXP);
 		}
 
+	}
+}
+
+void UAuraAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	if (Attribute == GetMaxHealthAttribute() && bTopOffHealth)
+	{
+		SetHealth(GetMaxHealth());
+		bTopOffHealth = false;
+	}
+	else if (Attribute == GetMaxManaAttribute() && bTopOffMana)
+	{
+		SetMana(GetMaxMana());
+		bTopOffMana = false;
 	}
 }
 
