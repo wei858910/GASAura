@@ -166,8 +166,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			{
 
 				//升级奖励赋予
-				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceAvatarActor, ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor));
-				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceAvatarActor, ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor));
+				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceAvatarActor, IPlayerInterface::Execute_GetAttributePointReward(Props.SourceAvatarActor,ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor)));
+				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceAvatarActor, IPlayerInterface::Execute_GetSpellPointReward(Props.SourceAvatarActor, ICombatInterface::Execute_GetPlayerLevel(Props.SourceAvatarActor)));
 
 				IPlayerInterface::Execute_LevelUp(Props.SourceAvatarActor);
 
