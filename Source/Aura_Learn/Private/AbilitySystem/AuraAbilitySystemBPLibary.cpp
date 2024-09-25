@@ -15,28 +15,37 @@
 
 UOverlayWidgetController* UAuraAbilitySystemBPLibary::GetOverlayWgtController(const UObject* WorldContenxt)
 {
-	auto WgtControllerParams = std::make_unique<FWidgetControllerParams>();
-	bool bSucsses = SetWgtCtrlParamsByWorldContenxt(WorldContenxt, *WgtControllerParams);
-	if (!bSucsses)return nullptr;
-	auto AuraHUD = Cast<AAuraHUD>(WgtControllerParams->PlayerController->GetHUD());
-	if (!IsValid(AuraHUD))return nullptr;
+	FWidgetControllerParams WgtControllerParams{};
+	AAuraHUD* AuraHUD{ nullptr };
+	bool Sucesses= SetWgtCtrlParamsByWorldContenxt(WorldContenxt, WgtControllerParams, AuraHUD);
+	if (!Sucesses)return nullptr; 
 
-	return AuraHUD->GetOverlaiController(*WgtControllerParams);
+	return AuraHUD->GetOverlaiController(WgtControllerParams);
 }
 
 UAttributeMenuWgtController* UAuraAbilitySystemBPLibary::GetAttributeMenuWgtController(const UObject* WorldContenxt)
 {
-	auto WgtControllerParams = std::make_unique<FWidgetControllerParams>();
-	bool bSucsses=SetWgtCtrlParamsByWorldContenxt(WorldContenxt, *WgtControllerParams);
-	if (!bSucsses)return nullptr;
-	auto AuraHUD = Cast<AAuraHUD>(WgtControllerParams->PlayerController->GetHUD());
-	if (!IsValid(AuraHUD))return nullptr;
+	FWidgetControllerParams WgtControllerParams{};
+	AAuraHUD* AuraHUD{ nullptr };
+	bool Sucesses = SetWgtCtrlParamsByWorldContenxt(WorldContenxt, WgtControllerParams, AuraHUD);
+	if (!Sucesses)return nullptr;
 
-	return AuraHUD->GetAtributeMenuController(*WgtControllerParams);
+	return AuraHUD->GetAtributeMenuController(WgtControllerParams);
+}
+
+USpellMenuWgtController* UAuraAbilitySystemBPLibary::GetSpellMenuWgtController(const UObject* WorldContenxt)
+{
+	FWidgetControllerParams WgtControllerParams{};
+	AAuraHUD* AuraHUD{ nullptr };
+	bool Sucesses = SetWgtCtrlParamsByWorldContenxt(WorldContenxt, WgtControllerParams, AuraHUD);
+	if (!Sucesses)return nullptr;
+
+	return AuraHUD->GetSpellMenuController(WgtControllerParams);
 }
 
 bool UAuraAbilitySystemBPLibary::SetWgtCtrlParamsByWorldContenxt(const UObject* WorldContenxt,
-                                                                 OUT FWidgetControllerParams& WgtCtrlParam)
+                                                                 OUT FWidgetControllerParams& WgtCtrlParam,
+                                                                 AAuraHUD*& OutAuraHud)
 {
 	auto Controller = UGameplayStatics::GetPlayerController(WorldContenxt, 0); //该函数在本地调用，0一定是玩家自己的控制器
 	if (!IsValid(Controller))return false;
@@ -50,6 +59,9 @@ bool UAuraAbilitySystemBPLibary::SetWgtCtrlParamsByWorldContenxt(const UObject* 
 	WgtCtrlParam.PlayerState = PS;
 	WgtCtrlParam.AbilitySystemComponent = ASC;
 	WgtCtrlParam.AttributeSet = AttributeSet;
+	OutAuraHud = Cast<AAuraHUD>(WgtCtrlParam.PlayerController->GetHUD());
+
+	if (!IsValid(OutAuraHud))return false;
 	return true;
 }
 

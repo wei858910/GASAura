@@ -1,12 +1,12 @@
-﻿// 学习使用
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+class AAuraHUD;
+class USpellMenuWgtController;
 class UCombatInterface;
 class UAbilitySystemComponent;
 enum class ECharacterClass : uint8;
@@ -20,13 +20,16 @@ class AURA_LEARN_API UAuraAbilitySystemBPLibary : public UBlueprintFunctionLibra
 	GENERATED_BODY()
 public:
 	//为了能访问世界的某些内容，最好拿到世界上下文
-	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLib|WgtController")
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLib|WgtController",meta=(DefaultToSelf="WorldContenxt"))
 	static UOverlayWidgetController* GetOverlayWgtController(const UObject* WorldContenxt);
 
-	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLib|WgtController")
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLib|WgtController", meta = (DefaultToSelf = "WorldContenxt"))
 	static UAttributeMenuWgtController* GetAttributeMenuWgtController(const UObject* WorldContenxt);
 
-	static bool SetWgtCtrlParamsByWorldContenxt(const UObject* WorldContenxt,OUT FWidgetControllerParams& WgtCtrlParam);
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLib|WgtController", meta = (DefaultToSelf = "WorldContenxt"))
+	static USpellMenuWgtController* GetSpellMenuWgtController(const UObject* WorldContenxt);
+
+	static bool SetWgtCtrlParamsByWorldContenxt(const UObject* WorldContenxt,OUT FWidgetControllerParams& WgtCtrlParam,AAuraHUD*& OutAuraHud);
 
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLib|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject* WorldContenxt, ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC);//从CharacterClassInfo的配置获取信息初始化属性
