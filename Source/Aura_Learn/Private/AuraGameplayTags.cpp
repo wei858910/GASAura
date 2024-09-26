@@ -236,6 +236,11 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("火焰火球")
 	);
 
+	GetInstance().Abilities_Lightning_Electrocute = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Lightning.Electrocute"),
+		FString("闪电链路")
+	);
+
 	GetInstance().CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("CombatSocket.Weapon"),
 		FString("武器攻击")
@@ -324,4 +329,8 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("火焰火球冷却")
 	);
 
+	GetInstance().Cooldown_Lightning_Electrocute = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Cooldown.Lightning.Electrocute"),
+		FString("闪链冷却")
+	);
 }

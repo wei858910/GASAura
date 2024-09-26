@@ -5,6 +5,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+class UAbilityInfo;
 class AAuraHUD;
 class USpellMenuWgtController;
 class UCombatInterface;
@@ -39,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContenx);//透过GameMode 访问CharacterClassInfo资产管理
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|AbilityInfo")
+	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContext);
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLib|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);//该GE中伤害是否被格挡

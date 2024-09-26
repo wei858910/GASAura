@@ -118,6 +118,14 @@ UCharacterClassInfo* UAuraAbilitySystemBPLibary::GetCharacterClassInfo(const UOb
 	return GameMode->CharacterClassInfo;
 }
 
+UAbilityInfo* UAuraAbilitySystemBPLibary::GetAbilityInfo(const UObject* WorldContext)
+{
+	auto GameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
+	if (!IsValid(GameMode))return nullptr;
+
+	return GameMode->AbilityInfo;
+}
+
 bool UAuraAbilitySystemBPLibary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {
 	

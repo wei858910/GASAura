@@ -4,6 +4,8 @@
 #include "Engine/DataAsset.h"
 #include "AbilityInfo.generated.h"
 
+class UGameplayAbility;
+
 USTRUCT(BlueprintType)
 struct FAuraAbilityInfo
 {
@@ -26,6 +28,12 @@ struct FAuraAbilityInfo
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> BackgroundMaterial{ nullptr };
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,DisplayName="等级要求")
+	int32 LevelRequirement{ 1 };//该技能的等级要求
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "技能类源")
+	TSubclassOf<UGameplayAbility> Ability;//该技能本身的类型
 };
 
 UCLASS()
