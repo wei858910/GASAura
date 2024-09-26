@@ -143,6 +143,15 @@ void FAuraGmaeplayTags::InitInputTags()
 		FName("InputTag.4"),
 		FString("键盘4键")
 	);
+
+	GetInstance().InputTag_Passive_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Passive.1"),
+		FString("被动技能1")
+	);
+	GetInstance().InputTag_Passive_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Passive.2"),
+		FString("被动技能2")
+	);
 }
 
 void FAuraGmaeplayTags::InitDamageTypesTags()
@@ -260,6 +269,52 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FName("Montage.Attack.4"),
 		FString("攻击类蒙太奇4")
 	);
+
+	GetInstance().Abilities_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.HitReact"),
+		FString("Hit React Ability")
+	);
+
+	GetInstance().Abilities_Status = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Status"),
+		FString("能够解锁")
+	);
+
+	GetInstance().Abilities_Status_Eligible = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Status.Eligible"),
+		FString("能够解锁")
+	);
+
+	GetInstance().Abilities_Status_Equipped = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Status.Equipped"),
+		FString("装备上了")
+	);
+
+	GetInstance().Abilities_Status_Locked = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Status.Locked"),
+		FString("Locked Status")
+	);
+
+	GetInstance().Abilities_Status_Unlocked = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Status.Unlocked"),
+		FString("Unlocked Status")
+	);
+
+	GetInstance().Abilities_Type_None = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Type.None"),
+		FString("Type None")
+	);
+
+	GetInstance().Abilities_Type_Offensive = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Type.Offensive"),
+		FString("Type Offensive")
+	);
+
+	GetInstance().Abilities_Type_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Type.Passive"),
+		FString("Type Passive")
+	);
+
 
 	/**
 	 * 冷却Tag
