@@ -15,6 +15,9 @@ struct FAuraAbilityInfo
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayTag InputTag{ FGameplayTag() };
 
+	UPROPERTY(BlueprintReadOnly,DisplayName="技能状态")
+	FGameplayTag StatusTag{ FGameplayTag() };
+
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FGameplayTag CooldownTag{ FGameplayTag() };
 
