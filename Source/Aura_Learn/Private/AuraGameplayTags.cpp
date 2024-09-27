@@ -221,6 +221,11 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("技能")
 	);
 
+	GetInstance().Abilities_None = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.None"),
+		FString("技能")
+	);
+
 	GetInstance().Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Attack"),
 		FString("基础攻击")
