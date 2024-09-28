@@ -5,6 +5,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+struct FGameplayTag;
 class UAbilityInfo;
 class AAuraHUD;
 class USpellMenuWgtController;
@@ -65,4 +66,7 @@ public:
 
 	UFUNCTION() //从目标职业类型和等级获取其奖励的经验值
 	static int32 GetXpRewardForClassAndLevel(const UObject* WorldContext, ECharacterClass ClassType, const int16 Level);
+
+	UFUNCTION()
+	static const FText& GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel);
 };

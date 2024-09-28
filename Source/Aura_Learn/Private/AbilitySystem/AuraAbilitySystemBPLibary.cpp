@@ -6,6 +6,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AuraAbilityTypes.h"
+#include "AbilitySystem/Data/AbilitieDescriptions.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/CombatInterface.h"
@@ -184,6 +185,16 @@ int32 UAuraAbilitySystemBPLibary::GetXpRewardForClassAndLevel(const UObject* Wor
 	const auto& DefaultInfo = ClassDefaultInfo->GetClassDefaultInfo(ClassType);
 
 	return (int32)DefaultInfo.XPReward.GetValueAtLevel(Level);
+}
+
+const FText& UAuraAbilitySystemBPLibary::GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel)
+{
+	auto GameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
+	if (!IsValid(GameMode))return FText::GetEmpty();
+
+	if(!IsValid(GameMode->AbilityDescriptions))return FText::GetEmpty();
+
+	return GameMode->AbilityDescriptions->FindDescriptionsByTagAndLevel(GATag, GALevel);
 }
 
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)
