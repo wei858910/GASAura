@@ -1,9 +1,5 @@
-﻿// 学习使用
-
-
-#include "AbilitySystem/AuraGameplayAbility.h"
-
-#include "AbilitySystem/AuraAbilitySystemComponent.h"
+﻿#include "AbilitySystem/AuraGameplayAbility.h"
+#include "AuraGameplayTags.h"
 
 FString UAuraGameplayAbility::GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag,const int32 Level)
 {
@@ -13,14 +9,4 @@ FString UAuraGameplayAbility::GetDescription(const UAuraAbilitySystemComponent* 
 FString UAuraGameplayAbility::GetLockedDescription(const int32 Level)
 {
 	return FString{};
-}
-
-float UAuraGameplayAbility::GetManaCost(const float Level)
-{
-	return 0.f;
-}
-
-float UAuraGameplayAbility::GetCooldown(const float Level)
-{
-	return 0.f;
 }
