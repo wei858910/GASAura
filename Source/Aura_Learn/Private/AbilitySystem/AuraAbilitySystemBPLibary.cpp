@@ -4,8 +4,10 @@
 
 #include <memory>
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AuraAbilityTypes.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/Data/AbilitieDescriptions.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Game/AuraGameModeBase.h"
@@ -195,6 +197,32 @@ const FText& UAuraAbilitySystemBPLibary::GetAbilityDescriptionByLevel(const UObj
 	if(!IsValid(GameMode->AbilityDescriptions))return FText::GetEmpty();
 
 	return GameMode->AbilityDescriptions->FindDescriptionsByTagAndLevel(GATag, GALevel);
+}
+
+void UAuraAbilitySystemBPLibary::ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams)
+{
+	if (!IsValid(DamageEffectParams.TargetAbilitySystemComponent)|| !IsValid(DamageEffectParams.SourceAbilitySystemComponent))return;
+
+	const auto SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+	const auto& Tags = FAuraGmaeplayTags::GetInstance();
+	for(const auto& it:DamageEffectParams.DebuffMapGEParams)
+	{
+		auto GEContext=DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
+		GEContext.AddSourceObject(SourceAvatarActor);
+
+		auto GESpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass,
+		                                                                                      DamageEffectParams.AbilityLevel,
+		                                                                                      GEContext);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, it.Value.DamageType, it.Value.BaseDamage);//伤害
+
+		//Debuff
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Damage, it.Value.DebuffDamage);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Duration, it.Value.DebuffDuration);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Frequency, it.Value.DebuffFrequency);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Chance, 99.f);
+
+		DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*GESpecHandle.Data);
+	}
 }
 
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)

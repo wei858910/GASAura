@@ -69,4 +69,7 @@ public:
 
 	UFUNCTION()
 	static const FText& GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|DamageEffect")
+	static void ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//应用伤害GE
 };

@@ -181,6 +181,11 @@ void FAuraGmaeplayTags::InitDamageTypesTags()
 
 
 	/*伤害类型抗性*/
+	GetInstance().Attributes_Resistance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance"),
+		FString("抗性")
+	);
+
 	GetInstance().Attributes_Resistance_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Resistance.Fire"),
 		FString("火性伤害抗性")
@@ -198,11 +203,58 @@ void FAuraGmaeplayTags::InitDamageTypesTags()
 		FString("物理伤害抗性")
 	);
 
+	//Debuff
+	GetInstance().Debuff = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff"),
+		FString("Debuff for Arcane damage")
+	);
+
+	GetInstance().Debuff_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Arcane"),
+		FString("Debuff for Arcane damage")
+	);
+	GetInstance().Debuff_Burn = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Burn"),
+		FString("Debuff for Fire damage")
+	);
+	GetInstance().Debuff_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Physical"),
+		FString("Debuff for Physical damage")
+	);
+	GetInstance().Debuff_Stun = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Stun"),
+		FString("Debuff for Lightning damage")
+	);
+
+	GetInstance().Debuff_Chance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Chance"),
+		FString("Debuff Chance")
+	);
+	GetInstance().Debuff_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Damage"),
+		FString("Debuff Damage")
+	);
+	GetInstance().Debuff_Duration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Duration"),
+		FString("Debuff Duration")
+	);
+	GetInstance().Debuff_Frequency = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Frequency"),
+		FString("Debuff Frequency")
+	);
+
 	/*伤害类型映射相应抵抗*/
 	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Fire, GetInstance().Attributes_Resistance_Fire);
 	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Lightning, GetInstance().Attributes_Resistance_Lightning);
 	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Arcane, GetInstance().Attributes_Resistance_Arcane);
 	GetInstance().DamageTagToResistanceTag.Emplace(GetInstance().Damage_Physical, GetInstance().Attributes_Resistance_Physical);
+
+	/*伤害类型映射相应Debuff*/
+	GetInstance().DamageTypesToDebuffs.Emplace(GetInstance().Damage_Fire, GetInstance().Debuff_Burn);
+	GetInstance().DamageTypesToDebuffs.Emplace(GetInstance().Damage_Lightning, GetInstance().Debuff_Stun);
+	GetInstance().DamageTypesToDebuffs.Emplace(GetInstance().Damage_Arcane, GetInstance().Debuff_Arcane);
+	GetInstance().DamageTypesToDebuffs.Emplace(GetInstance().Damage_Physical, GetInstance().Debuff_Physical);
+
 }
 
 void FAuraGmaeplayTags::InitEffectTags()
