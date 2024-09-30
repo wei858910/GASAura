@@ -139,10 +139,17 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				}
 				SendXPEvent(Props);
 			}
-			//瓢伤害数字
-			ShowFloatingText(Props, LocalIncomingDamage,
-			                 UAuraAbilitySystemBPLibary::IsBlockedHit(Props.EffectContextHandle),
-			                 UAuraAbilitySystemBPLibary::IsCriticalHit(Props.EffectContextHandle));
+			// 累加伤害
+			AccumulatedDamage += LocalIncomingDamage;
+
+			// 如果计时器未启动，启动一个0.1秒的延迟调用
+			if (!GetWorld()->GetTimerManager().IsTimerActive(FloatingTextTimerHandle))
+			{
+				const bool bBlockedHit = UAuraAbilitySystemBPLibary::IsBlockedHit(Props.EffectContextHandle);
+				const bool bCriticalHit = UAuraAbilitySystemBPLibary::IsCriticalHit(Props.EffectContextHandle);
+
+				GetWorld()->GetTimerManager().SetTimer(FloatingTextTimerHandle, FTimerDelegate::CreateUObject(this, &UAuraAttributeSet::OnShowFloatingText, Props, bBlockedHit, bCriticalHit), 0.1f, false);
+			}
 		}
 	}
 
@@ -262,4 +269,13 @@ ATTRIBUTE_ONREP(UAuraAttributeSet, FireResistance)
 ATTRIBUTE_ONREP(UAuraAttributeSet, LightningResistance)
 ATTRIBUTE_ONREP(UAuraAttributeSet, ArcaneResistance)
 ATTRIBUTE_ONREP(UAuraAttributeSet, PhysicalResistance)
+
+void UAuraAttributeSet::OnShowFloatingText(FEffectProperties Props, bool bBlockedHit, bool bCriticalHit)
+{
+	// 调用显示浮动伤害文本的函数
+	ShowFloatingText(Props, AccumulatedDamage, bBlockedHit, bCriticalHit);
+
+	// 重置累加的伤害值
+	AccumulatedDamage = 0.f;
+}
 

@@ -199,12 +199,15 @@ const FText& UAuraAbilitySystemBPLibary::GetAbilityDescriptionByLevel(const UObj
 	return GameMode->AbilityDescriptions->FindDescriptionsByTagAndLevel(GATag, GALevel);
 }
 
-void UAuraAbilitySystemBPLibary::ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams)
+TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams)
 {
-	if (!IsValid(DamageEffectParams.TargetAbilitySystemComponent)|| !IsValid(DamageEffectParams.SourceAbilitySystemComponent))return;
+	TMap<FGameplayTag, FGameplayEffectContextHandle> DamageTypeToGeContextHandle;
+
+	if (!IsValid(DamageEffectParams.TargetAbilitySystemComponent)|| !IsValid(DamageEffectParams.SourceAbilitySystemComponent))return DamageTypeToGeContextHandle;
 
 	const auto SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	const auto& Tags = FAuraGmaeplayTags::GetInstance();
+	
 	for(const auto& it:DamageEffectParams.DebuffMapGEParams)
 	{
 		auto GEContext=DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
@@ -219,10 +222,14 @@ void UAuraAbilitySystemBPLibary::ApplyDamageEffect(const FDamageEffectParams& Da
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Damage, it.Value.DebuffDamage);
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Duration, it.Value.DebuffDuration);
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Frequency, it.Value.DebuffFrequency);
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Chance, 99.f);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GESpecHandle, Tags.Debuff_Chance, it.Value.DebuffChance);
 
 		DamageEffectParams.TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*GESpecHandle.Data);
+	
+		DamageTypeToGeContextHandle.Emplace(it.Value.DamageType, GEContext);
+		
 	}
+	return DamageTypeToGeContextHandle;
 }
 
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)

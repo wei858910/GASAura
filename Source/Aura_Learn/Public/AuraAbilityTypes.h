@@ -2,6 +2,7 @@
 #include "GameplayEffectTypes.h"
 #include "AuraAbilityTypes.generated.h"
 
+class UGameplayEffect;
 USTRUCT(BlueprintType)
 struct FDamageGEParamsByDamageType
 {
@@ -14,12 +15,14 @@ struct FDamageGEParamsByDamageType
 	float DebuffDuration = 0.f;
 
 	UPROPERTY()
-	float DebuffFrequency = 0.f;
+	float DebuffFrequency = 1.f;//Ö´ÐÐÆµÂÊ
 
 	UPROPERTY()
 	float DebuffDamage = 0.f;
 
 	float BaseDamage = 0.f;
+
+	float DebuffChance = 0.f;
 };
 
 USTRUCT(BlueprintType)

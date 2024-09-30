@@ -40,11 +40,9 @@ void AAuraProjectile::Destroyed()
 {
 	if(!bHit&&!HasAuthority())//如果客户端没有应用击中产生的效果，那么此时需要应用
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
-		bHit = true;
+		OnHit();
 	}
-	if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
+	
 	Super::Destroyed();
 }
 
@@ -60,23 +58,24 @@ void AAuraProjectile::BeginPlay()
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if ((!DamageEffectSpecHandle.Data.IsValid())||DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)return;//仅客户端运行会打中自己
-	if (!UAuraAbilitySystemBPLibary::IsNotFriend(OtherActor, DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser(), "Enemy"))return;
+	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+
+	if (SourceAvatarActor == OtherActor)return;//仅客户端运行会打中自己
+
+	if (!UAuraAbilitySystemBPLibary::IsNotFriend(OtherActor, SourceAvatarActor, "Enemy"))return;
+
 	if(!bHit)//防止服务端已经击中，生成音效 复制给客户端时 客户端还生成音效
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
-
-		if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
-
-		bHit = true;
+		OnHit();
 	}
 
 	if(HasAuthority())
 	{
 		if(auto TargetAsc=UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 		{
-			TargetAsc->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+			DamageEffectParams.TargetAbilitySystemComponent = TargetAsc;
+
+			UAuraAbilitySystemBPLibary::ApplyDamageEffect(DamageEffectParams);
 		}
 
 		Destroy();//服务器上销毁这个
@@ -85,5 +84,13 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveCompo
 	{
 		bHit = true;//在服务端销毁前 客户端 可能还没有触发到这个事件， 因此标记一下已经完成触发，后续不再触发 
 	}
+}
+
+void AAuraProjectile::OnHit()
+{
+	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+	if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
+	bHit = true;
 }
 

@@ -1,11 +1,13 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "AuraAbilityTypes.h"
+#include "GameplayEffectTypes.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameplayTagContainer.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
-struct FGameplayTag;
 class UAbilityInfo;
 class AAuraHUD;
 class USpellMenuWgtController;
@@ -71,5 +73,5 @@ public:
 	static const FText& GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|DamageEffect")
-	static void ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//应用伤害GE
+	static TMap<FGameplayTag, FGameplayEffectContextHandle> ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//从参数里面获取的参数向目标应用伤害GE
 };
