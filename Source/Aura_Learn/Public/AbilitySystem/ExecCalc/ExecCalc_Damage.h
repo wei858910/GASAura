@@ -21,18 +21,12 @@ struct AuraDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalResistance)
 
 	AuraDamageStatics();
-	void InitTagToCaptureDef();
 
-	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition>TagToCaptureDef;//抗性类型映射相应的属性获取
 };
 
 static const AuraDamageStatics& GetDamageStatics()
 {
 	static AuraDamageStatics DStatics;
-	if(DStatics.TagToCaptureDef.Num()<2)
-	{
-		DStatics.InitTagToCaptureDef();
-	}
 	return DStatics;
 }
 
@@ -46,4 +40,7 @@ public:
 
 	void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	                            FGameplayEffectCustomExecutionOutput& OutExecutionOutput)const override;
+
+	//计算应用Debuff
+	static void CalcDebuff(const FGameplayEffectSpec& Spec, const FGameplayEffectCustomExecutionParameters& ExecutionParams, const FAggregatorEvaluateParameters& EvaluationParameters);
 };

@@ -49,9 +49,30 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 		{
 			RepBits |= 1 << 8;
 		}
+		if(bIsSucessfulDebuff)
+		{
+			RepBits |= 1 << 9;
+
+			if (DebuffDamage > 0.f)
+			{
+				RepBits |= 1 << 10;
+			}
+			if (DebuffDuration > 0.f)
+			{
+				RepBits |= 1 << 11;
+			}
+			if (DebuffFrequency > 0.f)
+			{
+				RepBits |= 1 << 12;
+			}
+		}
+		if (DamageType.IsValid())
+		{
+			RepBits |= 1 << 13;
+		}
 
 	}
-	Ar.SerializeBits(&RepBits, 9);
+	Ar.SerializeBits(&RepBits, 14);//要序列化的位数
 
 	//对有标识的位 映射数据
 	if (RepBits & (1 << 0))
@@ -105,6 +126,37 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 		Ar << bIsCriticalHit;
 		
 	}
+
+	if (RepBits & (1 << 9))
+	{
+		Ar << bIsSucessfulDebuff;
+
+		if (RepBits & (1 << 10))
+		{
+			Ar << DebuffDamage;
+		}
+		if (RepBits & (1 << 11))
+		{
+			Ar << DebuffDuration;
+		}
+		if (RepBits & (1 << 12))
+		{
+			Ar << DebuffFrequency;
+		}
+	}
+	if (RepBits & (1 << 13))
+	{
+		if (Ar.IsLoading())
+		{
+			if (!DamageType.IsValid())
+			{
+				DamageType = TSharedPtr<FGameplayTag>(new FGameplayTag());
+			}
+		}
+		DamageType->NetSerialize(Ar, Map, bOutSuccess);
+	}
+
+
 
 	if (Ar.IsLoading())
 	{

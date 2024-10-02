@@ -7,6 +7,8 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Interaction/CombatInterface.h"
 
+static TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagToCaptureDef; //抗性类型映射相应的属性获取
+
 AuraDamageStatics::AuraDamageStatics()
 {
 	DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, Armor, Target, false);
@@ -20,21 +22,6 @@ AuraDamageStatics::AuraDamageStatics()
 	DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, ArcaneResistance, Target, false)
 	DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet, PhysicalResistance, Target, false)
 
-}
-
-void AuraDamageStatics::InitTagToCaptureDef()
-{
-	const auto& Tags = FAuraGmaeplayTags::GetInstance();
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_Armor, ArmorDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_BlockChance, BlockChanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_ArmorPenetration, ArmorPenetrationDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitChance, CriticalHitChanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitResistance, CriticalHitResistanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitDamage, CriticalHitDamageDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Arcane, ArcaneResistanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Fire, FireResistanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Lightning, LightningResistanceDef);
-	TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Physical, PhysicalResistanceDef);
 }
 
 UExecCalc_Damage::UExecCalc_Damage()
@@ -56,6 +43,28 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 {
 	Super::Execute_Implementation(ExecutionParams, OutExecutionOutput);
 
+	//初始化抗性类型映射相应的属性获取
+	
+	static bool bInitMap{false};
+	if (!bInitMap)
+	{
+		const auto& Tags = FAuraGmaeplayTags::GetInstance();
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_Armor, GetDamageStatics().ArmorDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_BlockChance, GetDamageStatics().BlockChanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_ArmorPenetration, GetDamageStatics().ArmorPenetrationDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitChance, GetDamageStatics().CriticalHitChanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitResistance,
+		                        GetDamageStatics().CriticalHitResistanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Secondary_CriticalHitDamage, GetDamageStatics().CriticalHitDamageDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Arcane, GetDamageStatics().ArcaneResistanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Fire, GetDamageStatics().FireResistanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Lightning, GetDamageStatics().LightningResistanceDef);
+		TagToCaptureDef.Emplace(Tags.Attributes_Resistance_Physical, GetDamageStatics().PhysicalResistanceDef);
+
+		bInitMap = true;
+	}
+
+
 	//获取ASC
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
@@ -74,6 +83,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
+	//Debuff
+	CalcDebuff(Spec,ExecutionParams,EvaluationParameters);
+
 	//通过caller获取伤害值
 	float Damage{0.f};
 
@@ -82,14 +94,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 		const auto& DamageTypeTag = it.Key;
 		const auto& DamageResistanceTag = it.Value;
 
-		if (!GetDamageStatics().TagToCaptureDef.Contains(DamageResistanceTag))
+		if (!TagToCaptureDef.Contains(DamageResistanceTag))
 		{
 			auto temp = GetDamageStatics();
 			UE_LOG(LogTemp, Error, TEXT("TagToCaptureDef 不存在Tag: [%s]"), *DamageResistanceTag.ToString());
 			continue;
 		}
 		//当前的抗性属性
-		const auto& CaptureDef = GetDamageStatics().TagToCaptureDef[DamageResistanceTag];//直接拿到当前的属性捕获类型 下面就方便直接获取值
+		const auto& CaptureDef = TagToCaptureDef[DamageResistanceTag];//直接拿到当前的属性捕获类型 下面就方便直接获取值
 		if(float CurentTypeDamge = Spec.GetSetByCallerMagnitude(it.Key,false)) //从GE中找寻相应Tag的Modfiy 修饰符 获取其值,没找到不给警告
 		{
 			float CurResistance{ 0.f };
@@ -166,4 +178,43 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
+}
+
+void UExecCalc_Damage::CalcDebuff(const FGameplayEffectSpec& Spec, const FGameplayEffectCustomExecutionParameters& ExecutionParams, const FAggregatorEvaluateParameters& EvaluationParameters)
+{
+	for (const auto& it : FAuraGmaeplayTags::GetInstance().DamageTypesToDebuffs)
+	{
+		const float TypeDamage = Spec.GetSetByCallerMagnitude(it.Key, false, -1.f);
+		if (TypeDamage > -0.01f)
+		{
+			const float DebuffChance = Spec.GetSetByCallerMagnitude(FAuraGmaeplayTags::GetInstance().Debuff_Chance, false, -1.f);
+			
+			if (DebuffChance <= 0.f || !(DebuffChance > FMath::RandRange(1, 100)))continue;
+
+
+
+			auto CotextHandle = Spec.GetContext();
+
+			UAuraAbilitySystemBPLibary::SetIsSuccessfulDebuff(CotextHandle, true);
+			UAuraAbilitySystemBPLibary::SetDamageType(CotextHandle, it.Key);
+
+			const float DebuffDuration = Spec.GetSetByCallerMagnitude(FAuraGmaeplayTags::GetInstance().Debuff_Duration, false, -1.f);
+			const float DebuffFrequency = Spec.GetSetByCallerMagnitude(FAuraGmaeplayTags::GetInstance().Debuff_Frequency, false, -1.f);
+			float DebuffDamage = Spec.GetSetByCallerMagnitude(FAuraGmaeplayTags::GetInstance().Debuff_Damage, false, -1.f);
+
+			//减伤
+			float TargetDebuffResistance{ 0.f };
+			const auto& ResistanceTag = FAuraGmaeplayTags::GetInstance().DamageTagToResistanceTag[it.Key];
+			ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(TagToCaptureDef[ResistanceTag], EvaluationParameters, TargetDebuffResistance);
+			TargetDebuffResistance = FMath::Max(TargetDebuffResistance, 0.f);
+
+			float ResistanceRatio = TargetDebuffResistance / (100 + TargetDebuffResistance);//对数增长形式的系数，最终只能无限接近1
+			DebuffDamage = DebuffDamage - (DebuffDamage * ResistanceRatio);
+			DebuffDamage = FMath::Max(DebuffDamage, 0.5f);//给个保底吧
+
+			UAuraAbilitySystemBPLibary::SetDebuffDamage(CotextHandle, DebuffDamage);
+			UAuraAbilitySystemBPLibary::SetDebuffDuration(CotextHandle, DebuffDuration);
+			UAuraAbilitySystemBPLibary::SetDebuffFrequency(CotextHandle, DebuffFrequency);
+		}
+	}
 }
