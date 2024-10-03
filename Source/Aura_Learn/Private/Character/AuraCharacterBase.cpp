@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,6 +24,12 @@ AAuraCharacterBase::AAuraCharacterBase()
 
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);//生成重叠碰撞检测事件
+
+	//debuff组件
+	BurnDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("BurnDebuffComponent");
+	BurnDebuffComponent->SetupAttachment(RootComponent);
+	BurnDebuffComponent->DebuffTag = FAuraGmaeplayTags::GetInstance().Debuff_Burn;
+
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -104,11 +111,21 @@ ECharacterClass AAuraCharacterBase::GetCharacterClassType_Implementation()
 	return CharacterClass;
 }
 
-void AAuraCharacterBase::Die()
+FOnASCRegistered AAuraCharacterBase::GetOnASCRegisteredDel()
+{
+	return OnASCRegistered;
+}
+
+FOnDeathDel& AAuraCharacterBase::GetOnDeathDel()
+{
+	return OnSelfDead;
+}
+
+void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器
 
-	MulticastHandleDeath();
+	MulticastHandleDeath(DeathImpulse);
 }
 
 TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() const
@@ -116,7 +133,7 @@ TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() co
 	return AttackMontages;
 }
 
-void AAuraCharacterBase::MulticastHandleDeath_Implementation()
+void AAuraCharacterBase::MulticastHandleDeath_Implementation(const FVector& DeathImpulse)
 {
 
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(),GetActorRotation());
@@ -125,17 +142,19 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);//仅物理通道碰撞
+	Weapon->AddImpulse(DeathImpulse*0.1, NAME_None, true);
 
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
-
+	GetMesh()->AddImpulse(DeathImpulse,NAME_None,true);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
 
 	bDead = true;
+	OnSelfDead.Broadcast(this);
 }
 
 void AAuraCharacterBase::BeginPlay()

@@ -48,6 +48,12 @@ struct FDamageEffectParams
 	float AbilityLevel = 1.f;
 
 	UPROPERTY()
+	float DeathImpulseMagnitude{ 0.f };
+
+	UPROPERTY()
+	FVector DeathImpulseVectro{ FVector::ZeroVector };
+
+	UPROPERTY()
 	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuff类型对应的GE相关数据
 };
 
@@ -78,6 +84,7 @@ public:
 	float GetDebuffDuration() const { return DebuffDuration; }
 	float GetDebuffFrequency() const { return DebuffFrequency; }
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
+	FVector GetDeathImpulse() const { return DeathImpulse; }
 
 	void SetCriticalHit(const bool bValue) { bIsCriticalHit = bValue; };
 	void SetBlockedHit(const bool bValue) { bIsBlockedHit = bValue; };
@@ -86,6 +93,7 @@ public:
 	void SetDebuffDuration(float InDuration) { DebuffDuration = InDuration; }
 	void SetDebuffFrequency(float InFrequency) { DebuffFrequency = InFrequency; }
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType) { DamageType = InDamageType; }
+	void SetDeathImpulse(const FVector& InImpulse) { DeathImpulse = InImpulse; }
 
 protected:
 	UPROPERTY()
@@ -107,6 +115,9 @@ protected:
 
 
 	TSharedPtr<FGameplayTag> DamageType;//伤害类型
+
+	UPROPERTY()
+	FVector DeathImpulse{ FVector::ZeroVector };
 
 private:
 

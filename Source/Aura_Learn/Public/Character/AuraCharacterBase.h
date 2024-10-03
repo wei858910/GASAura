@@ -11,6 +11,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UDebuffNiagaraComponent;
 class UNiagaraSystem;
 class UGameplayAbility;
 class UGameplayEffect;
@@ -36,15 +37,16 @@ public:
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual int32 IncrementMinionCount_Implementation(int32 DeltaCount) override;
 	virtual ECharacterClass GetCharacterClassType_Implementation() override;
+	virtual FOnASCRegistered GetOnASCRegisteredDel() override;
+	virtual FOnDeathDel& GetOnDeathDel() override;
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
 	 *  此函数将通过网络复制，并且一定会到达，即使出现带宽或网络错误。
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath(); //死亡时进行
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse=FVector::Zero()); //死亡时进行
 
-	virtual void Die() override;
-
+	virtual void Die(const FVector& DeathImpulse) override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
 
 	UPROPERTY(EditAnywhere,Category="Combat")
@@ -71,13 +73,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartDissolveTimlineOfWeapon(UMaterialInstanceDynamic* DynamicMaterialInstance);
-
-	UPROPERTY(DisplayName="角色溶解材质", EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMaterialInstance> DissolveMaterialOfMesh{nullptr};
-	UPROPERTY(DisplayName = "武器溶解材质", EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMaterialInstance> DissolveMaterialOfWeapon{ nullptr };
-
-	int16 MinionCount {0};//召唤物的数量
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
@@ -128,4 +123,17 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults", DisplayName = "职业类型")
 	ECharacterClass CharacterClass{ ECharacterClass::Warrior };//敌人种类
+
+	UPROPERTY(DisplayName = "角色溶解材质", EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> DissolveMaterialOfMesh{ nullptr };
+	UPROPERTY(DisplayName = "武器溶解材质", EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> DissolveMaterialOfWeapon{ nullptr };
+
+	int16 MinionCount{ 0 };//召唤物的数量
+
+	FOnASCRegistered OnASCRegistered;//ASC组件有效时广播
+	FOnDeathDel OnSelfDead;
+
+	UPROPERTY(VisibleAnywhere,DisplayName="火焰减益特效组件")
+	TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;
 };

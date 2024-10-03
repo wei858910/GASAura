@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemBPLibary.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
 #include "Player/AuraPlayerController.h"
@@ -118,16 +119,21 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		if (!bFatal)
 		{
 			//受击反应
-			FGameplayTagContainer ActiveTags;
-			ActiveTags.AddTag(FAuraGmaeplayTags::GetInstance().EffectHitReact);
-			Props.TargetASC->TryActivateAbilitiesByTag(ActiveTags);
+			if(UAuraAbilitySystemBPLibary::IsSuccessfulDebuff(Props.EffectContextHandle))
+			{
+				FGameplayTagContainer ActiveTags;
+				ActiveTags.AddTag(FAuraGmaeplayTags::GetInstance().EffectHitReact);
+				Props.TargetASC->TryActivateAbilitiesByTag(ActiveTags);
+			}
+
 		}
 		else
 		{
+
 			//死亡
 			if (auto CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor))
 			{
-				CombatInterface->Die();
+				CombatInterface->Die(UAuraAbilitySystemBPLibary::GetDeathImpulse(Props.EffectContextHandle));
 			}
 			SendXPEvent(Props);
 		}

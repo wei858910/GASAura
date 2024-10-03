@@ -191,8 +191,6 @@ void UExecCalc_Damage::CalcDebuff(const FGameplayEffectSpec& Spec, const FGamepl
 			
 			if (DebuffChance <= 0.f || !(DebuffChance > FMath::RandRange(1, 100)))continue;
 
-
-
 			auto CotextHandle = Spec.GetContext();
 
 			UAuraAbilitySystemBPLibary::SetIsSuccessfulDebuff(CotextHandle, true);
