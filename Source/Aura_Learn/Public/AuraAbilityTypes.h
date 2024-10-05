@@ -32,28 +32,37 @@ struct FDamageEffectParams
 
 	FDamageEffectParams() {}
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UObject> WorldContextObject = nullptr;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<UGameplayEffect> DamageGameplayEffectClass = nullptr;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UAbilitySystemComponent> SourceAbilitySystemComponent;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UAbilitySystemComponent> TargetAbilitySystemComponent;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	float AbilityLevel = 1.f;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	float DeathImpulseMagnitude{ 0.f };
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FVector DeathImpulseVectro{ FVector::ZeroVector };
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
+	float KnockbackForceMagnitude = 0.f;//击退力度
+
+	UPROPERTY(BlueprintReadWrite)
+	float KnockbackChance = 0.f;//击退触发几率
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector KnockbackForce = FVector::ZeroVector;//击退向量
+
+	UPROPERTY(BlueprintReadWrite)
 	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuff类型对应的GE相关数据
 };
 
@@ -85,6 +94,7 @@ public:
 	float GetDebuffFrequency() const { return DebuffFrequency; }
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
 	FVector GetDeathImpulse() const { return DeathImpulse; }
+	FVector GetKnockbackForce() const { return KnockbackForce; }
 
 	void SetCriticalHit(const bool bValue) { bIsCriticalHit = bValue; };
 	void SetBlockedHit(const bool bValue) { bIsBlockedHit = bValue; };
@@ -94,6 +104,7 @@ public:
 	void SetDebuffFrequency(float InFrequency) { DebuffFrequency = InFrequency; }
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType) { DamageType = InDamageType; }
 	void SetDeathImpulse(const FVector& InImpulse) { DeathImpulse = InImpulse; }
+	void SetKnockbackForce(const FVector& InForce) { KnockbackForce = InForce; }
 
 protected:
 	UPROPERTY()
@@ -118,6 +129,9 @@ protected:
 
 	UPROPERTY()
 	FVector DeathImpulse{ FVector::ZeroVector };
+
+	UPROPERTY()
+	FVector KnockbackForce = FVector::ZeroVector;
 
 private:
 

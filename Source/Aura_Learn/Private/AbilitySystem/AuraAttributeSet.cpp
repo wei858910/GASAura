@@ -119,11 +119,18 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		if (!bFatal)
 		{
 			//受击反应
-			if(UAuraAbilitySystemBPLibary::IsSuccessfulDebuff(Props.EffectContextHandle))
+			if(!UAuraAbilitySystemBPLibary::IsSuccessfulDebuff(Props.EffectContextHandle))
 			{
 				FGameplayTagContainer ActiveTags;
 				ActiveTags.AddTag(FAuraGmaeplayTags::GetInstance().EffectHitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(ActiveTags);
+
+				const FVector& KnockbackForce = UAuraAbilitySystemBPLibary::GetKnockbackForce(Props.EffectContextHandle);
+				if (!KnockbackForce.IsNearlyZero(1.f))
+				{
+					Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+				}
+
 			}
 
 		}

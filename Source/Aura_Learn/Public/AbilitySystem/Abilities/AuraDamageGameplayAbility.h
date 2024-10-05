@@ -22,7 +22,9 @@ public:
 	FGameplayTag GetCurrentAbilityTag()const;
 	const TMap<FGameplayTag, FScalableFloat>& GetDamageTypes()const;
 
+	UFUNCTION(BlueprintPure)
 	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor=nullptr);//仅填充部分拥有，需要自定化
+
 protected:
 
 	void MakeDeBuffGEParams(TMap<FGameplayTag, FDamageGEParamsByDamageType>& DebuffMapParams);//DebuffGE的各项需要的参数
@@ -40,7 +42,13 @@ protected:
 	float GetDamageByDamageType(const FGameplayTag& DamageType, const float Level = 1.f) const;
 
 	UPROPERTY(EditDefaultsOnly, DisplayName="死亡冲击力度")
-	float DeathImpulseMagnitude{60.f};
+	float DeathImpulseMagnitude{888.f};
+
+	UPROPERTY(EditDefaultsOnly, DisplayName = "击退冲击力度")
+	float KnockbackForceMagnitude{ 888.f };
+
+	UPROPERTY(EditDefaultsOnly, DisplayName = "击退触发几率")
+	float KnockbackChance{ 0.f };
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;

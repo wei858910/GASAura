@@ -129,6 +129,24 @@ UAbilityInfo* UAuraAbilitySystemBPLibary::GetAbilityInfo(const UObject* WorldCon
 	return GameMode->AbilityInfo;
 }
 
+const FVector UAuraAbilitySystemBPLibary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const auto AuraEffectContext = static_cast<const FAuraGameEffectContext*>(EffectContextHandle.Get()))
+	{
+		return AuraEffectContext->GetKnockbackForce();
+	}
+	return FVector::ZeroVector;
+}
+
+void UAuraAbilitySystemBPLibary::SetKnockbackForce(FGameplayEffectContextHandle& EffectContextHandle,
+	const FVector& InForce)
+{
+	if (auto AuraEffectContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))
+	{
+		AuraEffectContext->SetKnockbackForce(InForce);
+	}
+}
+
 bool UAuraAbilitySystemBPLibary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {
 	
@@ -213,6 +231,7 @@ TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::App
 		auto GEContext = DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
 		GEContext.AddSourceObject(SourceAvatarActor);
 		SetDeathImpulse(GEContext, DamageEffectParams.DeathImpulseVectro);
+		SetKnockbackForce(GEContext, DamageEffectParams.KnockbackForce);
 
 		auto GESpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass,
 		                                                                                      DamageEffectParams.AbilityLevel,

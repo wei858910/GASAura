@@ -47,6 +47,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContext);
 
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static const FVector GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle);
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static void SetKnockbackForce(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FVector& InForce);
+
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLib|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);//该GE中伤害是否被格挡
 
@@ -102,6 +107,6 @@ public:
 	UFUNCTION()
 	static const FText& GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|DamageEffect")
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|DamageEffect")
 	static TMap<FGameplayTag, FGameplayEffectContextHandle> ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//从参数里面获取的参数向目标应用伤害GE
 };

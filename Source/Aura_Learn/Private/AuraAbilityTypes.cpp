@@ -74,9 +74,13 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 		{
 			RepBits |= 1 << 14;
 		}
+		if (!KnockbackForce.IsZero())
+		{
+			RepBits |= 1 << 15;
+		}
 
 	}
-	Ar.SerializeBits(&RepBits, 15);//要序列化的位数
+	Ar.SerializeBits(&RepBits, 16);//要序列化的位数
 
 	//对有标识的位 映射数据
 	if (RepBits & (1 << 0))
@@ -163,7 +167,10 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 	{
 		DeathImpulse.NetSerialize(Ar, Map, bOutSuccess);//Fvector自带的网络序列化
 	}
-
+	if (RepBits & (1 << 15))
+	{
+		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
+	}
 
 	if (Ar.IsLoading())
 	{
