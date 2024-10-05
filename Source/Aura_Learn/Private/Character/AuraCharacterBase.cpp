@@ -121,6 +121,11 @@ FOnDeathDel& AAuraCharacterBase::GetOnDeathDel()
 	return OnSelfDead;
 }
 
+bool AAuraCharacterBase::IsHeroCharacter() const
+{
+	return bIsHero;
+}
+
 void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器

@@ -119,7 +119,7 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		if (!bFatal)
 		{
 			//受击反应
-			if(!UAuraAbilitySystemBPLibary::IsSuccessfulDebuff(Props.EffectContextHandle))
+			if(UAuraAbilitySystemBPLibary::IsActiveHitReact(Props.EffectContextHandle))
 			{
 				FGameplayTagContainer ActiveTags;
 				ActiveTags.AddTag(FAuraGmaeplayTags::GetInstance().EffectHitReact);
@@ -226,7 +226,7 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 
 	//设置堆叠聚合
 	GE->StackingType = EGameplayEffectStackingType::AggregateBySource;
-	GE->StackLimitCount = 3;
+	GE->StackLimitCount = 1;
 
 	//向这个GE最后添加伤害修饰器
 	GE->Modifiers.Add(FGameplayModifierInfo());
@@ -242,7 +242,7 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 		{
 			TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageTypeTag));//创建指向已存在对象的 TSharedPtr
 			AuraGEContext->SetDamageType(DebuffDamageType);
-
+			AuraGEContext->SetHitReact(false);
 			Props.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
 		}
 	}

@@ -252,6 +252,52 @@ TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::App
 	return DamageTypeToGeContextHandle;
 }
 
+TArray<FRotator> UAuraAbilitySystemBPLibary::EvenlySpeacedRotators(const FVector& Forward, const FVector& Axis, const float Spread, const int32 Count)
+{
+	const FVector Left = Forward.RotateAngleAxis(-Spread / 2.f, Axis);
+	const FVector Right = Forward.RotateAngleAxis(Spread / 2.f, Axis);
+
+	TArray<FRotator> Rotatores;
+	if(Count>1)
+	{
+		const float DeltaSpread = Spread / (Count - 1);
+		for (int i{ 0 }; i < Count; ++i)
+		{
+			const FVector Direction = Left.RotateAngleAxis(i * DeltaSpread, FVector::UpVector);
+			Rotatores.Add(Direction.Rotation());
+		}
+	}else
+	{
+		Rotatores.Add(Forward.Rotation());
+	}
+
+	return Rotatores;
+
+}
+
+TArray<FVector> UAuraAbilitySystemBPLibary::EvenlySpeacedFVector(const FVector& Forward, const FVector& Axis, const float Spread, const int32 Count)
+{
+	const FVector Left = Forward.RotateAngleAxis(-Spread / 2.f, Axis);
+	const FVector Right = Forward.RotateAngleAxis(Spread / 2.f, Axis);
+
+	TArray<FVector> Vectors;
+	if (Count > 1)
+	{
+		const float DeltaSpread = Spread / (Count - 1);
+		for (int i{ 0 }; i < Count; ++i)
+		{
+			const FVector Direction = Left.RotateAngleAxis(i * DeltaSpread, FVector::UpVector);
+			Vectors.Add(Direction);
+		}
+	}
+	else
+	{
+		Vectors.Add(Forward);
+	}
+
+	return Vectors;
+}
+
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)
 {
 	if (auto GEContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))
@@ -323,6 +369,23 @@ FVector UAuraAbilitySystemBPLibary::GetDeathImpulse(const FGameplayEffectContext
 		return AuraEffectContext->GetDeathImpulse();
 	}
 	return FVector::ZeroVector;
+}
+
+bool UAuraAbilitySystemBPLibary::IsActiveHitReact(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const auto* AuraEffectContext = static_cast<const FAuraGameEffectContext*>(EffectContextHandle.Get()))
+	{
+		return AuraEffectContext->GetHitReact();
+	}
+	return true;
+}
+
+void UAuraAbilitySystemBPLibary::SetActiveHitReact(FGameplayEffectContextHandle& EffectContextHandle,const bool bIsActive)
+{
+	if ( auto* AuraEffectContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))
+	{
+		AuraEffectContext->SetHitReact(bIsActive);
+	}
 }
 
 bool UAuraAbilitySystemBPLibary::IsSuccessfulDebuff(const FGameplayEffectContextHandle& EffectContextHandle)

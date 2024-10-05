@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "AuraAbilityTypes.h"
-#include "GameplayEffectTypes.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameplayTagContainer.h"
@@ -84,6 +83,11 @@ public:
 	static FVector GetDeathImpulse(const FGameplayEffectContextHandle& EffectContextHandle);
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static bool IsActiveHitReact(const FGameplayEffectContextHandle& EffectContextHandle);//是否启用受击反应
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static void SetActiveHitReact(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,const bool bIsActive);
+
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static bool IsSuccessfulDebuff(const FGameplayEffectContextHandle& EffectContextHandle);
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static float GetDebuffDamage(const FGameplayEffectContextHandle& EffectContextHandle);
@@ -109,4 +113,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|DamageEffect")
 	static TMap<FGameplayTag, FGameplayEffectContextHandle> ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//从参数里面获取的参数向目标应用伤害GE
+
+	/**
+	 * 生成一组能构成扇形的旋转
+	 * @param Forward 向前向量
+	 * @param Axis 扇形的绕该轴旋转生成
+	 * @param Spread 扇形总共展开的角度
+	 * @param Count 生成的数量
+	 * @return 
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|GameplayMechanics")
+	static TArray<FRotator> EvenlySpeacedRotators(const FVector& Forward, const FVector& Axis,const float Spread,const int32 Count);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|GameplayMechanics")
+	static TArray<FVector> EvenlySpeacedFVector(const FVector& Forward, const FVector& Axis, const float Spread, const int32 Count);//生成一组扇形向量
 };

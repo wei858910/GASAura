@@ -95,6 +95,7 @@ public:
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
 	FVector GetDeathImpulse() const { return DeathImpulse; }
 	FVector GetKnockbackForce() const { return KnockbackForce; }
+	bool GetHitReact() const { return bActiveHitReact; }
 
 	void SetCriticalHit(const bool bValue) { bIsCriticalHit = bValue; };
 	void SetBlockedHit(const bool bValue) { bIsBlockedHit = bValue; };
@@ -105,6 +106,7 @@ public:
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType) { DamageType = InDamageType; }
 	void SetDeathImpulse(const FVector& InImpulse) { DeathImpulse = InImpulse; }
 	void SetKnockbackForce(const FVector& InForce) { KnockbackForce = InForce; }
+	void SetHitReact(const bool bIsActiv) { bActiveHitReact = bIsActiv; }
 
 protected:
 	UPROPERTY()
@@ -132,6 +134,9 @@ protected:
 
 	UPROPERTY()
 	FVector KnockbackForce = FVector::ZeroVector;
+
+	UPROPERTY()
+	bool bActiveHitReact{ true };//是否可以启用受击反应
 
 private:
 

@@ -78,9 +78,13 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 		{
 			RepBits |= 1 << 15;
 		}
+		if (bActiveHitReact)
+		{
+			RepBits |= 1 << 16;
+		}
 
 	}
-	Ar.SerializeBits(&RepBits, 16);//要序列化的位数
+	Ar.SerializeBits(&RepBits, 17);//要序列化的位数
 
 	//对有标识的位 映射数据
 	if (RepBits & (1 << 0))
@@ -171,11 +175,17 @@ bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& 
 	{
 		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
 	}
+	if (RepBits & (1 << 16))
+	{
+		Ar << bActiveHitReact;
+	}
 
 	if (Ar.IsLoading())
 	{
 		AddInstigator(Instigator.Get(), EffectCauser.Get()); // 
 	}
+
+
 
 	bOutSuccess = true;
 	return true;
