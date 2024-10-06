@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
@@ -87,6 +88,10 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	if (GetAuraASC() && GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputPressed))
+	{
+		return;
+	}
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 
 	//控制器的旋转跟随玩家的视角，因此需要设置旋转和朝向
@@ -105,33 +110,59 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
-	
+
+	if(GetAuraASC()&& GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_CursorTrace))
+	{
+		if (MouseHoverLastActor)MouseHoverLastActor->UnHightlightActor();
+		if (MouseHoverCurrentActor)MouseHoverCurrentActor->UnHightlightActor();
+		MouseHoverCurrentActor = nullptr;
+		MouseHoverLastActor = nullptr;
+		return;
+	}
+
+	//捕获鼠标下的物体
 	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit); //检测返回鼠标指针下的对象
 	if (!CursorHit.bBlockingHit)return;
+	
+	MouseHoverCurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
-	static IEnemyInterface* LastActor{nullptr};
-	CurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
-
-	if (LastActor != nullptr)LastActor->UnHightlightActor();
-	if (CurrentActor!=nullptr&&CurrentActor)CurrentActor->HighlightActor();
-	LastActor = CurrentActor;
+	if (MouseHoverLastActor)MouseHoverLastActor->UnHightlightActor();
+	if (MouseHoverCurrentActor)
+	{
+		MouseHoverCurrentActor->HighlightActor();
+	}
+	MouseHoverLastActor = MouseHoverCurrentActor;
+	
 }
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if (GetAuraASC() && GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputPressed))
+	{
+		return;
+	}
+
 	//输入的是左键？
 	if(InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB))
 	{
-		bTargeting = (CurrentActor != nullptr && CurrentActor);
+		bTargeting = (MouseHoverCurrentActor != nullptr && MouseHoverCurrentActor);
 		bAutoRunning = false;
 	}
 
-
+	if(GetAuraASC())
+	{
+		GetAuraASC()->AbilityInputTagPressed(InputTag);
+	}
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
+
 	if (!IsValid(GetAuraASC()))return;
+	if (GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputReleased))
+	{
+		return;
+	}
 
 	//放掉的是左键 或者存在交互物？
 	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB) || bTargeting||bShiftKeyDown)
@@ -146,20 +177,25 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
 				this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
+				//将生成的导航点添加至样条线
 				Spline->ClearSplinePoints();
-
 				for (const auto& CurPoint : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(CurPoint, ESplineCoordinateSpace::World);
 				}
+
 				bAutoRunning = true;
 
 				if (NavPath->PathPoints.Num() > 0)
 				{
-					CachedDestination = NavPath->PathPoints.Last(); //点击的点可能永远达不到，但是导航生成的点可以达到
+					CachedDestination = NavPath->PathPoints.Last(); //点击的点可能永远达不到，但是导航生成的点一定是有能达到的，因此缓存导航生成的最后一个点
 					bAutoRunning = true;
 				}
 			}
+
+			//生成点击的特效
+			if(bShowMouseCursor)
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagara, CachedDestination);
 		}
 		FllowTime = 0.f;
 		bTargeting = false;
@@ -170,6 +206,10 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!IsValid(GetAuraASC()))return;
+	if (GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputHeld))
+	{
+		return;
+	}
 
 	//如果并非左键 或者存在交互对象 或者按住shift则执行技能
 	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB)||bTargeting||bShiftKeyDown)

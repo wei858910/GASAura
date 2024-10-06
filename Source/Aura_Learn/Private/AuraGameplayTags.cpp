@@ -152,6 +152,24 @@ void FAuraGmaeplayTags::InitInputTags()
 		FName("InputTag.Passive.2"),
 		FString("被动技能2")
 	);
+
+	/*交互状态*/
+	GetInstance().Player_Block_CursorTrace = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Block.CursorTrace"),
+		FString("Block tracing under the cursor")
+	);
+	GetInstance().Player_Block_InputHeld = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Block.InputHeld"),
+		FString("Block Input Held callback for input")
+	);
+	GetInstance().Player_Block_InputPressed = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Block.InputPressed"),
+		FString("Block Input Pressed callback for input")
+	);
+	GetInstance().Player_Block_InputReleased = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Block.InputReleased"),
+		FString("Block Input Released callback for input")
+	);
 }
 
 void FAuraGmaeplayTags::InitDamageTypesTags()

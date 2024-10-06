@@ -34,6 +34,12 @@ AAuraProjectile::AAuraProjectile()
 
 void AAuraProjectile::Destroyed()
 {
+	if (IsValid(ProjectileLoopSoundCmpt))
+	{
+		ProjectileLoopSoundCmpt->Stop();
+		ProjectileLoopSoundCmpt->DestroyComponent();
+	}
+
 	if(!bHit&&!HasAuthority())//如果客户端没有应用击中产生的效果，那么此时需要应用
 	{
 		OnHit();
@@ -100,7 +106,11 @@ void AAuraProjectile::OnHit()
 {
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
-	if (IsValid(ProjectileLoopSoundCmpt))ProjectileLoopSoundCmpt->Stop();
+	if (IsValid(ProjectileLoopSoundCmpt))
+	{
+		ProjectileLoopSoundCmpt->Stop();
+		ProjectileLoopSoundCmpt->DestroyComponent();
+	}
 	bHit = true;
 }
 

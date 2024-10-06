@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class UNiagaraSystem;
 class UDamageTextComponent;
 class IEnemyInterface;
 class USplineComponent;
@@ -68,7 +69,8 @@ private:
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent{nullptr};
 
-	IEnemyInterface* CurrentActor{ nullptr };//鼠标悬浮到的Actor
+	IEnemyInterface* MouseHoverCurrentActor{ nullptr };//鼠标悬浮到的Actor
+	IEnemyInterface* MouseHoverLastActor{ nullptr };
 
 	FVector CachedDestination{FVector::Zero()};//缓存点中的场景坐标
 	float FllowTime{0.f};//跟随光标移动了的时间
@@ -86,4 +88,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+
+	UPROPERTY(EditDefaultsOnly,DisplayName="点击特效")
+	TObjectPtr<UNiagaraSystem> ClickNiagara{nullptr};
 };
