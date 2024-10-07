@@ -13,6 +13,7 @@
 #include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Aura_Learn/Aura_Learn.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Character.h"
 #include "UI/Widget/DamageTextComponent.h"
@@ -121,7 +122,7 @@ void AAuraPlayerController::CursorTrace()
 	}
 
 	//捕获鼠标下的物体
-	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit); //检测返回鼠标指针下的对象
+	GetHitResultUnderCursor(ECC_Target, false, CursorHit); //检测返回鼠标指针下的对象
 	if (!CursorHit.bBlockingHit)return;
 	
 	MouseHoverCurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());

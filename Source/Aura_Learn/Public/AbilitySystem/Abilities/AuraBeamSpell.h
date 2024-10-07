@@ -17,6 +17,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StoreOnwerVaribles();
+
+	/*检测电柱碰到的第一个人*/
+	UFUNCTION(BlueprintCallable)
+	void TraceFirstTarget(const FVector& BeamTargetLocation);
 protected:
 	UPROPERTY(BlueprintReadWrite, Category="光束")
 	FVector MouseHitLocation{FVector::Zero()};
