@@ -39,4 +39,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly,Category = "光束",DisplayName="闪电连鞭最大传递")
 	int32 MaxNumShockTargets{ 5 };
+
+	UPROPERTY(EditDefaultsOnly, Category = "光束", DisplayName = "连鞭初始传递距离")
+	float StartupAddtionalLen{500};
 };

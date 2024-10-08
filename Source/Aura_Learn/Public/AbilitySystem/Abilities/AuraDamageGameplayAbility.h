@@ -39,6 +39,9 @@ protected:
 protected:
 	float GetManaCost(const float Level = 1.f) const;//获取技能的魔力消耗
 	float GetCooldown(const float Level = 1.f) const;//获取技能冷却
+
+	//根据标签类型返回伤害
+	UFUNCTION(BlueprintCallable,BlueprintPure)
 	float GetDamageByDamageType(const FGameplayTag& DamageType, const float Level = 1.f) const;
 
 	UPROPERTY(EditDefaultsOnly, DisplayName="死亡冲击力度")
