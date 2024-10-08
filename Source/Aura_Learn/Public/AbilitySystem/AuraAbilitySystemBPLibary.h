@@ -127,4 +127,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "AuraAbilitySystemLib|GameplayMechanics")
 	static TArray<FVector> EvenlySpeacedFVector(const FVector& Forward, const FVector& Axis, const float Spread, const int32 Count);//生成一组扇形向量
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|GameplayMechanics")
+	static void GetClosesTarget(const FVector& Origin,int32 MaxTarget, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosesTargets);//从一组Actor中挑出最近的N个Actor
 };

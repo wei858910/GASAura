@@ -298,6 +298,38 @@ TArray<FVector> UAuraAbilitySystemBPLibary::EvenlySpeacedFVector(const FVector& 
 	return Vectors;
 }
 
+void UAuraAbilitySystemBPLibary::GetClosesTarget(const FVector& Origin, int32 MaxTarget, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosesTargets)
+{
+
+	//如果搜索容器都不足目标数量，那么直接赋值
+	if(Actors.Num()<=MaxTarget)
+	{
+		OutClosesTargets = Actors;
+		return;
+	}
+
+	TMap<float, AActor*> DistanceToActor;
+	for(auto Actor:Actors)
+	{
+		float Distance = (Actor->GetActorLocation() - Origin).Length();
+		DistanceToActor.Add(Distance,Actor);
+	}
+
+	//从小到大排序
+	DistanceToActor.KeySort([](float a, float b)
+	{
+		return a < b;
+	});
+
+	int count = 0;
+	for(auto& Pair:DistanceToActor)
+	{
+		if (count >= MaxTarget)break;
+		OutClosesTargets.Add(Pair.Value);
+		count++;
+	}
+}
+
 void UAuraAbilitySystemBPLibary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, const bool Value)
 {
 	if (auto GEContext = static_cast<FAuraGameEffectContext*>(EffectContextHandle.Get()))

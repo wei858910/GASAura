@@ -21,6 +21,9 @@ public:
 	/*检测电柱碰到的第一个人*/
 	UFUNCTION(BlueprintCallable)
 	void TraceFirstTarget(const FVector& BeamTargetLocation);
+
+	UFUNCTION(BlueprintCallable)
+	void StoreAdditionalTargets(TArray<AActor*>& OutAdditionalTargets);//闪电连鞭
 protected:
 	UPROPERTY(BlueprintReadWrite, Category="光束")
 	FVector MouseHitLocation{FVector::Zero()};
@@ -33,4 +36,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "光束")
 	TObjectPtr<ACharacter> OnwerCharacter{ nullptr };
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly,Category = "光束",DisplayName="闪电连鞭最大传递")
+	int32 MaxNumShockTargets{ 5 };
 };
