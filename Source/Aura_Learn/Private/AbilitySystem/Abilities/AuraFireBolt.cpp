@@ -49,7 +49,9 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 
 		if (HomingTarget&& HomingTarget->Implements<UCombatInterface>())
 		{
+			ProjectfileActor->HomingTargetSceneCmpt = HomingTarget->GetRootComponent();
 			ProjectfileActor->ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();//追踪目标为对象敌人
+
 		}
 		else
 		{
@@ -60,6 +62,8 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 
 		ProjectfileActor->ProjectileMovement->HomingAccelerationMagnitude = FMath::RandRange(HomingMinSpeed,HomingMaxSpeed);//追寻目标的速度
 		ProjectfileActor->ProjectileMovement->bIsHomingProjectile = bLaunchHoming;
+
+		ProjectfileActor->HomingTargetLocation = ProjectileTargetLocation;
 
 		ProjectfileActor->FinishSpawning(SpawnTransform);
 	}

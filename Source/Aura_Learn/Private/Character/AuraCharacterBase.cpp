@@ -31,6 +31,10 @@ AAuraCharacterBase::AAuraCharacterBase()
 	BurnDebuffComponent->SetupAttachment(RootComponent);
 	BurnDebuffComponent->DebuffTag = FAuraGmaeplayTags::GetInstance().Debuff_Burn;
 
+	StunDebuffComponent = CreateDefaultSubobject<UDebuffNiagaraComponent>("StunDebuffComponent");
+	StunDebuffComponent->SetupAttachment(RootComponent);
+	StunDebuffComponent->DebuffTag = FAuraGmaeplayTags::GetInstance().Debuff_Stun;
+
 }
 
 void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -38,6 +42,8 @@ void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AAuraCharacterBase,bStun)
+	DOREPLIFETIME(AAuraCharacterBase, bIsBurned)
+	DOREPLIFETIME(AAuraCharacterBase, bIsBeingShoked)
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -119,7 +125,7 @@ ECharacterClass AAuraCharacterBase::GetCharacterClassType_Implementation()
 	return CharacterClass;
 }
 
-FOnASCRegistered AAuraCharacterBase::GetOnASCRegisteredDel()
+FOnASCRegistered& AAuraCharacterBase::GetOnASCRegisteredDel()
 {
 	return OnASCRegistered;
 }
@@ -137,6 +143,16 @@ bool AAuraCharacterBase::IsHeroCharacter() const
 USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
 {
 	return Weapon;
+}
+
+void AAuraCharacterBase::SetIsBeingShocked_Implementation(const bool ShockLoop)
+{
+	bIsBeingShoked= ShockLoop;
+}
+
+bool AAuraCharacterBase::IsBeingShocked_Implementation() const
+{
+	return bIsBeingShoked;
 }
 
 void AAuraCharacterBase::Die(const FVector& DeathImpulse)
@@ -171,6 +187,10 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation(const FVector& Deat
 
 	Dissolve();
 
+	//特效组件取消
+	BurnDebuffComponent->Deactivate();
+	StunDebuffComponent->Deactivate();
+
 	bDead = true;
 	OnSelfDead.Broadcast(this);
 }
@@ -183,6 +203,11 @@ void AAuraCharacterBase::StunTagChanged(const FGameplayTag CallbackTag, int32 Ne
 }
 
 void AAuraCharacterBase::OnRep_Stunned()
+{
+
+}
+
+void AAuraCharacterBase::OnRep_Burned()
 {
 
 }

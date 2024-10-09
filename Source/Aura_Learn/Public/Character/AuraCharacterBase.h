@@ -39,11 +39,14 @@ public:
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual int32 IncrementMinionCount_Implementation(int32 DeltaCount) override;
 	virtual ECharacterClass GetCharacterClassType_Implementation() override;
-	virtual FOnASCRegistered GetOnASCRegisteredDel() override;
+	virtual FOnASCRegistered& GetOnASCRegisteredDel() override;
 	virtual FOnDeathDel& GetOnDeathDel() override;
 	virtual bool IsHeroCharacter() const override;
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
 	virtual bool GetIsStunded() override;
+	virtual void SetIsBeingShocked_Implementation(const bool ShockLoop) override;
+	virtual bool IsBeingShocked_Implementation() const override;
+
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
 	 *  此函数将通过网络复制，并且一定会到达，即使出现带宽或网络错误。
@@ -61,9 +64,18 @@ public:
 	UPROPERTY(ReplicatedUsing=OnRep_Stunned,BlueprintReadOnly)
 	bool bStun{ false };//是否处于眩晕状态
 
+	UPROPERTY(ReplicatedUsing = OnRep_Burned, BlueprintReadOnly)
+	bool bIsBurned{ false };//是否处于灼烧
+
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	bool bIsBeingShoked{ false };//被电中？
 	
 	UFUNCTION()
 	virtual void OnRep_Stunned();
+
+	UFUNCTION()
+	virtual void OnRep_Burned();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -150,6 +162,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere,DisplayName="火焰减益特效组件")
 	TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;
+
+	UPROPERTY(VisibleAnywhere, DisplayName = "电晕减益特效组件")
+	TObjectPtr<UDebuffNiagaraComponent> StunDebuffComponent;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,DisplayName="是否视为英雄")
 	bool bIsHero{ false };

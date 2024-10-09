@@ -8,12 +8,12 @@
 #include "AbilitySystem/AuraAbilitySystemBPLibary.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/AudioComponent.h"
+#include "Net/UnrealNetwork.h"
 
 AAuraProjectile::AAuraProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
-
 
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	SetRootComponent(Sphere);
@@ -52,13 +52,42 @@ void AAuraProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	SetLifeSpan(LifeSpan);
+
+	if (bHomingProjectile)
+	{
+		ProjectileMovement->HomingAccelerationMagnitude = HomingAccelerationMagnitude;
+		ProjectileMovement->bIsHomingProjectile = bHomingProjectile;
+
+		//无效制导对象，手动创建一个
+		if (HomingTargetSceneCmpt.IsNull())
+		{
+			HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());
+			HomingTargetSceneCmpt->SetWorldLocation(HomingTargetLocation);
+			ProjectileMovement->HomingTargetComponent = HomingTargetSceneCmpt;
+		}
+		ProjectileMovement->HomingTargetComponent = HomingTargetSceneCmpt;
+	}
+	else
+	{
+		SetReplicateMovement(true);
+	}
+
 	ProjectileLoopSoundCmpt =UGameplayStatics::SpawnSoundAttached(ProjectileSound, RootComponent);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraProjectile::OnSphereOverlap);
 	
 }
 
+void AAuraProjectile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AAuraProjectile, HomingTargetSceneCmpt);
+	DOREPLIFETIME(AAuraProjectile, bHomingProjectile);
+	DOREPLIFETIME(AAuraProjectile, HomingAccelerationMagnitude);
+	DOREPLIFETIME(AAuraProjectile, HomingTargetLocation);
+}
+
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!IsValid(DamageEffectParams.SourceAbilitySystemComponent)) return;
 
