@@ -221,7 +221,21 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	//添加Debuff 标签
 	FInheritedTagContainer TagContainer = FInheritedTagContainer();
 	UTargetTagsGameplayEffectComponent& TargetTagsComponent = GE->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
-	TagContainer.Added.AddTag(FAuraGmaeplayTags::GetInstance().DamageTypesToDebuffs[DamageTypeTag]);
+	auto DeBuffTag = FAuraGmaeplayTags::GetInstance().DamageTypesToDebuffs[DamageTypeTag];
+	TagContainer.Added.AddTag(DeBuffTag);
+
+	//额外效果
+
+	//眩晕 
+	if(DeBuffTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().Debuff_Stun))
+	{
+		//禁用输入 通过上标签的方式
+		TagContainer.Added.AddTag(FAuraGmaeplayTags::GetInstance().Player_Block_CursorTrace);
+		TagContainer.Added.AddTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputHeld);
+		TagContainer.Added.AddTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputPressed);
+		TagContainer.Added.AddTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputReleased);
+	}
+
 	TargetTagsComponent.SetAndApplyTargetTagChanges(TagContainer);
 
 	//设置堆叠聚合

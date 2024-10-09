@@ -53,7 +53,7 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 		}
 		else
 		{
-			ProjectfileActor->HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());//主要是像new的对象被计入GC
+			ProjectfileActor->HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());//主要是想new的对象被计入GC，因此寄托在飞射物
 			ProjectfileActor->HomingTargetSceneCmpt->SetWorldLocation(ProjectileTargetLocation);
 			ProjectfileActor->ProjectileMovement->HomingTargetComponent = ProjectfileActor->HomingTargetSceneCmpt;
 		}

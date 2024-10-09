@@ -24,6 +24,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StoreAdditionalTargets(TArray<AActor*>& OutAdditionalTargets);//闪电连鞭
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PrimaryTargetDied(AActor* DeadActor);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AdditionalTargetDied(AActor* DeadActor);
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void RemoveOnDeathNotify(AActor* Actor);//解除绑定
+
 protected:
 	UPROPERTY(BlueprintReadWrite, Category="光束")
 	FVector MouseHitLocation{FVector::Zero()};

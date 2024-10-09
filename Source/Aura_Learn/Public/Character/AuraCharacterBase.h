@@ -25,6 +25,8 @@ class AURA_LEARN_API AAuraCharacterBase : public ACharacter, public IAbilitySyst
 
 public:
 	AAuraCharacterBase();
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 	virtual FVector GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
@@ -41,6 +43,7 @@ public:
 	virtual FOnDeathDel& GetOnDeathDel() override;
 	virtual bool IsHeroCharacter() const override;
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
+	virtual bool GetIsStunded() override;
 	/*
 	 *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
 	 *  此函数将通过网络复制，并且一定会到达，即使出现带宽或网络错误。
@@ -50,10 +53,17 @@ public:
 
 	virtual void Die(const FVector& DeathImpulse) override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
+	virtual void StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
 
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TArray<FTaggedMontage> AttackMontages;
 
+	UPROPERTY(ReplicatedUsing=OnRep_Stunned,BlueprintReadOnly)
+	bool bStun{ false };//是否处于眩晕状态
+
+	
+	UFUNCTION()
+	virtual void OnRep_Stunned();
 protected:
 	virtual void BeginPlay() override;
 
@@ -116,6 +126,8 @@ protected:
 
 	bool bDead{ false };
 
+	float DefaultMaxWalkSpeed{ 0.f };
+
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat",DisplayName="贱血特效")
 	UNiagaraSystem* BloodEffect; //贱血效果
 
@@ -142,3 +154,8 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,DisplayName="是否视为英雄")
 	bool bIsHero{ false };
 };
+
+inline bool AAuraCharacterBase::GetIsStunded()
+{
+	return bStun;
+}

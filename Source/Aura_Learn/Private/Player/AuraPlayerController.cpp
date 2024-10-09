@@ -16,6 +16,7 @@
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Character.h"
+#include "Interaction/CombatInterface.h"
 #include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController():
@@ -138,6 +139,7 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+
 	if (GetAuraASC() && GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputPressed))
 	{
 		return;
@@ -206,6 +208,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
+
 	if (!IsValid(GetAuraASC()))return;
 	if (GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_InputHeld))
 	{
@@ -228,7 +231,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		CachedDestination = CursorHit.ImpactPoint;
 	}
 
-	if(auto ControledPawn=GetPawn())
+	if(auto ControledPawn = GetPawn())
 	{
 		const auto WorldDirection = (CachedDestination - ControledPawn->GetActorLocation()).GetSafeNormal();
 		ControledPawn->AddMovementInput(WorldDirection);
@@ -239,6 +242,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 void AAuraPlayerController::AutoRun()
 {
 	auto ControledPawn = GetPawn();
+	
 	if (IsValid(ControledPawn)&&bAutoRunning)
 	{
 		//从线上找到距离角色最近的点

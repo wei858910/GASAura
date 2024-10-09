@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "GameplayEffectTypes.h"
 #include "AuraAbilityTypes.generated.h"
 
@@ -15,7 +15,7 @@ struct FDamageGEParamsByDamageType
 	float DebuffDuration = 0.f;
 
 	UPROPERTY()
-	float DebuffFrequency = 1.f;//Ö´ĞĞÆµÂÊ
+	float DebuffFrequency = 1.f;//æ‰§è¡Œé¢‘ç‡
 
 	UPROPERTY()
 	float DebuffDamage = 0.f;
@@ -54,16 +54,16 @@ struct FDamageEffectParams
 	FVector DeathImpulseVectro{ FVector::ZeroVector };
 
 	UPROPERTY(BlueprintReadWrite)
-	float KnockbackForceMagnitude = 0.f;//»÷ÍËÁ¦¶È
+	float KnockbackForceMagnitude = 0.f;//å‡»é€€åŠ›åº¦
 
 	UPROPERTY(BlueprintReadWrite)
-	float KnockbackChance = 0.f;//»÷ÍË´¥·¢¼¸ÂÊ
+	float KnockbackChance = 0.f;//å‡»é€€è§¦å‘å‡ ç‡
 
 	UPROPERTY(BlueprintReadWrite)
-	FVector KnockbackForce = FVector::ZeroVector;//»÷ÍËÏòÁ¿
+	FVector KnockbackForce = FVector::ZeroVector;//å‡»é€€å‘é‡
 
 	UPROPERTY(BlueprintReadWrite)
-	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuffÀàĞÍ¶ÔÓ¦µÄGEÏà¹ØÊı¾İ
+	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuffç±»å‹å¯¹åº”çš„GEç›¸å…³æ•°æ®
 };
 
 USTRUCT(BlueprintType)
@@ -72,7 +72,7 @@ struct FAuraGameEffectContext :public FGameplayEffectContext
 	GENERATED_BODY()
 public:
 	virtual UScriptStruct* GetScriptStruct() const override { return StaticStruct(); };
-	virtual bool NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess) override;//ÍøÂçĞòÁĞ»¯
+	virtual bool NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess) override;//ç½‘ç»œåºåˆ—åŒ–
 
 	virtual FAuraGameEffectContext* Duplicate() const override
 	{
@@ -110,12 +110,12 @@ public:
 
 protected:
 	UPROPERTY()
-	bool bIsCriticalHit{ false };//ÊÇ·ñ±©»÷
+	bool bIsCriticalHit{ false };//æ˜¯å¦æš´å‡»
 	UPROPERTY()
-	bool bIsBlockedHit{ false };//ÊÇ·ñ¸ñµ²
+	bool bIsBlockedHit{ false };//æ˜¯å¦æ ¼æŒ¡
 
 	UPROPERTY()
-	bool bIsSucessfulDebuff{ false };//³É¹¦debuff?
+	bool bIsSucessfulDebuff{ false };//æˆåŠŸdebuff?
 
 	UPROPERTY()
 	float DebuffDamage{ 0.f };
@@ -124,10 +124,10 @@ protected:
 	float DebuffDuration{ 0.f };
 
 	UPROPERTY()
-	float DebuffFrequency{ 0.f };//Ö´ĞĞÆµÂÊ
+	float DebuffFrequency{ 0.f };//æ‰§è¡Œé¢‘ç‡
 
 
-	TSharedPtr<FGameplayTag> DamageType;//ÉËº¦ÀàĞÍ
+	TSharedPtr<FGameplayTag> DamageType;//ä¼¤å®³ç±»å‹
 
 	UPROPERTY()
 	FVector DeathImpulse{ FVector::ZeroVector };
@@ -136,7 +136,7 @@ protected:
 	FVector KnockbackForce = FVector::ZeroVector;
 
 	UPROPERTY()
-	bool bActiveHitReact{ true };//ÊÇ·ñ¿ÉÒÔÆôÓÃÊÜ»÷·´Ó¦
+	bool bActiveHitReact{ true };//æ˜¯å¦å¯ä»¥å¯ç”¨å—å‡»ååº”
 
 private:
 
@@ -148,7 +148,7 @@ struct  TStructOpsTypeTraits<FAuraGameEffectContext>:TStructOpsTypeTraitsBase2<F
 	enum
 	{
 		WithNetSerializer = true,
-		WithCopy = true		// ÒÔ±ã½« TSharedPtr<FHitResult> Êı¾İ¸´ÖÆµ½¸÷´¦
+		WithCopy = true		// ä»¥ä¾¿å°† TSharedPtr<FHitResult> æ•°æ®å¤åˆ¶åˆ°å„å¤„
 	};
 
 };
