@@ -118,8 +118,8 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 
 		if (!bFatal)
 		{
-			//受击反应
-			if(UAuraAbilitySystemBPLibary::IsActiveHitReact(Props.EffectContextHandle)&&!ICombatInterface::Execute_IsBeingShocked(Props.TargetCharacter))
+			//受击反应 如果不想应用，请设置GE上下文的施法启用受击判定 SetActiveHitReact
+			if(UAuraAbilitySystemBPLibary::IsActiveHitReact(Props.EffectContextHandle))
 			{
 				FGameplayTagContainer ActiveTags;
 				ActiveTags.AddTag(FAuraGmaeplayTags::GetInstance().EffectHitReact);

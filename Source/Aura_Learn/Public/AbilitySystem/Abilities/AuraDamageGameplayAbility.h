@@ -23,7 +23,10 @@ public:
 	const TMap<FGameplayTag, FScalableFloat>& GetDamageTypes()const;
 
 	UFUNCTION(BlueprintPure)
-	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor=nullptr);//仅填充部分拥有，需要自定化
+	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr);//仅填充部分拥有，需要自定化
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,DisplayName="是否应用受击反应", Category = "Damage")
+	bool bIsApplyHitReact{ true };
 
 protected:
 

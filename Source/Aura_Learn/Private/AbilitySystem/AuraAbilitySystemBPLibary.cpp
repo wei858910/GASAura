@@ -232,7 +232,7 @@ TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::App
 		GEContext.AddSourceObject(SourceAvatarActor);
 		SetDeathImpulse(GEContext, DamageEffectParams.DeathImpulseVectro);
 		SetKnockbackForce(GEContext, DamageEffectParams.KnockbackForce);
-
+		SetActiveHitReact(GEContext, DamageEffectParams.bApplyHitReact);
 		auto GESpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass,
 		                                                                                      DamageEffectParams.AbilityLevel,
 		                                                                                      GEContext);

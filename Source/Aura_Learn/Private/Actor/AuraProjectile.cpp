@@ -59,7 +59,7 @@ void AAuraProjectile::BeginPlay()
 		ProjectileMovement->bIsHomingProjectile = bHomingProjectile;
 
 		//无效制导对象，手动创建一个
-		if (HomingTargetSceneCmpt.IsNull())
+		if (IsValid(HomingTargetSceneCmpt))
 		{
 			HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());
 			HomingTargetSceneCmpt->SetWorldLocation(HomingTargetLocation);

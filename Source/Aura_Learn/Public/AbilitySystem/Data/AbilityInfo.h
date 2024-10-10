@@ -11,7 +11,7 @@ struct FAuraAbilityInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, DisplayName = "技能标识标签", meta = (Categories = "Abilities"))
 	FGameplayTag AbilityTag{FGameplayTag()};
 
 	UPROPERTY(BlueprintReadOnly)
@@ -20,10 +20,10 @@ struct FAuraAbilityInfo
 	UPROPERTY(BlueprintReadOnly,DisplayName="技能状态")
 	FGameplayTag StatusTag{ FGameplayTag() };
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,DisplayName="技能类型")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,DisplayName="技能类型",meta = (Categories = "Abilities.Type"))
 	FGameplayTag AbilityType{ FGameplayTag() };
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, DisplayName = "冷却标签", meta = (Categories = "Cooldown"))
 	FGameplayTag CooldownTag{ FGameplayTag() };
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

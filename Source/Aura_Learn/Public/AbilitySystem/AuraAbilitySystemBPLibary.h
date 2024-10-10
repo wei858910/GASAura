@@ -84,7 +84,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static bool IsActiveHitReact(const FGameplayEffectContextHandle& EffectContextHandle);//是否启用受击反应
-	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static void SetActiveHitReact(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,const bool bIsActive);
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")

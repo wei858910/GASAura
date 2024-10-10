@@ -63,6 +63,9 @@ struct FDamageEffectParams
 	FVector KnockbackForce = FVector::ZeroVector;//击退向量
 
 	UPROPERTY(BlueprintReadWrite)
+	bool bApplyHitReact{ true };
+
+	UPROPERTY(BlueprintReadWrite)
 	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuff类型对应的GE相关数据
 };
 
