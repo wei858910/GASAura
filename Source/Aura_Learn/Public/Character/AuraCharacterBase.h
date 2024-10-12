@@ -11,6 +11,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UPassiveNiagaraComponent;
 class UDebuffNiagaraComponent;
 class UNiagaraSystem;
 class UGameplayAbility;
@@ -168,6 +169,15 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,DisplayName="是否视为英雄")
 	bool bIsHero{ false };
+
+	UPROPERTY(VisibleAnywhere,DisplayName="奥拉庇佑特效")
+	TObjectPtr<UPassiveNiagaraComponent> HaloOfProtectionNiagaraComponent;//奥拉庇佑被动技能的奶罐
+	UPROPERTY(VisibleAnywhere, DisplayName = "生命虹吸特效")
+	TObjectPtr<UPassiveNiagaraComponent> LifeSiphonNiagaraComponent;
+	UPROPERTY(VisibleAnywhere, DisplayName = "魔能虹吸特效")
+	TObjectPtr<UPassiveNiagaraComponent> ManaSiphonNiagaraComponent;
+	UPROPERTY(VisibleAnywhere, DisplayName = "Niagara跟随组件")
+	TObjectPtr<USceneComponent> EffectAttachComponent;//被动技能特效套接到此
 };
 
 inline bool AAuraCharacterBase::GetIsStunded()

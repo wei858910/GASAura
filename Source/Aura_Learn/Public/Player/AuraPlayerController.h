@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class AMagicCircle;
 class UNiagaraSystem;
 class UDamageTextComponent;
 class IEnemyInterface;
@@ -34,6 +35,11 @@ public:
 	 */
 	UFUNCTION(Client,Reliable)
 	void ShowDamage(float DamageAmount,ACharacter* TargetCharacter, const bool bBlocked=false, const bool bCriticalHit=false);
+
+	UFUNCTION(BlueprintCallable)
+	void HideMagicCircle();
+	UFUNCTION(BlueprintCallable)
+	void ShowMagicCircle();
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -53,6 +59,8 @@ private:
 	
 	void AutoRun();
 	UAuraAbilitySystemComponent* GetAuraASC();
+
+	void UpdateMagicCircleLocation();
 
 private:
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -91,4 +99,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly,DisplayName="点击特效")
 	TObjectPtr<UNiagaraSystem> ClickNiagara{nullptr};
+
+	UPROPERTY(EditDefaultsOnly,DisplayName="法阵特效Actor类型")
+	TSubclassOf<AMagicCircle> MagicCircleClass{ nullptr };
+
+	UPROPERTY(DisplayName = "法阵特效Actor")
+	TObjectPtr<AMagicCircle> MagicCircle{ nullptr };
 };

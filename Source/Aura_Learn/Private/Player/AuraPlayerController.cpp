@@ -13,6 +13,7 @@
 #include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Actor/MagicCircle.h"
 #include "Aura_Learn/Aura_Learn.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Character.h"
@@ -23,6 +24,23 @@ AAuraPlayerController::AAuraPlayerController():
 	Spline(CreateDefaultSubobject<USplineComponent>("Spline"))
 {
 	bReplicates = true;//允许复制 复制基本指的是当一个实体在服务器上发生变化时，该变化会被发送至每个客户端
+}
+
+void AAuraPlayerController::HideMagicCircle()
+{
+	if(IsValid(MagicCircle))
+	{
+		MagicCircle->Destroy();
+	}
+}
+
+void AAuraPlayerController::ShowMagicCircle()
+{
+	if (IsValid(MagicCircleClass)&&!IsValid(MagicCircle))
+	{
+		MagicCircle = GetWorld()->SpawnActor<AMagicCircle>(MagicCircleClass);
+	}
+
 }
 
 void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter, const bool bBlocked, const bool bCriticalHit)
@@ -84,8 +102,9 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	CursorTrace();
-
 	AutoRun();
+
+	UpdateMagicCircleLocation();//依赖 CursorTrace
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -267,4 +286,13 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetAuraASC()
 		AuraAbilitySystemComponent=Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
 	}
 	return AuraAbilitySystemComponent;
+}
+
+void AAuraPlayerController::UpdateMagicCircleLocation()
+{
+
+	if (!IsValid(MagicCircle))return;
+	
+	MagicCircle->SetActorLocation(CursorHit.ImpactPoint);
+	
 }
