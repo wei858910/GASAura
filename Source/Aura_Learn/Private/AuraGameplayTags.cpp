@@ -316,6 +316,16 @@ void FAuraGmaeplayTags::InitSkillTags()
 		FString("闪电链路")
 	);
 
+	GetInstance().Abilities_Arcane= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Arcane"),
+		FString("Arcane Shards Ability Tag")
+	);
+
+	GetInstance().Abilities_Arcane_ArcaneShards = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Arcane.ArcaneShards"),
+		FString("Arcane Shards Ability Tag")
+	);
+
 	GetInstance().Abilities_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Passive"),
 		FString("Life Siphon")

@@ -9,6 +9,11 @@ AMagicCircle::AMagicCircle()
 	MagicCircleDecal = CreateDefaultSubobject<UDecalComponent>("MagicCircleDecal");
 }
 
+UDecalComponent& AMagicCircle::GetMagicCircleDecal()
+{
+	return  *MagicCircleDecal;
+}
+
 void AMagicCircle::BeginPlay()
 {
 	Super::BeginPlay();

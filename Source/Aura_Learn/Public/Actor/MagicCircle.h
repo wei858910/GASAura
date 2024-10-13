@@ -14,7 +14,7 @@ class AURA_LEARN_API AMagicCircle : public AActor
 	
 public:	
 	AMagicCircle();
-
+	UDecalComponent& GetMagicCircleDecal();
 protected:
 	virtual void BeginPlay() override;
 

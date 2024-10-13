@@ -15,6 +15,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Actor/MagicCircle.h"
 #include "Aura_Learn/Aura_Learn.h"
+#include "Components/DecalComponent.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
@@ -31,6 +32,7 @@ void AAuraPlayerController::HideMagicCircle()
 	if(IsValid(MagicCircle))
 	{
 		MagicCircle->Destroy();
+		bShowMouseCursor = true;
 	}
 }
 
@@ -39,8 +41,17 @@ void AAuraPlayerController::ShowMagicCircle()
 	if (IsValid(MagicCircleClass)&&!IsValid(MagicCircle))
 	{
 		MagicCircle = GetWorld()->SpawnActor<AMagicCircle>(MagicCircleClass);
+		bShowMouseCursor = false;
 	}
 
+}
+
+void AAuraPlayerController::SetMagicCircleMaterial(UMaterialInterface* DecalMaterial)
+{
+	if (IsValid(MagicCircle))
+	{
+		MagicCircle->GetMagicCircleDecal().SetMaterial(0,DecalMaterial);
+	}
 }
 
 void AAuraPlayerController::ShowDamage_Implementation(float DamageAmount, ACharacter* TargetCharacter, const bool bBlocked, const bool bCriticalHit)
