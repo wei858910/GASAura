@@ -45,14 +45,14 @@ TArray<USceneComponent*> APointCollection::GetGroundPoints(const FVector& Ground
 
 		/*再进行计算，获得地面投影点*/
 		const FVector RaisedLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y, Pt->GetComponentLocation().Z + 500.f);
-		const FVector LoweredLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y, Pt->GetComponentLocation().Z + 500.f);
+		const FVector LoweredLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y, Pt->GetComponentLocation().Z - 500.f);
 		FHitResult HitRes;
 		TArray<AActor*>ActorToignal;
 		//忽略战斗对象
 		UAuraAbilitySystemBPLibary::GetLivePlayersWithRadius(this, ActorToignal, TArray<AActor*>(), GetActorLocation(), 1500.f);
 		FCollisionQueryParams QueryParam;
 		QueryParam.AddIgnoredActors(ActorToignal);
-		GetWorld()->LineTraceSingleByProfile(HitRes, RaisedLocation, LoweredLocation, FName("BlockAll"), QueryParam);
+		GetWorld()->LineTraceSingleByProfile(HitRes, RaisedLocation, LoweredLocation, FName("BlockAll"), QueryParam);//Profile 是碰撞预设，描述了对每个通道的响应方式
 		//设置组件位置到地面投影
 		FVector AdjustLocation = LoweredLocation;
 		AdjustLocation.Z = HitRes.ImpactPoint.Z;
