@@ -20,7 +20,7 @@ void UPassiveNiagaraComponent::BeginPlay()
 		//采用回调的方式，等待GAS有效时再进行绑定
 		if (auto CombatIF = Cast<ICombatInterface>(GetOwner()))
 		{
-			CombatIF->GetOnASCRegisteredDel().AddLambda([this](UAbilitySystemComponent* AuraASC)
+			CombatIF->GetOnASCRegisteredDel().AddLambda([this](UAbilitySystemComponent* InAuraASC)
 			{
 				if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(
 					UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner())))
