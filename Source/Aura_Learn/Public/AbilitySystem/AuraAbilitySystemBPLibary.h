@@ -136,9 +136,6 @@ public:
 	UFUNCTION() //从目标职业类型和等级获取其奖励的经验值
 	static int32 GetXpRewardForClassAndLevel(const UObject* WorldContext, ECharacterClass ClassType, const int16 Level);
 
-	UFUNCTION()
-	static const FText& GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel);
-
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|DamageEffect")
 	static TMap<FGameplayTag, FGameplayEffectContextHandle> ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//从参数里面获取的参数向目标应用伤害GE
 

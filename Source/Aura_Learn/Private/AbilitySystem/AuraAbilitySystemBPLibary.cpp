@@ -239,16 +239,6 @@ int32 UAuraAbilitySystemBPLibary::GetXpRewardForClassAndLevel(const UObject* Wor
 	return (int32)DefaultInfo.XPReward.GetValueAtLevel(Level);
 }
 
-const FText& UAuraAbilitySystemBPLibary::GetAbilityDescriptionByLevel(const UObject* WorldContext, const FGameplayTag& GATag, const int32 GALevel)
-{
-	auto GameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
-	if (!IsValid(GameMode))return FText::GetEmpty();
-
-	if(!IsValid(GameMode->AbilityDescriptions))return FText::GetEmpty();
-
-	return GameMode->AbilityDescriptions->FindDescriptionsByTagAndLevel(GATag, GALevel);
-}
-
 TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams)
 {
 	TMap<FGameplayTag, FGameplayEffectContextHandle> DamageTypeToGeContextHandle;

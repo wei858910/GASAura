@@ -23,7 +23,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GAS", DisplayName = "技能信息")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
-
-	UPROPERTY(EditDefaultsOnly, Category = "GAS", DisplayName = "技能描述列表")
-	TObjectPtr<UAbilitieDescriptions> AbilityDescriptions;
 };
