@@ -83,6 +83,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
+	//GE 设置上下文内容
+	auto GEContext = Spec.GetContext();
+
 	//Debuff
 	CalcDebuff(Spec,ExecutionParams,EvaluationParameters);
 
@@ -109,6 +112,20 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 			CurResistance = FMath::Clamp(CurResistance, 0.f, 100.f);
 			CurentTypeDamge *= (100.f - CurResistance) / 100.f;
+
+			/**
+			 * 径向伤害处理
+			 * 替代原项目的 重写TakeDamage和使用代理的形式
+			 */
+			if (UAuraAbilitySystemBPLibary::IsRadialDamage(GEContext))
+			{
+				CurentTypeDamge = UAuraAbilitySystemBPLibary::GetRadialDamageWithFalloff(TargetAvatar, CurentTypeDamge, 1.f,
+				                                                                         UAuraAbilitySystemBPLibary::GetRadialDamageOrigin(GEContext),
+				                                                                         UAuraAbilitySystemBPLibary::GetRadialDamageInnerRadius(GEContext),
+				                                                                         UAuraAbilitySystemBPLibary::GetRadialDamageOuterRadius(GEContext),
+				                                                                         1.f);
+			}
+
 			Damage += CurentTypeDamge;
 		}
 
@@ -121,8 +138,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	bool bBlock= BlockChance>FMath::RandRange(0, 100);
 	Damage = bBlock ? Damage / 2 : Damage;
 
-	//GE 设置上下文内容
-	auto GEContext = Spec.GetContext();
+
 	UAuraAbilitySystemBPLibary::SetIsBlockedHit(GEContext, bBlock);
 
 	/**

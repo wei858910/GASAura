@@ -171,6 +171,7 @@ bool AAuraCharacterBase::IsBeingShocked_Implementation() const
 	return bIsBeingShoked;
 }
 
+
 void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));//分离武器

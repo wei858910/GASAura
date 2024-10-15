@@ -66,6 +66,22 @@ struct FDamageEffectParams
 	bool bApplyHitReact{ true };
 
 	UPROPERTY(BlueprintReadWrite)
+	bool bIsRadialDamage{ false };//是否属于径向伤害
+
+	UPROPERTY(BlueprintReadWrite)
+	float RadialDamageInnerRadius{ 0.f };//径向伤害内圈半径
+
+	UPROPERTY(BlueprintReadWrite)
+	float RadialDamageOuterRadius{ 0.f };//径向伤害外圈半径
+
+	/**
+	 * 径向伤害中心点
+	 * 需DamageGA类MakeDamageEffectParamsFromClassDefaults前设置DamageGA类的RadialDamageOrigin
+	 */
+	UPROPERTY(BlueprintReadWrite)
+	FVector RadialDamageOrigin{ FVector::ZeroVector };
+
+	UPROPERTY(BlueprintReadWrite)
 	TMap<FGameplayTag, FDamageGEParamsByDamageType> DebuffMapGEParams;//DeBuff类型对应的GE相关数据
 };
 
@@ -99,6 +115,10 @@ public:
 	FVector GetDeathImpulse() const { return DeathImpulse; }
 	FVector GetKnockbackForce() const { return KnockbackForce; }
 	bool GetHitReact() const { return bActiveHitReact; }
+	bool IsRadialDamage() const { return bIsRadialDamage; }
+	float GetRadialDamageInnerRadius() const { return RadialDamageInnerRadius; }
+	float GetRadialDamageOuterRadius() const { return RadialDamageOuterRadius; }
+	FVector GetRadialDamageOrigin() const { return RadialDamageOrigin; }
 
 	void SetCriticalHit(const bool bValue) { bIsCriticalHit = bValue; };
 	void SetBlockedHit(const bool bValue) { bIsBlockedHit = bValue; };
@@ -110,6 +130,10 @@ public:
 	void SetDeathImpulse(const FVector& InImpulse) { DeathImpulse = InImpulse; }
 	void SetKnockbackForce(const FVector& InForce) { KnockbackForce = InForce; }
 	void SetHitReact(const bool bIsActiv) { bActiveHitReact = bIsActiv; }
+	void SetIsRadialDamage(bool bInIsRadialDamage) { bIsRadialDamage = bInIsRadialDamage; }
+	void SetRadialDamageInnerRadius(float InRadialDamageInnerRadius) { RadialDamageInnerRadius = InRadialDamageInnerRadius; }
+	void SetRadialDamageOuterRadius(float InRadialDamageOuterRadius) { RadialDamageOuterRadius = InRadialDamageOuterRadius; }
+	void SetRadialDamageOrigin(const FVector& InRadialDamageOrigin) { RadialDamageOrigin = InRadialDamageOrigin; }
 
 protected:
 	UPROPERTY()
@@ -140,6 +164,19 @@ protected:
 
 	UPROPERTY()
 	bool bActiveHitReact{ true };//是否可以启用受击反应
+
+
+	UPROPERTY()
+	bool bIsRadialDamage = false;
+
+	UPROPERTY()
+	float RadialDamageInnerRadius = 0.f;
+
+	UPROPERTY()
+	float RadialDamageOuterRadius = 0.f;
+
+	UPROPERTY()
+	FVector RadialDamageOrigin = FVector::ZeroVector;
 
 private:
 

@@ -25,9 +25,6 @@ public:
 	UFUNCTION(BlueprintPure)
 	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr);//仅填充部分拥有，需要自定化
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,DisplayName="是否应用受击反应", Category = "Damage")
-	bool bIsApplyHitReact{ true };
-
 protected:
 
 	void MakeDeBuffGEParams(TMap<FGameplayTag, FDamageGEParamsByDamageType>& DebuffMapParams);//DebuffGE的各项需要的参数
@@ -61,6 +58,21 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TMap<FGameplayTag, FScalableFloat>DamageTypes;//对应属性伤害的值
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "是否应用受击反应", Category = "Damage")
+	bool bIsApplyHitReact{ true };
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "是否为径向伤害", Category = "Damage")
+	bool bIsRadialDamage{ false };//是否属于径向伤害
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "径向伤害内圈范围", Category = "Damage")
+	float RadialDamageInnerRadius{ 0.f };//径向伤害内圈半径
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "径向伤害外圈范围", Category = "Damage")
+	float RadialDamageOuterRadius{ 0.f };//径向伤害外圈半径
+
+	UPROPERTY(BlueprintReadWrite, DisplayName = "径向伤害中心", Category = "Damage")
+	FVector RadialDamageOrigin{ FVector::ZeroVector };//径向伤害中心点
 
 
 };
