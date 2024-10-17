@@ -89,13 +89,7 @@ void AAuraProjectile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!IsValid(DamageEffectParams.SourceAbilitySystemComponent)) return;
-
-	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
-
-	if (SourceAvatarActor == OtherActor)return;//仅客户端运行会打中自己
-
-	if (!UAuraAbilitySystemBPLibary::IsNotFriend(OtherActor, SourceAvatarActor, "Enemy"))return;
+	if (!IsValidOverlay(OtherActor))return;
 
 	if(!bHit)//防止服务端已经击中，生成音效 复制给客户端时 客户端还生成音效
 	{
@@ -143,5 +137,18 @@ void AAuraProjectile::OnHit()
 		ProjectileLoopSoundCmpt->DestroyComponent();
 	}
 	bHit = true;
+}
+
+bool AAuraProjectile::IsValidOverlay(AActor* OtherActor) const
+{
+	if (!IsValid(DamageEffectParams.SourceAbilitySystemComponent)) return false;
+
+	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+
+	if (SourceAvatarActor == OtherActor)return false;//仅客户端运行会打中自己
+
+	if (!UAuraAbilitySystemBPLibary::IsNotFriend(OtherActor, SourceAvatarActor, "Enemy"))return false;
+
+	return true;
 }
 

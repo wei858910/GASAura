@@ -139,6 +139,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|DamageEffect")
 	static TMap<FGameplayTag, FGameplayEffectContextHandle> ApplyDamageEffect(const FDamageEffectParams& DamageEffectParams);//从参数里面获取的参数向目标应用伤害GE
 
+	/*更改 FDamageEffectParams 参数*/
+	UFUNCTION(BlueprintCallable)
+	static void SetDamageParamsRadialDamageOrigin(UPARAM(ref) FDamageEffectParams& DamageParams, const FVector& Origin,const float OutRadius,const float InnerRadius);
+
+	UFUNCTION(BlueprintCallable)
+	static void SetDamageParamsKnockback(UPARAM(ref) FDamageEffectParams& DamageParams, const FVector& Vector, const float Strength,const float Chance=100.f);
+
+	UFUNCTION(BlueprintCallable)
+	static void SetDamageParamsTargetASC(UPARAM(ref) FDamageEffectParams& DamageParams,UAbilitySystemComponent* TargetASC);
+	/*更改 FDamageEffectParams 参数*/
+
 	/**
 	 * 生成一组能构成扇形的旋转
 	 * @param Forward 向前向量

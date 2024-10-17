@@ -39,6 +39,11 @@ TArray<AAuraFireBall*> UAuraFireBlast::SpawnFireBall()
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		Fireball->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
+		Fireball->ExplosionDamageParams = Fireball->DamageEffectParams;
+		Fireball->CallerAbility = this;
+		//重叠伤害不用径向和击退
+		Fireball->DamageEffectParams.bIsRadialDamage = false;
+		Fireball->DamageEffectParams.KnockbackChance = 0.f;
 
 		FireBalls.Emplace(Fireball);
 

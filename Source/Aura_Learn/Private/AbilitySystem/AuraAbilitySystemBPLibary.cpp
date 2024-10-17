@@ -281,6 +281,38 @@ TMap<FGameplayTag, FGameplayEffectContextHandle> UAuraAbilitySystemBPLibary::App
 	return DamageTypeToGeContextHandle;
 }
 
+void UAuraAbilitySystemBPLibary::SetDamageParamsRadialDamageOrigin(FDamageEffectParams& DamageParams, const FVector& Origin, const float OutRadius, const float InnerRadius)
+{
+	DamageParams.bIsRadialDamage = true;
+	DamageParams.RadialDamageOrigin = Origin;
+	DamageParams.RadialDamageOuterRadius = OutRadius;
+	DamageParams.RadialDamageInnerRadius = InnerRadius;
+}
+
+void UAuraAbilitySystemBPLibary::SetDamageParamsKnockback(FDamageEffectParams& DamageParams, const FVector& Vector, const float Strength, const float Chance)
+{
+	
+	if(Strength<0.01f)
+	{
+		DamageParams.KnockbackChance = 0.f;
+		return;
+	}else
+	{
+		auto Rotation = Vector.Rotation();
+		Rotation.Pitch = 45.f;
+		const FVector ToTarget = Rotation.Vector();
+
+		DamageParams.DeathImpulseVectro = ToTarget * Strength;
+		DamageParams.KnockbackForce = ToTarget * Strength;
+		DamageParams.KnockbackChance = Chance;
+	}
+}
+
+void UAuraAbilitySystemBPLibary::SetDamageParamsTargetASC(FDamageEffectParams& DamageParams,UAbilitySystemComponent* TargetASC)
+{
+	DamageParams.TargetAbilitySystemComponent = TargetASC;
+}
+
 TArray<FRotator> UAuraAbilitySystemBPLibary::EvenlySpeacedRotators(const FVector& Forward, const FVector& Axis, const float Spread, const int32 Count)
 {
 	const FVector Left = Forward.RotateAngleAxis(-Spread / 2.f, Axis);
