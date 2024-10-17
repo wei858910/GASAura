@@ -282,6 +282,10 @@ void FAuraGmaeplayTags::InitEffectTags()
 		FString("伤害标签")
 	);
 
+	GetInstance().GameplayCue_FireBlast= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("GameplayCue.FireBlast"),
+		FString("GameplayCue FireBlast")
+	);
 }
 
 void FAuraGmaeplayTags::InitSkillTags()

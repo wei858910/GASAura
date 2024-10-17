@@ -10,10 +10,6 @@ void AAuraFireBall::OnHit()
 {
 	if(IsValid(GetInstigator()))
 	{
-		/**
-		 * 父类启用了网络复制 OnHit已经处于复制
-		 * 如果想使用GC的方式播放效果 没必要使用GC的默认执行（GC会使用RPC），因此使用NonReplicated 执行效果
-		 */
 		FGameplayCueParameters GameplayCueParameters;
 		GameplayCueParameters.Location = GetActorLocation();
 		UGameplayCueManager::ExecuteGameplayCue_NonReplicated(GetInstigator(),FAuraGmaeplayTags::GetInstance().GameplayCue_FireBlast, GameplayCueParameters);
