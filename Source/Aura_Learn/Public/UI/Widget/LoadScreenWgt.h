@@ -13,5 +13,9 @@ UCLASS()
 class AURA_LEARN_API ULoadScreenWgt : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
+	void BlueprintInitWgtEvent();
 };
