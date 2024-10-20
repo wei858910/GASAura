@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "AuraGameModeBase.generated.h"
 
+class USaveGame;
+class UMVVM_LoadSlot;
 class UAbilitieDescriptions;
 class UAbilityInfo;
 class UCharacterClassInfo;
@@ -23,4 +25,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GAS", DisplayName = "技能信息")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
+
+	UPROPERTY(EditDefaultsOnly,Category="存档",DisplayName="存档类")
+	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
+
+	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,uint8 SlotIdx);
 };
