@@ -3,7 +3,7 @@
  void UMVVM_LoadSlot::InitSlostIndex()
  {
 
-	 SetWgtSwitcherIndexDel.Broadcast(2);
+	 SetWgtSwitcherIndexDel.Broadcast(SlotStatus.GetValue());
  }
 
  void UMVVM_LoadSlot::SetLoadSlotName(const FString& TargetName)

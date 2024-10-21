@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "AuraGameModeBase.generated.h"
 
+class ULoadScreenSaveGame;
 class USaveGame;
 class UMVVM_LoadSlot;
 class UAbilitieDescriptions;
@@ -30,4 +31,5 @@ public:
 	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
 
 	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,uint8 SlotIdx);
+	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName,int32 SlotIdx) const;
 };

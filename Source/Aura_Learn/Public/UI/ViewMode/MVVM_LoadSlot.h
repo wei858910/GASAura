@@ -4,7 +4,9 @@
 #include "MVVMViewModelBase.h"
 #include "MVVM_LoadSlot.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetWgtSwitcherIndexDel,int32,WgtSwitcherIndex);
+enum ESaveSlotStatus : uint8;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetWgtSwitcherIndexDel, int32, WgtSwitcherIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnableSelectSlotBtnDel, bool, bEnable);
 
 /**
  * 
@@ -21,17 +23,22 @@ public:
 	void SetPlayerName(FString InPlayerName);
 
 	FString GetPlayerName() const { return PlayerName; }
-	const FString& GetLoadSlotName()const { return LoadSlotName; };
+	const FString& GetLoadSlotName()const { return LoadSlotName; }
 
 	UPROPERTY(BlueprintAssignable)
 	FSetWgtSwitcherIndexDel SetWgtSwitcherIndexDel;//切换堆叠界面的显示成员
 
+	UPROPERTY(BlueprintAssignable)
+	FEnableSelectSlotBtnDel EnableSelectSlotBtnDel;//加载存档按钮启用状态变化
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FString PlayerName;//输入的存档名字
 
 	UPROPERTY()
 	uint8 SlotIndex;//
+
+	UPROPERTY()
+	TEnumAsByte<ESaveSlotStatus> SlotStatus;
 
 private:
 	/*

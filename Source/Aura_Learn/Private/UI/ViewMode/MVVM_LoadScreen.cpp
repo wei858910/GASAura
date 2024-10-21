@@ -1,6 +1,7 @@
 #include "UI/ViewMode/MVVM_LoadScreen.h"
 
 #include "Game/AuraGameModeBase.h"
+#include "Game/LoadScreenSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/ViewMode/MVVM_LoadSlot.h"
 
@@ -29,7 +30,7 @@ void UMVVM_LoadScreen::NewSlotBtnPressed(int32 idx, const FString& EnterName)
 	{
 		LoadSlots[idx]->SetPlayerName(EnterName);
 		AuraGameMode->SaveSlotData(LoadSlots[idx], idx);
-
+		LoadSlots[idx]->SlotStatus = ESaveSlotStatus::Taken;
 		LoadSlots[idx]->InitSlostIndex();
 	}
 }
@@ -41,5 +42,33 @@ void UMVVM_LoadScreen::NewGameBtnPressed(int32 idx)
 
 void UMVVM_LoadScreen::SelectSlotBtnPressed(int32 idx)
 {
+	HasSlotSelectedDel.Broadcast();
 
+	for(auto& LoadSlot :LoadSlots)
+	{
+		//禁用按下的 加载按钮 开启另外两个槽的加载按钮
+		if(LoadSlot.Key!=idx)
+		{
+			LoadSlot.Value->EnableSelectSlotBtnDel.Broadcast(true);
+		}else
+		{
+			LoadSlot.Value->EnableSelectSlotBtnDel.Broadcast(false);
+		}
+	}
+}
+
+void UMVVM_LoadScreen::LoadData()
+{
+	if(auto AuraGameMode=Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+	{
+		for(const auto& LoadSlot:LoadSlots)
+		{
+			auto SaveObj = AuraGameMode->GetSaveSlotData(LoadSlot.Value->GetLoadSlotName(), LoadSlot.Key);
+
+			LoadSlot.Value->SlotStatus = SaveObj->SlotStatus;
+			LoadSlot.Value->SetPlayerName(SaveObj->PlayerName);
+
+			LoadSlot.Value->InitSlostIndex();
+		}
+	}
 }

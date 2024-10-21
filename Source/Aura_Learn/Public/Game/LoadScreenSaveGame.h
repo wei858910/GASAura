@@ -4,6 +4,14 @@
 #include "GameFramework/SaveGame.h"
 #include "LoadScreenSaveGame.generated.h"
 
+UENUM()
+enum ESaveSlotStatus:uint8 //存档插槽界面处于哪种界面模式
+{
+	Vacant=0, // 空缺插槽模式
+	EnterName, //输入存档名
+	Taken, //能直接加载
+};
+
 /**
  * 
  */
@@ -21,4 +29,7 @@ public:
 
 	UPROPERTY()
 	FString PlayerName{"Default Name"};
+
+	UPROPERTY()
+	TEnumAsByte<ESaveSlotStatus> SlotStatus{Vacant};
 };

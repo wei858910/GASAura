@@ -1,12 +1,13 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "MVVMViewModelBase.h"
 #include "MVVM_LoadScreen.generated.h"
 
 class UMVVM_LoadSlot;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHasSlotSelectedDel);
+
 /**
  * 
  */
@@ -33,6 +34,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SelectSlotBtnPressed(int32 idx);
+
+	void LoadData();//加载存档
+
+	UPROPERTY(BlueprintAssignable)
+	FHasSlotSelectedDel HasSlotSelectedDel;//有存档被选中时，得通知开始和删除按钮启用
+
 private:
 	UPROPERTY()
 	TMap<int32, UMVVM_LoadSlot*> LoadSlots;
