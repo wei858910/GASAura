@@ -30,6 +30,7 @@ public:
 	UPROPERTY(EditDefaultsOnly,Category="存档",DisplayName="存档类")
 	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
 
-	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,uint8 SlotIdx);
+	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,uint8 SlotIdx) const;
+	static void DeleteSlotData(UMVVM_LoadSlot* LoadSlot, uint8 SlotIdx);
 	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName,int32 SlotIdx) const;
 };

@@ -8,6 +8,7 @@
 #define CREATE_LOAD_SLOT(INDEX,SlostStr)\
 LoadSlot_##INDEX = NewObject<UMVVM_LoadSlot>(this, LoadSlotViewModelClass);\
 LoadSlot_##INDEX->SetLoadSlotName( SlostStr+#INDEX);\
+LoadSlot_##INDEX->SlotIndex = INDEX;\
 LoadSlots.Emplace(INDEX, LoadSlot_##INDEX)
 
 void UMVVM_LoadScreen::InitLoadSlot()
@@ -17,6 +18,7 @@ void UMVVM_LoadScreen::InitLoadSlot()
 	CREATE_LOAD_SLOT(0, Slot);
 	CREATE_LOAD_SLOT(1, Slot);
 	CREATE_LOAD_SLOT(2, Slot);
+
 }
 
 UMVVM_LoadSlot* UMVVM_LoadScreen::GetSlotViewModelByIndex(const uint8 Index) const
@@ -43,7 +45,7 @@ void UMVVM_LoadScreen::NewGameBtnPressed(int32 idx)
 void UMVVM_LoadScreen::SelectSlotBtnPressed(int32 idx)
 {
 	HasSlotSelectedDel.Broadcast();
-
+	ActiveSlot = LoadSlots[idx];
 	for(auto& LoadSlot :LoadSlots)
 	{
 		//禁用按下的 加载按钮 开启另外两个槽的加载按钮
@@ -55,6 +57,19 @@ void UMVVM_LoadScreen::SelectSlotBtnPressed(int32 idx)
 			LoadSlot.Value->EnableSelectSlotBtnDel.Broadcast(false);
 		}
 	}
+}
+
+void UMVVM_LoadScreen::DeleteBtnPressed()
+{
+	if(IsValid(ActiveSlot))
+	{
+		AAuraGameModeBase::DeleteSlotData(ActiveSlot, ActiveSlot->SlotIndex);
+		ActiveSlot->SlotStatus = ESaveSlotStatus::Vacant;
+		ActiveSlot->InitSlostIndex();
+		ActiveSlot->EnableSelectSlotBtnDel.Broadcast(true);
+		ActiveSlot = nullptr;
+	}
+	
 }
 
 void UMVVM_LoadScreen::LoadData()

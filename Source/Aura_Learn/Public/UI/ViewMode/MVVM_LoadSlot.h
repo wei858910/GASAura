@@ -17,7 +17,7 @@ class AURA_LEARN_API UMVVM_LoadSlot : public UMVVMViewModelBase
 	GENERATED_BODY()
 
 public:
-	void InitSlostIndex();
+	void InitSlostIndex();//通过枚举值设置界面显示的子项
 
 	void SetLoadSlotName(const FString& TargetName);
 	void SetPlayerName(FString InPlayerName);

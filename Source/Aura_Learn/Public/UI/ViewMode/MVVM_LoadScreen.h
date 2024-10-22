@@ -35,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SelectSlotBtnPressed(int32 idx);
 
+	UFUNCTION(BlueprintCallable)
+	void DeleteBtnPressed();
+
 	void LoadData();//加载存档
 
 	UPROPERTY(BlueprintAssignable)
@@ -50,4 +53,7 @@ private:
 	TObjectPtr<UMVVM_LoadSlot> LoadSlot_1;
 	UPROPERTY()
 	TObjectPtr<UMVVM_LoadSlot> LoadSlot_2;
+
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot> ActiveSlot{nullptr};//当前激活的存档槽
 };
