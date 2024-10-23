@@ -38,6 +38,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeleteBtnPressed();
 
+	UFUNCTION(BlueprintCallable)
+	void OnPlayBtnPressed();
+
 	void LoadData();//加载存档
 
 	UPROPERTY(BlueprintAssignable)

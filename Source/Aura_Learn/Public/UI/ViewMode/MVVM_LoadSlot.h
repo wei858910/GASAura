@@ -21,9 +21,11 @@ public:
 
 	void SetLoadSlotName(const FString& TargetName);
 	void SetPlayerName(FString InPlayerName);
+	void SetMapName(FString InMapName);
 
 	FString GetPlayerName() const { return PlayerName; }
 	const FString& GetLoadSlotName()const { return LoadSlotName; }
+	const FString& GetMapName()const { return MapName; }
 
 	UPROPERTY(BlueprintAssignable)
 	FSetWgtSwitcherIndexDel SetWgtSwitcherIndexDel;//切换堆叠界面的显示成员
@@ -47,4 +49,7 @@ private:
 	 */
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"),DisplayName="插槽ID")
 	FString LoadSlotName;//存档槽的名字
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess = "true"), DisplayName = "地图名")
+	FString MapName;//存档槽的名字
 };

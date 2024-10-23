@@ -1,5 +1,6 @@
 #include "UI/ViewMode/MVVM_LoadScreen.h"
 
+#include "Game/AuraGameInstance.h"
 #include "Game/AuraGameModeBase.h"
 #include "Game/LoadScreenSaveGame.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,9 +32,15 @@ void UMVVM_LoadScreen::NewSlotBtnPressed(int32 idx, const FString& EnterName)
 	if(auto AuraGameMode=Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
 	{
 		LoadSlots[idx]->SetPlayerName(EnterName);
+		LoadSlots[idx]->SetMapName(AuraGameMode->DefaultMapName);
 		AuraGameMode->SaveSlotData(LoadSlots[idx], idx);
 		LoadSlots[idx]->SlotStatus = ESaveSlotStatus::Taken;
 		LoadSlots[idx]->InitSlostIndex();
+
+		auto AuraGameInstance = Cast<UAuraGameInstance>(AuraGameMode->GetGameInstance());
+		AuraGameInstance->LoadSlotName = LoadSlots[idx]->GetLoadSlotName();
+		AuraGameInstance->LoadSlotIdx = LoadSlots[idx]->SlotIndex;
+		AuraGameInstance->PlayerStartTag = AuraGameMode->DefaultPlayerStartTag;
 	}
 }
 
@@ -72,6 +79,17 @@ void UMVVM_LoadScreen::DeleteBtnPressed()
 	
 }
 
+void UMVVM_LoadScreen::OnPlayBtnPressed()
+{
+	if (auto AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+	{
+		if(IsValid(ActiveSlot))
+		{
+			AuraGameMode->TravelToMap(ActiveSlot);
+		}
+	}
+}
+
 void UMVVM_LoadScreen::LoadData()
 {
 	if(auto AuraGameMode=Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
@@ -82,6 +100,7 @@ void UMVVM_LoadScreen::LoadData()
 
 			LoadSlot.Value->SlotStatus = SaveObj->SlotStatus;
 			LoadSlot.Value->SetPlayerName(SaveObj->PlayerName);
+			LoadSlot.Value->SetMapName(SaveObj->MapName);
 
 			LoadSlot.Value->InitSlostIndex();
 		}
