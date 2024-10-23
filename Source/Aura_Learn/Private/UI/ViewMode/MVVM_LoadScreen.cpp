@@ -83,8 +83,13 @@ void UMVVM_LoadScreen::OnPlayBtnPressed()
 {
 	if (auto AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
 	{
+		auto AuraGI=Cast<UAuraGameInstance>(AuraGameMode->GetGameInstance());
 		if(IsValid(ActiveSlot))
 		{
+			AuraGI->PlayerStartTag = ActiveSlot->PlayerStartTag;
+			AuraGI->LoadSlotName = ActiveSlot->GetLoadSlotName();
+			AuraGI->LoadSlotIdx = ActiveSlot->SlotIndex;
+
 			AuraGameMode->TravelToMap(ActiveSlot);
 		}
 	}
@@ -101,7 +106,7 @@ void UMVVM_LoadScreen::LoadData()
 			LoadSlot.Value->SlotStatus = SaveObj->SlotStatus;
 			LoadSlot.Value->SetPlayerName(SaveObj->PlayerName);
 			LoadSlot.Value->SetMapName(SaveObj->MapName);
-
+			LoadSlot.Value->PlayerStartTag = SaveObj->PlayerStartTag;
 			LoadSlot.Value->InitSlostIndex();
 		}
 	}

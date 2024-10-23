@@ -40,6 +40,9 @@ public:
 	uint8 SlotIndex;//
 
 	UPROPERTY()
+	FName PlayerStartTag;
+
+	UPROPERTY()
 	TEnumAsByte<ESaveSlotStatus> SlotStatus;
 
 private:

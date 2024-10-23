@@ -25,6 +25,8 @@ public:
 	void SaveSlotData(UMVVM_LoadSlot* LoadSlot, uint8 SlotIdx) const;
 	static void DeleteSlotData(UMVVM_LoadSlot* LoadSlot, uint8 SlotIdx);
 	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIdx) const;
+	ULoadScreenSaveGame* RetrieveInGameSaveData();//获取当前游戏的存档
+	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObj);
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
