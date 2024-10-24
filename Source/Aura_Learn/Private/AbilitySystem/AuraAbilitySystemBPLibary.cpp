@@ -7,6 +7,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Engine/DamageEvents.h"
 #include "Game/AuraGameModeBase.h"
+#include "Game/LoadScreenSaveGame.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerState.h"
@@ -80,6 +81,30 @@ void UAuraAbilitySystemBPLibary::InitializeDefaultAttributes(const UObject* Worl
 
 	auto ViatalAttributeSpecHandl = ASC->MakeOutgoingSpec(ClassDefaultInfo->ViatalAttributes, Level, GEContext);
 	ASC->ApplyGameplayEffectSpecToSelf(*ViatalAttributeSpecHandl.Data.Get());
+}
+
+void UAuraAbilitySystemBPLibary::InitAttributesFormLoadData(const UObject* WorldContext, UAbilitySystemComponent* ASC, ULoadScreenSaveGame* SaveObj)
+{
+	auto ClassDefaultInfo = GetCharacterClassInfo(WorldContext);
+	if (!ClassDefaultInfo)return;
+
+
+	const auto& GameplayTags = FAuraGmaeplayTags::GetInstance();
+
+	const AActor* SourceAvatarActor = ASC->GetAvatarActor();
+
+	FGameplayEffectContextHandle EffectContexthandle = ASC->MakeEffectContext();
+	EffectContexthandle.AddSourceObject(SourceAvatarActor);
+
+	//主要属性设置
+	const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(ClassDefaultInfo->PrimaryAttributes_SetByCaller, 1.f, EffectContexthandle);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Attributes_Primary_Strength, SaveObj->Strength);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Attributes_Primary_Intelligence, SaveObj->Intelligence);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Attributes_Primary_Resilience, SaveObj->Resilience);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Attributes_Primary_Vigor, SaveObj->Vigor);
+	ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+
+	//次要属性并非存档 靠角色的 DefaultVitalAtributes 和 DefaultVitalAtributes
 }
 
 void UAuraAbilitySystemBPLibary::GiveStartupAbilities(const UObject* WorldContenxt, UAbilitySystemComponent* ASC, const ECharacterClass CharacterClass)

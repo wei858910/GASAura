@@ -39,6 +39,9 @@ class AURA_LEARN_API UCharacterClassInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditDefaultsOnly, Category = "角色默认",DisplayName="按值设置主要属性的GE类")
+	TSubclassOf<UGameplayEffect> PrimaryAttributes_SetByCaller;
+
 	UPROPERTY(EditDefaultsOnly, Category = "普通角色类型属性")
 	TSubclassOf<UGameplayEffect> SecondaryAttributes;
 

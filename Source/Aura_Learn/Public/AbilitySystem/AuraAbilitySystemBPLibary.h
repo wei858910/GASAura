@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+class ULoadScreenSaveGame;
 class UAbilityInfo;
 class AAuraHUD;
 class USpellMenuWgtController;
@@ -36,6 +37,10 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLib|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject* WorldContenxt, ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC);//从CharacterClassInfo的配置获取信息初始化属性
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|CharacterClassDefaults")
+	static void InitAttributesFormLoadData(const UObject* WorldContext, UAbilitySystemComponent* ASC,ULoadScreenSaveGame* SaveObj);//从存档获取信息初始化属性
+
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|CharacterClassDefaults")
 	static void GiveStartupAbilities(const UObject* WorldContenxt, UAbilitySystemComponent* ASC,const ECharacterClass CharacterClass);//从CharacterClassInfo的配置获取初始的能力

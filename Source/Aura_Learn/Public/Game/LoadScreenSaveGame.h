@@ -13,7 +13,7 @@ enum ESaveSlotStatus:uint8 //存档插槽界面处于哪种界面模式
 };
 
 /**
- * 
+ * 存档，无多说
  */
 UCLASS()
 class AURA_LEARN_API ULoadScreenSaveGame : public USaveGame
@@ -38,4 +38,34 @@ public:
 
 	UPROPERTY()
 	TEnumAsByte<ESaveSlotStatus> SlotStatus{Vacant};
+
+	UPROPERTY()
+	bool bFirstTimeLoadIn{ true };//是否为第一次载入
+
+	/* 玩家信息 */
+	UPROPERTY()
+	uint16 PlayerLevel{ 1 };
+
+	UPROPERTY()
+	uint32 PlayerXP{ 0 };
+
+	UPROPERTY()
+	uint16 SpellPoint{ 0 };//技能点
+
+	UPROPERTY()
+	uint16 AttributePoint{ 0 };
+
+	UPROPERTY()
+	float Strength{ 0 };
+
+	UPROPERTY()
+	float Vigor{ 0 };
+
+	UPROPERTY()
+	float Resilience{ 0 };
+
+	UPROPERTY()
+	float Intelligence{ 0 };
+
+	/* 玩家信息 */
 };
