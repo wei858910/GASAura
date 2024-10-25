@@ -1,19 +1,47 @@
-#pragma once
+ï»¿#pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/SaveGame.h"
 #include "LoadScreenSaveGame.generated.h"
 
 UENUM()
-enum ESaveSlotStatus:uint8 //´æµµ²å²Û½çÃæ´¦ÓÚÄÄÖÖ½çÃæÄ£Ê½
+enum ESaveSlotStatus:uint8 //å­˜æ¡£æ’æ§½ç•Œé¢å¤„äºå“ªç§ç•Œé¢æ¨¡å¼
 {
-	Vacant=0, // ¿ÕÈ±²å²ÛÄ£Ê½
-	EnterName, //ÊäÈë´æµµÃû
-	Taken, //ÄÜÖ±½Ó¼ÓÔØ
+	Vacant=0, // ç©ºç¼ºæ’æ§½æ¨¡å¼
+	EnterName, //è¾“å…¥å­˜æ¡£å
+	Taken, //èƒ½ç›´æ¥åŠ è½½
+};
+
+/*
+ * ç”¨ä»¥è¾…åŠ©å­˜æ¡£æŠ€èƒ½
+ */
+USTRUCT(BlueprintType)
+struct FSavedAbility
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ClassDefaults", DisplayName = "æŠ€èƒ½ç±»")
+	TSubclassOf<UGameplayAbility> GameplayAbility;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,DisplayName="æŠ€èƒ½æ ‡ç­¾",meta=(Categories = "Abilities"))
+	FGameplayTag AbilityTag = FGameplayTag();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, DisplayName = "æŠ€èƒ½çŠ¶æ€", meta = (Categories = "Abilities.Status"))
+	FGameplayTag AbilityStatus = FGameplayTag();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, DisplayName = "æŠ€èƒ½è£…å¤‡æ§½", meta = (Categories = "InputTag"))
+	FGameplayTag AbilitySlot = FGameplayTag();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, DisplayName = "æŠ€èƒ½ç±»å‹", meta = (Categories = "Abilities.Type"))
+	FGameplayTag AbilityType = FGameplayTag();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, DisplayName = "æŠ€èƒ½ç­‰çº§")
+	int32 AbilityLevel;
 };
 
 /**
- * ´æµµ£¬ÎŞ¶àËµ
+ * å­˜æ¡£ï¼Œæ— å¤šè¯´
  */
 UCLASS()
 class AURA_LEARN_API ULoadScreenSaveGame : public USaveGame
@@ -22,7 +50,7 @@ class AURA_LEARN_API ULoadScreenSaveGame : public USaveGame
 
 public:
 	UPROPERTY()
-	FString SlotName{};//¶ÔÓ¦½çÃæÖĞµÄ²å²ÛUI
+	FString SlotName{};//å¯¹åº”ç•Œé¢ä¸­çš„æ’æ§½UI
 
 	UPROPERTY()
 	uint8 SlotIndex;
@@ -40,9 +68,9 @@ public:
 	TEnumAsByte<ESaveSlotStatus> SlotStatus{Vacant};
 
 	UPROPERTY()
-	bool bFirstTimeLoadIn{ true };//ÊÇ·ñÎªµÚÒ»´ÎÔØÈë
+	bool bFirstTimeLoadIn{ true };//æ˜¯å¦ä¸ºç¬¬ä¸€æ¬¡è½½å…¥
 
-	/* Íæ¼ÒĞÅÏ¢ */
+	/* ç©å®¶ä¿¡æ¯ */
 	UPROPERTY()
 	uint16 PlayerLevel{ 1 };
 
@@ -50,7 +78,7 @@ public:
 	uint32 PlayerXP{ 0 };
 
 	UPROPERTY()
-	uint16 SpellPoint{ 0 };//¼¼ÄÜµã
+	uint16 SpellPoint{ 0 };//æŠ€èƒ½ç‚¹
 
 	UPROPERTY()
 	uint16 AttributePoint{ 0 };
@@ -66,6 +94,10 @@ public:
 
 	UPROPERTY()
 	float Intelligence{ 0 };
+	/* ç©å®¶ä¿¡æ¯ */
 
-	/* Íæ¼ÒĞÅÏ¢ */
+	/* æŠ€èƒ½äº› */
+	UPROPERTY()
+	TArray<FSavedAbility> SaveAbilities;
+	/* æŠ€èƒ½äº› */
 };
