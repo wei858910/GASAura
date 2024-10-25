@@ -45,9 +45,8 @@ void ACheckPoint::HandleGlowEffect()
 	if (!CachedDynamicMI)
 	{
 		CachedDynamicMI = UMaterialInstanceDynamic::Create(CheckPointMesh->GetMaterial(0), this);
+		CheckPointMesh->SetMaterial(0, CachedDynamicMI);
 	}
-
-	CheckPointMesh->SetMaterial(0, CachedDynamicMI);
 
 	CheckPointReached(CachedDynamicMI);
 }

@@ -144,6 +144,11 @@ void FAuraGmaeplayTags::InitInputTags()
 		FString("键盘4键")
 	);
 
+	GetInstance().InputTag_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Passive"),
+		FString("被动技能")
+	);
+
 	GetInstance().InputTag_Passive_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.Passive.1"),
 		FString("被动技能1")

@@ -1,6 +1,7 @@
 #include "AbilitySystem/Passive/PassiveNiagaraComponent.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Interaction/CombatInterface.h"
 
@@ -15,6 +16,10 @@ void UPassiveNiagaraComponent::BeginPlay()
 	if(auto AuraASC=Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner())))
 	{
 		AuraASC->ActivatePassiveEffectDel.AddUObject(this, &UPassiveNiagaraComponent::OnPassiveActivate);
+		if(AuraASC->bStartupAbilitiesGiven&& AuraASC->GetStatusFromAbilityTag(PassiveSpellTag)==FAuraGmaeplayTags::GetInstance().Abilities_Status_Equipped)
+		{
+			Activate();
+		}
 	}else
 	{
 		//采用回调的方式，等待GAS有效时再进行绑定
@@ -26,6 +31,11 @@ void UPassiveNiagaraComponent::BeginPlay()
 					UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner())))
 				{
 					AuraASC->ActivatePassiveEffectDel.AddUObject(this, &UPassiveNiagaraComponent::OnPassiveActivate);
+
+					if (AuraASC->bStartupAbilitiesGiven && AuraASC->GetStatusFromAbilityTag(PassiveSpellTag) == FAuraGmaeplayTags::GetInstance().Abilities_Status_Equipped)
+					{
+						Activate();
+					}
 				}
 			});
 		}

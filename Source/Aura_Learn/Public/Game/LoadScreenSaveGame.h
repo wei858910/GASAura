@@ -5,6 +5,8 @@
 #include "GameFramework/SaveGame.h"
 #include "LoadScreenSaveGame.generated.h"
 
+class UGameplayAbility;
+
 UENUM()
 enum ESaveSlotStatus:uint8 //存档插槽界面处于哪种界面模式
 {
@@ -38,8 +40,12 @@ struct FSavedAbility
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, DisplayName = "技能等级")
 	int32 AbilityLevel;
-};
 
+};
+inline bool operator==(const FSavedAbility& Left, const FSavedAbility& Right)
+{
+	return Left.AbilityTag.MatchesTagExact(Right.AbilityTag);
+}
 /**
  * 存档，无多说
  */
