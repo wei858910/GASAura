@@ -28,6 +28,7 @@ public:
 	ULoadScreenSaveGame* RetrieveInGameSaveData();//获取当前游戏的存档
 	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObj);
 	void SaveWorldState(UWorld* World);
+	void LoadWorldState(UWorld* World);
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 

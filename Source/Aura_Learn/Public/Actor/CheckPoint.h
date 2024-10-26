@@ -17,6 +17,10 @@ class AURA_LEARN_API ACheckPoint : public APlayerStart,public ISaveInterface
 public:
 	ACheckPoint(const FObjectInitializer& ObjectInitializer);
 
+	/* SaveInterface */
+	virtual bool ShouldLoadTransform_Implementation() override{return false;};
+	virtual void LoadActor_Implementation() override;//如果已经存过裆，则让其亮起
+	/* SaveInterface */
 	UPROPERTY(SaveGame,BluePrintReadOnly)//Savegame能支持序列化
 	bool bReached{ false };//存档过了？
 protected:
