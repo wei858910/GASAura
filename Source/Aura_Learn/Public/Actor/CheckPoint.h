@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerStart.h"
+#include "Interaction/SaveInterface.h"
 #include "CheckPoint.generated.h"
 
 class USphereComponent;
@@ -9,13 +10,15 @@ class USphereComponent;
  * 
  */
 UCLASS()
-class AURA_LEARN_API ACheckPoint : public APlayerStart
+class AURA_LEARN_API ACheckPoint : public APlayerStart,public ISaveInterface
 {
 	GENERATED_BODY()
 
 public:
 	ACheckPoint(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(SaveGame,BluePrintReadOnly)//Savegame能支持序列化
+	bool bReached{ false };//存档过了？
 protected:
 	virtual void BeginPlay() override;
 

@@ -46,6 +46,51 @@ inline bool operator==(const FSavedAbility& Left, const FSavedAbility& Right)
 {
 	return Left.AbilityTag.MatchesTagExact(Right.AbilityTag);
 }
+
+/*
+ * 存关卡中的状态
+ */
+USTRUCT()
+struct FSavedActor
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FName ActorName = FName();
+
+	UPROPERTY()
+	FTransform Transform = FTransform();
+
+	// Actor 中的序列化变量 - 仅限于标有 SaveGame 修饰符的变量
+	UPROPERTY()
+	TArray<uint8> Bytes;
+};
+
+inline bool operator==(const FSavedActor& Left, const FSavedActor& Right)
+{
+	return Left.ActorName == Right.ActorName;
+}
+
+/**
+ * 关卡对应关卡中的状态集
+ */
+USTRUCT()
+struct FSavedMap
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString MapAssetName = FString();//地图在编辑器中的资产名
+
+	UPROPERTY()
+	TArray<FSavedActor> SavedActors;
+};
+
+inline bool operator==(const FSavedMap& Left, const FSavedMap& Right)
+{
+	return Left.MapAssetName == Right.MapAssetName;
+}
+
 /**
  * 存档，无多说
  */
@@ -106,4 +151,11 @@ public:
 	UPROPERTY()
 	TArray<FSavedAbility> SaveAbilities;
 	/* 技能些 */
+
+	//地图状态
+	UPROPERTY()
+	TArray<FSavedMap> SavedMaps;//地图状态保存
+
+	FSavedMap GetSavedMapWithMapName(const FString& InMapName);//通过地图资源名找到对应的地图状态
+	bool HasMap(const FString& InMapName);//查看是否存在这个UMAP资源
 };

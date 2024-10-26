@@ -1,5 +1,4 @@
 ﻿// 学习使用
-
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
 #include "AuraGameplayTags.h"
@@ -164,6 +163,14 @@ USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
 void AAuraCharacterBase::SetIsBeingShocked_Implementation(const bool ShockLoop)
 {
 	bIsBeingShoked= ShockLoop;
+	if(ShockLoop)
+	{
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->MaxWalkSpeed = 0.f;
+	}else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = DefaultMaxWalkSpeed;
+	}
 }
 
 bool AAuraCharacterBase::IsBeingShocked_Implementation() const

@@ -27,6 +27,7 @@ public:
 	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIdx) const;
 	ULoadScreenSaveGame* RetrieveInGameSaveData();//获取当前游戏的存档
 	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObj);
+	void SaveWorldState(UWorld* World);
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
