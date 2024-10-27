@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class IHighlightInterface;
 class AMagicCircle;
 class UNiagaraSystem;
 class UDamageTextComponent;
@@ -17,6 +18,14 @@ class UAuraInputConfig;
 class UInputMappingContext;
 class UInputAction;
 struct  FInputActionValue;
+
+enum class ETargetingStatus : uint8
+{
+	TargetingEnemy, //是可以战斗的对象
+	TargetingNonEnemy, //仅为可交互对象
+	NotTargeting
+};
+
 /**
  * 
  */
@@ -64,6 +73,9 @@ private:
 
 	void UpdateMagicCircleLocation();
 
+	static void HighlightActor(AActor* InActor);
+	static void UnHighlightActor(AActor* InActor);
+
 private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
@@ -79,14 +91,15 @@ private:
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent{nullptr};
 
-	IEnemyInterface* MouseHoverCurrentActor{ nullptr };//鼠标悬浮到的Actor
-	IEnemyInterface* MouseHoverLastActor{ nullptr };
+	TObjectPtr<AActor> MouseHoverCurrentActor{ nullptr };//鼠标悬浮到的Actor
+	TObjectPtr<AActor>  MouseHoverLastActor{ nullptr };
 
 	FVector CachedDestination{FVector::Zero()};//缓存点中的场景坐标
 	float FllowTime{0.f};//跟随光标移动了的时间
 	float ShortPressThreshold{ 0.5f };//判断是否属于长按的临界值
 	bool bAutoRunning{ false };
-	bool bTargeting{ false };//鼠标点击是否存在可交互对象
+
+	ETargetingStatus TargetingStatus{ ETargetingStatus::NotTargeting};
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius{ 50.f };//距离目标多远则被视为到达目标

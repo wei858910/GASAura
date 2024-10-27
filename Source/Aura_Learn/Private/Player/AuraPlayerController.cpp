@@ -19,6 +19,7 @@
 #include "Components/SplineComponent.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
+#include "Interaction/HighlightInterface.h"
 #include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController():
@@ -145,8 +146,8 @@ void AAuraPlayerController::CursorTrace()
 
 	if(GetAuraASC()&& GetAuraASC()->HasMatchingGameplayTag(FAuraGmaeplayTags::GetInstance().Player_Block_CursorTrace))
 	{
-		if (MouseHoverLastActor)MouseHoverLastActor->UnHightlightActor();
-		if (MouseHoverCurrentActor)MouseHoverCurrentActor->UnHightlightActor();
+		UnHighlightActor(MouseHoverLastActor);
+		UnHighlightActor(MouseHoverCurrentActor);
 		MouseHoverCurrentActor = nullptr;
 		MouseHoverLastActor = nullptr;
 		return;
@@ -155,16 +156,20 @@ void AAuraPlayerController::CursorTrace()
 	//捕获鼠标下的物体
 	GetHitResultUnderCursor(ECC_Target, false, CursorHit); //检测返回鼠标指针下的对象
 	if (!CursorHit.bBlockingHit)return;
-	
-	MouseHoverCurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
-	if (MouseHoverLastActor)MouseHoverLastActor->UnHightlightActor();
-	if (MouseHoverCurrentActor)
+	if (IsValid(CursorHit.GetActor()) && CursorHit.GetActor()->Implements<UHighlightInterface>())
 	{
-		MouseHoverCurrentActor->HighlightActor();
+		MouseHoverCurrentActor = CursorHit.GetActor();
 	}
+	else
+	{
+		MouseHoverCurrentActor = nullptr;
+	}
+
+	UnHighlightActor(MouseHoverLastActor);
+	HighlightActor(MouseHoverCurrentActor);
+
 	MouseHoverLastActor = MouseHoverCurrentActor;
-	
 }
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
@@ -178,7 +183,14 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 	//输入的是左键？
 	if(InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB))
 	{
-		bTargeting = (MouseHoverCurrentActor != nullptr && MouseHoverCurrentActor);
+		if(IsValid(MouseHoverLastActor))
+		{
+			TargetingStatus = MouseHoverLastActor->Implements<UEnemyInterface>() ? ETargetingStatus::TargetingEnemy : ETargetingStatus::NotTargeting;
+		}else
+		{
+			TargetingStatus = ETargetingStatus::NotTargeting;
+		}
+		
 		bAutoRunning = false;
 	}
 
@@ -198,7 +210,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	}
 
 	//放掉的是左键 或者存在交互物？
-	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB) || bTargeting||bShiftKeyDown)
+	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB) || TargetingStatus != ETargetingStatus::NotTargeting ||bShiftKeyDown)
 	{
 		GetAuraASC()->AbilityInputTagReleased(InputTag);
 	}
@@ -207,6 +219,17 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		auto ControlledPawn = GetPawn();
 		if (FllowTime <= ShortPressThreshold && IsValid(ControlledPawn)) //点击移动 生成路径
 		{
+			//如果存在可交互物，那么移动的目标位置为交互对象的目标位置
+			if(IsValid(MouseHoverLastActor)&& MouseHoverLastActor->Implements<UHighlightInterface>())
+			{
+				IHighlightInterface::Execute_SetMoveToLocation(MouseHoverLastActor, CachedDestination);
+			}else
+			{
+				//生成点击的特效
+				if (bShowMouseCursor)
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagara, CachedDestination);
+			}
+
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
 				this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
@@ -226,12 +249,9 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				}
 			}
 
-			//生成点击的特效
-			if(bShowMouseCursor)
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagara, CachedDestination);
 		}
 		FllowTime = 0.f;
-		bTargeting = false;
+		TargetingStatus=ETargetingStatus::NotTargeting;
 	}
 
 }
@@ -246,7 +266,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	}
 
 	//如果并非左键 或者存在交互对象 或者按住shift则执行技能
-	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB)||bTargeting||bShiftKeyDown)
+	if (!InputTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().InputTag_LMB)|| TargetingStatus == ETargetingStatus::TargetingEnemy ||bShiftKeyDown)
 	{
 		GetAuraASC()->AbilityInputTagHeld(InputTag);
 
@@ -306,4 +326,20 @@ void AAuraPlayerController::UpdateMagicCircleLocation()
 	
 	MagicCircle->SetActorLocation(CursorHit.ImpactPoint);
 	
+}
+
+void AAuraPlayerController::HighlightActor(AActor* InActor)
+{
+	if (IsValid(InActor) && InActor->Implements<UHighlightInterface>())
+	{
+		IHighlightInterface::Execute_HighlightActor(InActor);
+	}
+}
+
+void AAuraPlayerController::UnHighlightActor(AActor* InActor)
+{
+	if (IsValid(InActor) && InActor->Implements<UHighlightInterface>())
+	{
+		IHighlightInterface::Execute_UnHightlightActor(InActor);
+	}
 }

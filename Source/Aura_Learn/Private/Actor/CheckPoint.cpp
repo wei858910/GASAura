@@ -1,5 +1,4 @@
 ﻿#include "Actor/CheckPoint.h"
-
 #include "Components/SphereComponent.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/PlayerInterface.h"
@@ -20,6 +19,26 @@ ACheckPoint::ACheckPoint(const FObjectInitializer& ObjectInitializer):Super(Obje
 	CheckPointMesh->SetupAttachment(Sphere);
 	CheckPointMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CheckPointMesh->SetCollisionResponseToAllChannels(ECR_Block);
+	CheckPointMesh->SetCustomDepthStencilValue(CustomDepthStencilOverride);
+	CheckPointMesh->MarkRenderStateDirty();//标记渲染状态为“脏”状态,通知引擎该渲染状态发生变化，需更新渲染
+}
+
+void ACheckPoint::SetMoveToLocation_Implementation(FVector& OutDestination)
+{
+	OutDestination= MoveToLocation+GetActorLocation();
+}
+
+void ACheckPoint::HighlightActor_Implementation()
+{
+	if(!bReached)
+	{
+		CheckPointMesh->SetRenderCustomDepth(true);
+	}
+}
+
+void ACheckPoint::UnHightlightActor_Implementation()
+{
+	CheckPointMesh->SetRenderCustomDepth(false);
 }
 
 void ACheckPoint::LoadActor_Implementation()
@@ -34,7 +53,10 @@ void ACheckPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ACheckPoint::OnSphereOverlap);
+	if(bBindOverlapCallback)
+	{
+		Sphere->OnComponentBeginOverlap.AddDynamic(this, &ACheckPoint::OnSphereOverlap);
+	}
 }
 
 void ACheckPoint::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
