@@ -25,5 +25,5 @@ public:
 	bool ShouldLoadTransform();//是否应该保存ActorTransform
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void LoadActor();
+	void LoadActor();//根据数据加载一些状态
 };

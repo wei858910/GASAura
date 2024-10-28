@@ -26,9 +26,10 @@ public:
 	static void DeleteSlotData(UMVVM_LoadSlot* LoadSlot, uint8 SlotIdx);
 	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIdx) const;
 	ULoadScreenSaveGame* RetrieveInGameSaveData();//获取当前游戏的存档
-	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObj);
-	void SaveWorldState(UWorld* World);
+	FString GetMapNameFromMapAssetName(const FString& AssetName);//从资源名称获取地图名称
+	void SaveWorldState(UWorld* World,const FString& AssetNameOfTargetMap=FString(""), const FName& StartTagOfTargetMap = FName(""));
 	void LoadWorldState(UWorld* World);
+	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObj);
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
