@@ -8,15 +8,18 @@ ACheckPoint::ACheckPoint(const FObjectInitializer& ObjectInitializer):Super(Obje
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	TargetLocation = CreateDefaultSubobject<USceneComponent>("TargetLocation");
+
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	Sphere->SetupAttachment(GetRootComponent());
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Sphere->SetGenerateOverlapEvents(true);
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	TargetLocation->SetupAttachment(Sphere);
 
 	CheckPointMesh = CreateDefaultSubobject<UStaticMeshComponent>("CheckPointMesh");
-	CheckPointMesh->SetupAttachment(Sphere);
+	CheckPointMesh->SetupAttachment(GetRootComponent());
 	CheckPointMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CheckPointMesh->SetCollisionResponseToAllChannels(ECR_Block);
 	CheckPointMesh->SetCustomDepthStencilValue(CustomDepthStencilOverride);
@@ -25,7 +28,7 @@ ACheckPoint::ACheckPoint(const FObjectInitializer& ObjectInitializer):Super(Obje
 
 void ACheckPoint::SetMoveToLocation_Implementation(FVector& OutDestination)
 {
-	OutDestination= MoveToLocation+GetActorLocation();
+	OutDestination = TargetLocation->GetComponentLocation();
 }
 
 void ACheckPoint::HighlightActor_Implementation()

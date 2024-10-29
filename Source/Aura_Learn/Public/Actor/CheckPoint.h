@@ -49,7 +49,7 @@ protected:
 	void HandleGlowEffect();//处理发光
 
 	UPROPERTY(EditAnywhere, DisplayName="交互目标位置",meta=(MakeEditWidget="true"))
-	FVector MoveToLocation{327.f,0.f,-100.f};
+	TObjectPtr<class USceneComponent> TargetLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, DisplayName = "存档点模型")
 	TObjectPtr<UStaticMeshComponent> CheckPointMesh;
