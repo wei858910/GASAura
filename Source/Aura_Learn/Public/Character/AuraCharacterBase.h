@@ -139,6 +139,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "CombatPower")
 	TObjectPtr<UAnimMontage> HitReactMontage{nullptr};
 
+	UPROPERTY(BlueprintReadOnly)
 	bool bDead{ false };
 
 	float DefaultMaxWalkSpeed{ 0.f };

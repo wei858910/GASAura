@@ -33,6 +33,8 @@ public:
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
+	void PlayerDied(ACharacter* Deader);//玩家死亡 加载上次状态
+
 	UPROPERTY(EditDefaultsOnly,Category="Character Class Defaults",DisplayName="职业类型信息")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 
