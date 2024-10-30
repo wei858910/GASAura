@@ -59,6 +59,8 @@ public:
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
 	virtual void StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
 
+	void setCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; };//职业设置
+
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TArray<FTaggedMontage> AttackMontages;
 
