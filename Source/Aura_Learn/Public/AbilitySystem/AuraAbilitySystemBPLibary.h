@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "AuraAbilitySystemBPLibary.generated.h"
 
+class ULootTiers;
 class ULoadScreenSaveGame;
 class UAbilityInfo;
 class AAuraHUD;
@@ -50,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContext);
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLib|LootTier", meta = (DefaultToSelf = "WorldContext"))
+	static ULootTiers* GetLootTiersInfo(const UObject* WorldContext);//掉落几率配置类
 
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static const FVector GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle);

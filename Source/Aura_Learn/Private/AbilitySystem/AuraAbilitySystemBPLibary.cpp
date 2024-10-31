@@ -150,6 +150,14 @@ UAbilityInfo* UAuraAbilitySystemBPLibary::GetAbilityInfo(const UObject* WorldCon
 	return GameMode->AbilityInfo;
 }
 
+ULootTiers* UAuraAbilitySystemBPLibary::GetLootTiersInfo(const UObject* WorldContext)
+{
+	auto GameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContext));
+	if (!IsValid(GameMode))return nullptr;
+
+	return GameMode->LootTiersInfo;
+}
+
 const FVector UAuraAbilitySystemBPLibary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
 {
 	if (const auto AuraEffectContext = static_cast<const FAuraGameEffectContext*>(EffectContextHandle.Get()))

@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "AuraGameModeBase.generated.h"
 
+class ULootTiers;
 class ULoadScreenSaveGame;
 class USaveGame;
 class UMVVM_LoadSlot;
@@ -40,6 +41,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GAS", DisplayName = "技能信息")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "奖励", DisplayName = "战利品配置文件")
+	TObjectPtr<ULootTiers> LootTiersInfo;
 
 	UPROPERTY(EditDefaultsOnly,Category="存档",DisplayName="存档类")
 	TSubclassOf<USaveGame> LoadScreenSaveGameClass;

@@ -67,7 +67,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects",DisplayName="应用GE之后自动销毁")
 	bool bDestroyOnEffectApplication{ false };
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Applied Effects")
 	float ActorLevel{ 1.f };//GE应用的等级
 private:
 
