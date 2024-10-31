@@ -1,6 +1,4 @@
-﻿// 学习使用
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -61,6 +59,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* TargetActor);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void FloatctorEvent();
+
+	UPROPERTY(EditAnywhere, DisplayName = "是否浮动")
+	bool bFloattActor{ true };
+
 protected:
 	UPROPERTY(EditAnywhere)
 	TArray<FEffectWithPolicy> EffectWithPolicys;
@@ -69,6 +73,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Applied Effects")
 	float ActorLevel{ 1.f };//GE应用的等级
+
+
 private:
 
 };
