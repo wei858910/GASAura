@@ -118,7 +118,10 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 
 		if (!bFatal)
 		{
-			//受击反应 如果不想应用，请设置GE上下文的施法启用受击判定 SetActiveHitReact
+			/* 受击反应 
+			 *  由AuraDamageabilityBase 中 MakeEffectParams 时已经进行击退应用计算
+			 *  如果想不受影响 也可以调用库函数设置 但是首先应该考虑在编辑器中将GA取消应用 受击反应
+			 */
 			if(UAuraAbilitySystemBPLibary::IsActiveHitReact(Props.EffectContextHandle))
 			{
 				FGameplayTagContainer ActiveTags;
