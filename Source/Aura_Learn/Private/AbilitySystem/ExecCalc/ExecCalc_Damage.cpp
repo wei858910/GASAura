@@ -111,7 +111,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 			ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvaluationParameters, CurResistance);
 
 			CurResistance = FMath::Clamp(CurResistance, 0.f, 100.f);
-			CurentTypeDamge *= (100.f - CurResistance) / 100.f;
+			CurentTypeDamge *= 100.f/(100.f + CurResistance*4.f) ;
 
 			/**
 			 * 径向伤害处理
