@@ -76,6 +76,11 @@ void UMVVM_LoadScreen::DeleteBtnPressed()
 		ActiveSlot->SlotStatus = ESaveSlotStatus::Vacant;
 		ActiveSlot->InitSlostIndex();
 		ActiveSlot->EnableSelectSlotBtnDel.Broadcast(true);
+		if (auto AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+		{
+			ActiveSlot->PlayerStartTag = AuraGameMode->DefaultPlayerStartTag;
+		}
+		
 		ActiveSlot = nullptr;
 	}
 	
