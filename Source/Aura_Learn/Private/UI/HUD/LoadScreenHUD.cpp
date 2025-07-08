@@ -16,7 +16,7 @@ void ALoadScreenHUD::BeginPlay()
 	LoadScreenWidget->AddToViewport();
 	
 	/*
-	 * 此时 加载菜单界面已经完成 初始化存档槽界面
+	 * 姝ゆ椂 鍔犺浇鑿滃崟鐣岄潰宸茬粡瀹屾垚 鍒濆鍖栧瓨妗ｆЫ鐣岄潰
 	 */
 	LoadScreenWidget->BlueprintInitWgtEvent();
 

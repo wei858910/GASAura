@@ -11,8 +11,8 @@ void AAuraFireBall::OnHit()
 	if(IsValid(GetInstigator()))
 	{
 		/**
-		 * ¸¸ÀàÆôÓÃÁËÍøÂç¸´ÖÆ OnHitÒÑ¾­´¦ÓÚ¸´ÖÆ
-		 * Èç¹ûÏëÊ¹ÓÃGCµÄ·½Ê½²¥·ÅĞ§¹û Ã»±ØÒªÊ¹ÓÃGCµÄÄ¬ÈÏÖ´ĞĞ£¨GC»áÊ¹ÓÃRPC£©£¬Òò´ËÊ¹ÓÃNonReplicated Ö´ĞĞĞ§¹û
+		 * çˆ¶ç±»å¯ç”¨äº†ç½‘ç»œå¤åˆ¶ OnHitå·²ç»å¤„äºå¤åˆ¶
+		 * å¦‚æœæƒ³ä½¿ç”¨GCçš„æ–¹å¼æ’­æ”¾æ•ˆæœ æ²¡å¿…è¦ä½¿ç”¨GCçš„é»˜è®¤æ‰§è¡Œï¼ˆGCä¼šä½¿ç”¨RPCï¼‰ï¼Œå› æ­¤ä½¿ç”¨NonReplicated æ‰§è¡Œæ•ˆæœ
 		 */
 		FGameplayCueParameters GameplayCueParameters;
 		GameplayCueParameters.Location = GetActorLocation();
@@ -45,12 +45,12 @@ void AAuraFireBall::OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveCompone
 			DamageEffectParams.DeathImpulseVectro = DeathImpulse;
 			DamageEffectParams.TargetAbilitySystemComponent = TargetAsc;
 
-			//»÷ÍË
+			//å‡»é€€
 			const bool bKnockback = FMath::RandRange(1, 100) < DamageEffectParams.KnockbackChance;
 			if (bKnockback)
 			{
 				FRotator Rotation = GetActorRotation();
-				Rotation.Pitch = 45.f; //ÏòÁ¿Ğ©Î¢Æ«×ª£¬ÈÃµĞÈËĞ¡·É
+				Rotation.Pitch = 45.f; //å‘é‡äº›å¾®åè½¬ï¼Œè®©æ•Œäººå°é£
 
 				const FVector KnockbackDirection = Rotation.Vector();
 				const FVector KnockbackForce = KnockbackDirection * DamageEffectParams.KnockbackForceMagnitude;

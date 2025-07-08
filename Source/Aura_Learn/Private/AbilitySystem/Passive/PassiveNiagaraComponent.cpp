@@ -22,7 +22,7 @@ void UPassiveNiagaraComponent::BeginPlay()
 		}
 	}else
 	{
-		//采用回调的方式，等待GAS有效时再进行绑定
+		//閲囩敤鍥炶皟鐨勬柟寮忥紝绛夊緟GAS鏈夋晥鏃跺啀杩涜缁戝畾
 		if (auto CombatIF = Cast<ICombatInterface>(GetOwner()))
 		{
 			CombatIF->GetOnASCRegisteredDel().AddLambda([this](UAbilitySystemComponent* InAuraASC)

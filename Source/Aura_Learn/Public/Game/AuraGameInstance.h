@@ -14,7 +14,7 @@ class AURA_LEARN_API UAuraGameInstance : public UGameInstance
 
 public:
 	UPROPERTY()
-	FName PlayerStartTag{""};//采用哪个玩家起点实例
+	FName PlayerStartTag{""};//閲囩敤鍝釜鐜╁璧风偣瀹炰緥
 
 	UPROPERTY()
 	FString  LoadSlotName{ "" };

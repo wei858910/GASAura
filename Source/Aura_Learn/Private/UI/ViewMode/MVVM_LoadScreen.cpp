@@ -6,20 +6,22 @@
 #include "Kismet/GameplayStatics.h"
 #include "UI/ViewMode/MVVM_LoadSlot.h"
 
-#define CREATE_LOAD_SLOT(INDEX,SlostStr)\
-LoadSlot_##INDEX = NewObject<UMVVM_LoadSlot>(this, LoadSlotViewModelClass);\
-LoadSlot_##INDEX->SetLoadSlotName( SlostStr+#INDEX);\
-LoadSlot_##INDEX->SlotIndex = INDEX;\
-LoadSlots.Emplace(INDEX, LoadSlot_##INDEX)
-
 void UMVVM_LoadScreen::InitLoadSlot()
 {
-	FString Slot{ "Load_Slot_" };
+	InitLoadSlotItem(LoadSlot_0, 0);
+	InitLoadSlotItem(LoadSlot_1, 1);
+	InitLoadSlotItem(LoadSlot_2, 2);
+}
 
-	CREATE_LOAD_SLOT(0, Slot);
-	CREATE_LOAD_SLOT(1, Slot);
-	CREATE_LOAD_SLOT(2, Slot);
+void UMVVM_LoadScreen::InitLoadSlotItem(TObjectPtr<UMVVM_LoadSlot>& LoadSlotRef, const uint8 Index)
+{
+	const FString Slot{ "Load_Slot_" };
 
+	LoadSlotRef = NewObject<UMVVM_LoadSlot>(this, LoadSlotViewModelClass);
+	LoadSlotRef->SetLoadSlotName(Slot + "0");
+	LoadSlotRef->SlotIndex = 0;
+	LoadSlots.Emplace(0, LoadSlotRef);
+	
 }
 
 UMVVM_LoadSlot* UMVVM_LoadScreen::GetSlotViewModelByIndex(const uint8 Index) const
@@ -57,7 +59,7 @@ void UMVVM_LoadScreen::SelectSlotBtnPressed(int32 idx)
 	ActiveSlot = LoadSlots[idx];
 	for(auto& LoadSlot :LoadSlots)
 	{
-		//½ûÓÃ°´ÏÂµÄ ¼ÓÔØ°´Å¥ ¿ªÆôÁíÍâÁ½¸ö²ÛµÄ¼ÓÔØ°´Å¥
+		//ç¦ç”¨æŒ‰ä¸‹çš„ åŠ è½½æŒ‰é’® å¼€å¯å¦å¤–ä¸¤ä¸ªæ§½çš„åŠ è½½æŒ‰é’®
 		if(LoadSlot.Key!=idx)
 		{
 			LoadSlot.Value->EnableSelectSlotBtnDel.Broadcast(true);

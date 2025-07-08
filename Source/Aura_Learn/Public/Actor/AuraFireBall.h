@@ -5,7 +5,7 @@
 #include "AuraFireBall.generated.h"
 
 /**
- * ¼Ì³Ğ×Ô·ÉÉäÎï£¬»ğÇò»Ø¹ö
+ * ç»§æ‰¿è‡ªé£å°„ç‰©ï¼Œç«çƒå›æ»š
  */
 UCLASS()
 class AURA_LEARN_API AAuraFireBall : public AAuraProjectile
@@ -21,7 +21,7 @@ public:
 	void BackToOnwer();
 
 	UPROPERTY(BlueprintReadWrite)
-	FDamageEffectParams ExplosionDamageParams;//×îºó±¬Õ¨½«Ó¦ÓÃµÄÉËº¦
+	FDamageEffectParams ExplosionDamageParams;//æœ€åçˆ†ç‚¸å°†åº”ç”¨çš„ä¼¤å®³
 
 	virtual void OnHit() override;
 protected:

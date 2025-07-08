@@ -19,6 +19,8 @@ class AURA_LEARN_API UMVVM_LoadScreen : public UMVVMViewModelBase
 public:
 
 	void InitLoadSlot();
+	
+	void InitLoadSlotItem(TObjectPtr<UMVVM_LoadSlot>& LoadSlotRef, uint8 Index);
 
 	UPROPERTY(EditDefaultsOnly,DisplayName="存档槽界面的ViewModel类")
 	TSubclassOf<UMVVM_LoadSlot> LoadSlotViewModelClass;

@@ -22,8 +22,8 @@ class AURA_LEARN_API ISaveInterface
 public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	bool ShouldLoadTransform();//ÊÇ·ñÓ¦¸Ã±£´æActorTransform
+	bool ShouldLoadTransform();//æ˜¯å¦åº”è¯¥ä¿å­˜ActorTransform
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void LoadActor();//¸ù¾İÊı¾İ¼ÓÔØÒ»Ğ©×´Ì¬
+	void LoadActor();//æ ¹æ®æ•°æ®åŠ è½½ä¸€äº›çŠ¶æ€
 };

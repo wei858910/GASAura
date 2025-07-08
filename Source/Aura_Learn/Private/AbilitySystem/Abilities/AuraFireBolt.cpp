@@ -6,7 +6,7 @@
 
 void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bool bOverridePitch, float PitchOverride, AActor* HomingTarget)
 {
-	//µ¥ÈËÓÎÏ·»òÕßÊÇÔÚ·þÎñÆ÷
+	//å•äººæ¸¸æˆæˆ–è€…æ˜¯åœ¨æœåŠ¡å™¨
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer)return;
 
@@ -16,8 +16,8 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 	const auto SocketLocation = ICombatInterface::Execute_GetCombatSocktLocation
 	(GetAvatarActorFromActorInfo(), FAuraGmaeplayTags::GetInstance().CombatSocket_Weapon);
 
-	FRotator  Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();//»ñÈ¡Á½¸öÎ»ÖÃµÄÐý×ª²î
-	//Èç¹ûÏëÓÃÐÂµÄpitchÐý×ª
+	FRotator  Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();//èŽ·å–ä¸¤ä¸ªä½ç½®çš„æ—‹è½¬å·®
+	//å¦‚æžœæƒ³ç”¨æ–°çš„pitchæ—‹è½¬
 	if (bOverridePitch)
 	{
 		Rotation.Pitch = PitchOverride;
@@ -40,7 +40,7 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 
 		SpawnTransform.SetRotation(Rotator.Quaternion());
 
-		//ÑÓÆÚÉú³É µ÷ÓÃfinish Íê³ÉÉú³É
+		//å»¶æœŸç”Ÿæˆ è°ƒç”¨finish å®Œæˆç”Ÿæˆ
 		auto ProjectfileActor = GetWorld()->SpawnActorDeferred<AAuraProjectile>(ProjectfileClass, SpawnTransform, GetOwningActorFromActorInfo(),
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
@@ -50,17 +50,17 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
 		if (HomingTarget&& HomingTarget->Implements<UCombatInterface>())
 		{
 			ProjectfileActor->HomingTargetSceneCmpt = HomingTarget->GetRootComponent();
-			ProjectfileActor->ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();//×·×ÙÄ¿±êÎª¶ÔÏóµÐÈË
+			ProjectfileActor->ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();//è¿½è¸ªç›®æ ‡ä¸ºå¯¹è±¡æ•Œäºº
 
 		}
 		else
 		{
-			ProjectfileActor->HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());//Ö÷ÒªÊÇÏënewµÄ¶ÔÏó±»¼ÆÈëGC£¬Òò´Ë¼ÄÍÐÔÚ·ÉÉäÎï
+			ProjectfileActor->HomingTargetSceneCmpt = NewObject<USceneComponent>(USceneComponent::StaticClass());//ä¸»è¦æ˜¯æƒ³newçš„å¯¹è±¡è¢«è®¡å…¥GCï¼Œå› æ­¤å¯„æ‰˜åœ¨é£žå°„ç‰©
 			ProjectfileActor->HomingTargetSceneCmpt->SetWorldLocation(ProjectileTargetLocation);
 			ProjectfileActor->ProjectileMovement->HomingTargetComponent = ProjectfileActor->HomingTargetSceneCmpt;
 		}
 
-		ProjectfileActor->ProjectileMovement->HomingAccelerationMagnitude = FMath::RandRange(HomingMinSpeed,HomingMaxSpeed);//×·Ñ°Ä¿±êµÄËÙ¶È
+		ProjectfileActor->ProjectileMovement->HomingAccelerationMagnitude = FMath::RandRange(HomingMinSpeed,HomingMaxSpeed);//è¿½å¯»ç›®æ ‡çš„é€Ÿåº¦
 		ProjectfileActor->ProjectileMovement->bIsHomingProjectile = bLaunchHoming;
 
 		ProjectfileActor->HomingTargetLocation = ProjectileTargetLocation;

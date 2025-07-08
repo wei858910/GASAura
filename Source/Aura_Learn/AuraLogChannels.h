@@ -1,4 +1,3 @@
-/* 日志类型通道 */
 #pragma once
 #include "CoreMinimal.h"
 #include "Logging/LogMacros.h"
