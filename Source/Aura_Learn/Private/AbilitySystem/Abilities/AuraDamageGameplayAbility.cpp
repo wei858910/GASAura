@@ -18,7 +18,7 @@ void UAuraDamageGameplayAbility::CauseDamage(AActor* BeDamageActor)
 
 FGameplayTag UAuraDamageGameplayAbility::GetCurrentAbilityTag() const
 {
-	for(const auto& GATag: AbilityTags)
+	for(const auto& GATag: GetAssetTags())
 	{
 		if (GATag.MatchesTag(FAuraGmaeplayTags::GetInstance().Abilities))return GATag;
 	}
