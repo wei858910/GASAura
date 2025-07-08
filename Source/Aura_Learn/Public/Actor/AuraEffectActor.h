@@ -13,7 +13,7 @@ UENUM(BlueprintType) //GE应用策略
 enum class EEffectApplicationPolicy :uint8
 {
 	ApplyOnOverlap,
-	ApplyOnEndoverlap,
+	ApplyOnEndOverlap,
 	DoNotApply
 };
 
