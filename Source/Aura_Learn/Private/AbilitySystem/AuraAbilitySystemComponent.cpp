@@ -210,7 +210,7 @@ void UAuraAbilitySystemComponent::ForEachAbility(const FForEachAbility& Delegate
 FGameplayTag UAuraAbilitySystemComponent::GetAbilityTagFromSpec(const FGameplayAbilitySpec& GASpec)
 {
 	if (!IsValid(GASpec.Ability))return FGameplayTag{};
-	for(const auto& Tag: GASpec.Ability->AbilityTags)
+	for(const auto& Tag: GASpec.Ability->GetAssetTags())
 	{
 		if(Tag.MatchesTag(FAuraGmaeplayTags::GetInstance().Abilities)	)
 		{
@@ -271,7 +271,7 @@ FGameplayAbilitySpec* UAuraAbilitySystemComponent::GetSpecFromAbilityTag(const F
 	//从可激活的所有GA内的Tag中找到对应技能Tag
 	for(auto& GASpec:GetActivatableAbilities())
 	{
-		for(const auto& GATag:GASpec.Ability->AbilityTags)
+		for(const auto& GATag:GASpec.Ability->GetAssetTags())
 		{
 			if(AbilityTag.MatchesTagExact(GATag))
 			{

@@ -60,7 +60,7 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 		}
 	}
 
-	Props.TargetASC = Data.Target;
+	Props.TargetASC = &(Data.Target);
 	if (IsValid(Props.TargetASC) && Props.TargetASC->AbilityActorInfo.IsValid() 
 		&& Props.TargetASC->AbilityActorInfo->AvatarActor.IsValid())
 	{
