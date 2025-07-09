@@ -10,7 +10,7 @@ FAuraGmaeplayTags& FAuraGmaeplayTags::GetInstance()
 	return Instance;
 }
 
-void FAuraGmaeplayTags::InitNaviveGameplayTags()
+void FAuraGmaeplayTags::InitNativeGameplayTags()
 {
 	//Primary Attributes
 	GetInstance().InitPrimaryAttributeTags();

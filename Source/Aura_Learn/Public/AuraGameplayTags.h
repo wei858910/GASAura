@@ -11,7 +11,7 @@ struct FAuraGmaeplayTags
 
 public:
 	static FAuraGmaeplayTags& GetInstance();
-	static void InitNaviveGameplayTags();
+	static void InitNativeGameplayTags();
 
 	FGameplayTag Attributes_Primary_Strength;
 	FGameplayTag Attributes_Primary_Intelligence;
