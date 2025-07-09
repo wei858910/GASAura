@@ -12,10 +12,12 @@
 UCLASS()
 class AURA_LEARN_API UArcaneShards : public UAuraDamageGameplayAbility
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 public:
-	virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
+    virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
+
 protected:
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,DisplayName="最大水晶数量",Category="奥术")
-	int32 MaxNumArcane{ 11 };
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="最大水晶数量", Category="奥术")
+    int32 MaxNumArcane{ 11 };
 };

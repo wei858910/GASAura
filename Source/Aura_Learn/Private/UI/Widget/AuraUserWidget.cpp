@@ -5,6 +5,6 @@
 
 void UAuraUserWidget::SetWidgetController(UObject* InWidgetController)
 {
-	WidgetController = InWidgetController;
-	OnWidgetControllerSetEnd();//通知蓝图事件
+    WidgetController = InWidgetController;
+    OnWidgetControllerSetEnd(); //通知蓝图事件
 }

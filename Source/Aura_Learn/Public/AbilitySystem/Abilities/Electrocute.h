@@ -10,8 +10,8 @@
 UCLASS()
 class AURA_LEARN_API UElectrocute : public UAuraBeamSpell
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
+    virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
 };

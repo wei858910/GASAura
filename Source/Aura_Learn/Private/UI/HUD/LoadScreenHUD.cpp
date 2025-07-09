@@ -5,20 +5,20 @@
 
 void ALoadScreenHUD::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	check(LoadScreenWidgetClass);
+    check(LoadScreenWidgetClass);
 
-	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this,LoadScreenViewModelClass);
-	LoadScreenViewModel->InitLoadSlot();
+    LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this, LoadScreenViewModelClass);
+    LoadScreenViewModel->InitLoadSlot();
 
-	LoadScreenWidget = CreateWidget<ULoadScreenWgt>(GetWorld(), LoadScreenWidgetClass);
-	LoadScreenWidget->AddToViewport();
-	
-	/*
-	 * 此时 加载菜单界面已经完成 初始化存档槽界面
-	 */
-	LoadScreenWidget->BlueprintInitWgtEvent();
+    LoadScreenWidget = CreateWidget<ULoadScreenWgt>(GetWorld(), LoadScreenWidgetClass);
+    LoadScreenWidget->AddToViewport();
 
-	LoadScreenViewModel->LoadData();
+    /*
+     * 此时 加载菜单界面已经完成 初始化存档槽界面
+     */
+    LoadScreenWidget->BlueprintInitWgtEvent();
+
+    LoadScreenViewModel->LoadData();
 }

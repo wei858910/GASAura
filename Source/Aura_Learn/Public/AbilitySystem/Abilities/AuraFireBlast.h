@@ -11,16 +11,17 @@ class AAuraFireBall;
 UCLASS()
 class AURA_LEARN_API UAuraFireBlast : public UAuraDamageGameplayAbility
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 public:
-	virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
-	UFUNCTION(BlueprintCallable)
-	TArray<AAuraFireBall*>SpawnFireBall();
+    virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
+    UFUNCTION(BlueprintCallable)
+    TArray<AAuraFireBall*> SpawnFireBall();
 
 protected:
-	UPROPERTY(EditDefaultsOnly,Category="火元子",DisplayName="火元数量")
-	int32 NumFireBalls{ 12 };
+    UPROPERTY(EditDefaultsOnly, Category="火元子", DisplayName="火元数量")
+    int32 NumFireBalls{ 12 };
 
-	UPROPERTY(EditDefaultsOnly, Category = "火元子", DisplayName = "火元子类")
-	TSubclassOf<AAuraFireBall>  FireballClass;
+    UPROPERTY(EditDefaultsOnly, Category = "火元子", DisplayName = "火元子类")
+    TSubclassOf<AAuraFireBall> FireballClass;
 };

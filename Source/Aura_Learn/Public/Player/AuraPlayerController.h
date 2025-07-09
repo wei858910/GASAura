@@ -17,13 +17,13 @@ class UAuraAbilitySystemComponent;
 class UAuraInputConfig;
 class UInputMappingContext;
 class UInputAction;
-struct  FInputActionValue;
+struct FInputActionValue;
 
 enum class ETargetingStatus : uint8
 {
-	TargetingEnemy, //是可以战斗的对象
-	TargetingNonEnemy, //仅为可交互对象
-	NotTargeting
+    TargetingEnemy,    //是可以战斗的对象
+    TargetingNonEnemy, //仅为可交互对象
+    NotTargeting
 };
 
 /**
@@ -32,92 +32,93 @@ enum class ETargetingStatus : uint8
 UCLASS()
 class AURA_LEARN_API AAuraPlayerController : public APlayerController
 {
-	GENERATED_BODY()
-	friend class AAuraCharacterBase;
+    GENERATED_BODY()
+    friend class AAuraCharacterBase;
+
 public:
-	AAuraPlayerController();
+    AAuraPlayerController();
 
-	/* *
-	 *  Client 此函数仅在拥有在其上调用此函数的对象的客户端上执行。用于声明名称与主函数相同的附加函数，但是末尾添加了_Implementation。
-	 *           - 必要时，此自动生成的代码将调用 _Implementation 方法。
-	 *  Reliable 此函数将通过网络复制，并且一定会到达
-	 */
-	UFUNCTION(Client,Reliable)
-	void ShowDamage(float DamageAmount,ACharacter* TargetCharacter, const bool bBlocked=false, const bool bCriticalHit=false);
+    /* *
+     *  Client 此函数仅在拥有在其上调用此函数的对象的客户端上执行。用于声明名称与主函数相同的附加函数，但是末尾添加了_Implementation。
+     *           - 必要时，此自动生成的代码将调用 _Implementation 方法。
+     *  Reliable 此函数将通过网络复制，并且一定会到达
+     */
+    UFUNCTION(Client, Reliable)
+    void ShowDamage(float DamageAmount, ACharacter* TargetCharacter, const bool bBlocked = false, const bool bCriticalHit = false);
 
-	UFUNCTION(BlueprintCallable)
-	void HideMagicCircle();
-	UFUNCTION(BlueprintCallable)
-	void ShowMagicCircle();
+    UFUNCTION(BlueprintCallable)
+    void HideMagicCircle();
+    UFUNCTION(BlueprintCallable)
+    void ShowMagicCircle();
 
-	void SetMagicCircleMaterial(UMaterialInterface* DecalMaterial = nullptr);
+    void SetMagicCircleMaterial(UMaterialInterface* DecalMaterial = nullptr);
+
 protected:
-	virtual void BeginPlay() override;
-	virtual void SetupInputComponent() override;
-	virtual void PlayerTick(float DeltaTime) override;//PlayerTick只能用于本地Controller
+    virtual void BeginPlay() override;
+    virtual void SetupInputComponent() override;
+    virtual void PlayerTick(float DeltaTime) override; //PlayerTick只能用于本地Controller
 private:
-	void Move(const FInputActionValue& InputActionValue);
-	void CursorTrace();
+    void Move(const FInputActionValue& InputActionValue);
+    void CursorTrace();
 
-	void AbilityInputTagPressed(FGameplayTag InputTag); //按下的输入操作回调
-	void AbilityInputTagReleased(FGameplayTag InputTag);//松开的输入操作回调
-	void AbilityInputTagHeld(FGameplayTag InputTag);//按住的输入操作回调
+    void AbilityInputTagPressed(FGameplayTag InputTag);  //按下的输入操作回调
+    void AbilityInputTagReleased(FGameplayTag InputTag); //松开的输入操作回调
+    void AbilityInputTagHeld(FGameplayTag InputTag);     //按住的输入操作回调
 
-	bool bShiftKeyDown{ false };//shift是否按住
+    bool bShiftKeyDown{ false }; //shift是否按住
 
-	void ShiftPressed() { bShiftKeyDown = true; };
-	void ShiftReleased() { bShiftKeyDown = false; };
-	
-	void AutoRun();
-	UAuraAbilitySystemComponent* GetAuraASC();
+    void ShiftPressed() { bShiftKeyDown = true; };
+    void ShiftReleased() { bShiftKeyDown = false; };
 
-	void UpdateMagicCircleLocation();
+    void AutoRun();
+    UAuraAbilitySystemComponent* GetAuraASC();
 
-	static void HighlightActor(AActor* InActor);
-	static void UnHighlightActor(AActor* InActor);
+    void UpdateMagicCircleLocation();
 
-private:
-	UPROPERTY(EditAnywhere,Category="Input")
-	TObjectPtr<UInputMappingContext> AuraContext;
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> MoveAction;
+    static void HighlightActor(AActor* InActor);
+    static void UnHighlightActor(AActor* InActor);
 
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> ShiftAction;
+    UPROPERTY(EditAnywhere, Category="Input")
+    TObjectPtr<UInputMappingContext> AuraContext;
+    UPROPERTY(EditAnywhere, Category = "Input")
+    TObjectPtr<UInputAction> MoveAction;
 
-	UPROPERTY(EditDefaultsOnly,Category="Input")
-	TObjectPtr<UAuraInputConfig> InputConfig;//输入操作的DA 配置文件
+    UPROPERTY(EditAnywhere, Category = "Input")
+    TObjectPtr<UInputAction> ShiftAction;
 
-	UPROPERTY()
-	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent{nullptr};
+    UPROPERTY(EditDefaultsOnly, Category="Input")
+    TObjectPtr<UAuraInputConfig> InputConfig; //输入操作的DA 配置文件
 
-	TObjectPtr<AActor> MouseHoverCurrentActor{ nullptr };//鼠标悬浮到的Actor
-	TObjectPtr<AActor>  MouseHoverLastActor{ nullptr };
+    UPROPERTY()
+    TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent{ nullptr };
 
-	FVector CachedDestination{FVector::Zero()};//缓存点中的场景坐标
-	float FllowTime{0.f};//跟随光标移动了的时间
-	float ShortPressThreshold{ 0.5f };//判断是否属于长按的临界值
-	bool bAutoRunning{ false };
+    TObjectPtr<AActor> MouseHoverCurrentActor{ nullptr }; //鼠标悬浮到的Actor
+    TObjectPtr<AActor> MouseHoverLastActor{ nullptr };
 
-	ETargetingStatus TargetingStatus{ ETargetingStatus::NotTargeting};
+    FVector CachedDestination{ FVector::Zero() }; //缓存点中的场景坐标
+    float FllowTime{ 0.f };                       //跟随光标移动了的时间
+    float ShortPressThreshold{ 0.5f };            //判断是否属于长按的临界值
+    bool bAutoRunning{ false };
 
-	UPROPERTY(EditDefaultsOnly)
-	float AutoRunAcceptanceRadius{ 50.f };//距离目标多远则被视为到达目标
+    ETargetingStatus TargetingStatus{ ETargetingStatus::NotTargeting };
 
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USplineComponent> Spline;//根据点生成平滑的路径
+    UPROPERTY(EditDefaultsOnly)
+    float AutoRunAcceptanceRadius{ 50.f }; //距离目标多远则被视为到达目标
 
-	FHitResult CursorHit;
+    UPROPERTY(VisibleAnywhere)
+    TObjectPtr<USplineComponent> Spline; //根据点生成平滑的路径
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+    FHitResult CursorHit;
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="点击特效")
-	TObjectPtr<UNiagaraSystem> ClickNiagara{nullptr};
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="法阵特效Actor类型")
-	TSubclassOf<AMagicCircle> MagicCircleClass{ nullptr };
+    UPROPERTY(EditDefaultsOnly, DisplayName="点击特效")
+    TObjectPtr<UNiagaraSystem> ClickNiagara{ nullptr };
 
-	UPROPERTY(DisplayName = "法阵特效Actor")
-	TObjectPtr<AMagicCircle> MagicCircle{ nullptr };
+    UPROPERTY(EditDefaultsOnly, DisplayName="法阵特效Actor类型")
+    TSubclassOf<AMagicCircle> MagicCircleClass{ nullptr };
+
+    UPROPERTY(DisplayName = "法阵特效Actor")
+    TObjectPtr<AMagicCircle> MagicCircle{ nullptr };
 };

@@ -11,14 +11,15 @@
 UCLASS()
 class AURA_LEARN_API UPassiveNiagaraComponent : public UNiagaraComponent
 {
-	GENERATED_BODY()
-public:
-	UPassiveNiagaraComponent();
+    GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="技能标签", meta = (Categories = "Abilities"))
-	FGameplayTag PassiveSpellTag;
+public:
+    UPassiveNiagaraComponent();
+
+    UPROPERTY(EditDefaultsOnly, DisplayName="技能标签", meta = (Categories = "Abilities"))
+    FGameplayTag PassiveSpellTag;
 
 protected:
-	virtual void BeginPlay() override;
-	void OnPassiveActivate(const FGameplayTag& AbilityTag,bool bActivate);
+    virtual void BeginPlay() override;
+    void OnPassiveActivate(const FGameplayTag& AbilityTag, bool bActivate);
 };

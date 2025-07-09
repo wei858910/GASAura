@@ -5,5 +5,5 @@
 
 FCharacterClassDefaultInfo UCharacterClassInfo::GetClassDefaultInfo(ECharacterClass CharacterType)
 {
-	return *CharacterClassInformation.Find(CharacterType);
+    return *CharacterClassInformation.Find(CharacterType);
 }

@@ -11,24 +11,26 @@
 USTRUCT(BlueprintType)
 struct FAbilityDescription
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,DisplayName="技能标签")
-	FGameplayTag AbilityTag{};
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="技能标签")
+    FGameplayTag AbilityTag{};
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "技能描述")
-	TArray<FText>AbilityDescriptions;
-	
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "技能描述")
+    TArray<FText> AbilityDescriptions;
+
 };
+
 UCLASS()
 class AURA_LEARN_API UAbilitieDescriptions : public UDataAsset
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "技能信息", DisplayName = "技能描述集")
-	TArray<FAbilityDescription> AbilityDescriptionInfos;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "技能信息", DisplayName = "技能描述集")
+    TArray<FAbilityDescription> AbilityDescriptionInfos;
 
 public:
-	UFUNCTION(BlueprintCallable)
-	const FText& FindDescriptionsByTagAndLevel(const FGameplayTag& AbilityTag, const int32 Level);
+    UFUNCTION(BlueprintCallable)
+    const FText& FindDescriptionsByTagAndLevel(const FGameplayTag& AbilityTag, const int32 Level);
 };

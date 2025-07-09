@@ -9,92 +9,91 @@
 
 AAuraPlayerState::AAuraPlayerState()
 {
-	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
-	AbilitySystemComponent->SetIsReplicated(true); //组件类的启用网络复制
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);//设置同步模式
+    AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+    AbilitySystemComponent->SetIsReplicated(true);                                     //组件类的启用网络复制
+    AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed); //设置同步模式
 
+    AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
-	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
-
-	SetNetUpdateFrequency(100.f); //设置客户端将此对象每秒更新的次数
+    SetNetUpdateFrequency(100.f); //设置客户端将此对象每秒更新的次数
 }
 
 void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AAuraPlayerState, Level);
-	DOREPLIFETIME(AAuraPlayerState, XP);
-	DOREPLIFETIME(AAuraPlayerState, AttributePoints);
-	DOREPLIFETIME(AAuraPlayerState, SpellPoints);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    DOREPLIFETIME(AAuraPlayerState, Level);
+    DOREPLIFETIME(AAuraPlayerState, XP);
+    DOREPLIFETIME(AAuraPlayerState, AttributePoints);
+    DOREPLIFETIME(AAuraPlayerState, SpellPoints);
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+    return AbilitySystemComponent;
 }
 
 int16 AAuraPlayerState::GetPlayerLevel() const
 {
-	return Level;
+    return Level;
 }
 
 int32 AAuraPlayerState::GetPlayerXP() const
 {
-	return XP;
+    return XP;
 }
 
 void AAuraPlayerState::SetXP(const int32 InXP)
 {
-	XP = InXP;
-	OnXPChangeDel.Broadcast(XP);
+    XP = InXP;
+    OnXPChangeDel.Broadcast(XP);
 }
 
 void AAuraPlayerState::AddToXP(const int32 InXP)
 {
-	XP += InXP;
-	OnXPChangeDel.Broadcast(XP);
+    XP += InXP;
+    OnXPChangeDel.Broadcast(XP);
 }
 
 void AAuraPlayerState::SetLevel(const int32 InLevel)
 {
-	Level = InLevel;
-	OnLevelChangeDel.Broadcast(Level,false);
+    Level = InLevel;
+    OnLevelChangeDel.Broadcast(Level, false);
 }
 
 void AAuraPlayerState::AddToLevel(const int32 InLevel)
 {
-	Level += InLevel;
-	OnLevelChangeDel.Broadcast(Level,true);
+    Level += InLevel;
+    OnLevelChangeDel.Broadcast(Level, true);
 }
 
 void AAuraPlayerState::OnRep_Level(int16 OldValue)
 {
-	OnLevelChangeDel.Broadcast(Level, true);
+    OnLevelChangeDel.Broadcast(Level, true);
 }
 
 void AAuraPlayerState::OnRep_XP(int32 OldValue)
 {
-	OnXPChangeDel.Broadcast(XP);
+    OnXPChangeDel.Broadcast(XP);
 }
 
 void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 {
-	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+    OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
 }
 
 void AAuraPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
 {
-	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
+    OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)
 {
-	AttributePoints += InPoints;
-	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+    AttributePoints += InPoints;
+    OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
 }
 
 void AAuraPlayerState::AddToSpellPoints(int32 InPoints)
 {
-	SpellPoints += InPoints;
-	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
+    SpellPoints += InPoints;
+    OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }

@@ -7,7 +7,8 @@
 #include "TargetDataUnderMouse.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature, const FGameplayAbilityTargetDataHandle&,DataHandle);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature, const FGameplayAbilityTargetDataHandle&, DataHandle);
+
 /**
  * 该类是Task 类型 按照固定套路填充类 static函数会成蓝图节点   声明的代理会成为执行节点分支
  *
@@ -18,21 +19,21 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMouseTargetDataSignature, const FGa
 UCLASS()
 class AURA_LEARN_API UTargetDataUnderMouse : public UAbilityTask
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 public:
+    //DefaultToSelf 表示默认参数为蓝图中的self，也就是调用者了  //BlueprintInternalUseOnly 意味着该函数通常不应该被蓝图用户直接调用
+    UFUNCTION(BlueprintCallable, Category="Ability|Tasks", meta=(DisplayName="TargetDataUnderMouse", HidePin="OwningAbility", DefaultToSelf="OwningAbility", BlueprintInternalUseOnly="true"))
+    static UTargetDataUnderMouse* CreateTargetDataUnderMouse(UGameplayAbility* OwningAbility); //创建一个该类型对象
 
-	//DefaultToSelf 表示默认参数为蓝图中的self，也就是调用者了  //BlueprintInternalUseOnly 意味着该函数通常不应该被蓝图用户直接调用
-	UFUNCTION(BlueprintCallable,Category="Ability|Tasks",meta=(DisplayName="TargetDataUnderMouse",HidePin="OwningAbility",DefaultToSelf="OwningAbility",BlueprintInternalUseOnly="true"))
-	static UTargetDataUnderMouse* CreateTargetDataUnderMouse(UGameplayAbility* OwningAbility);//创建一个该类型对象
-
-	UPROPERTY(BlueprintAssignable)
-	FMouseTargetDataSignature ValidData;
+    UPROPERTY(BlueprintAssignable)
+    FMouseTargetDataSignature ValidData;
 
 private:
-	virtual void Activate() override;
+    virtual void Activate() override;
 
-	//如果GA先促发，后才收到信息，GA调用为非预期
-	void SendMouseCursorData();//向服务器发送鼠标命中信息，然后在在其回调中触发GA
+    //如果GA先促发，后才收到信息，GA调用为非预期
+    void SendMouseCursorData(); //向服务器发送鼠标命中信息，然后在在其回调中触发GA
 
-	void OnTargetDataReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle, FGameplayTag ActivationTag);
+    void OnTargetDataReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle, FGameplayTag ActivationTag);
 };

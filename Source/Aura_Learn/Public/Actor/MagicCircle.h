@@ -10,16 +10,16 @@
 UCLASS()
 class AURA_LEARN_API AMagicCircle : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AMagicCircle();
-	UDecalComponent& GetMagicCircleDecal();
-protected:
-	virtual void BeginPlay() override;
+    GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere,DisplayName="阵法贴花")
-	TObjectPtr<UDecalComponent> MagicCircleDecal;//魔法贴花
-public:	
+public:
+    AMagicCircle();
+    UDecalComponent& GetMagicCircleDecal();
+
+protected:
+    virtual void BeginPlay() override;
+
+    UPROPERTY(VisibleAnywhere, DisplayName="阵法贴花")
+    TObjectPtr<UDecalComponent> MagicCircleDecal; //魔法贴花
 
 };

@@ -12,7 +12,7 @@
 UCLASS()
 class AURA_LEARN_API UAuraAbilitySystemGlobals : public UAbilitySystemGlobals
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	virtual FGameplayEffectContext* AllocGameplayEffectContext() const override;//原本new了FGameplayEffectContext 改成自己的context
+    virtual FGameplayEffectContext* AllocGameplayEffectContext() const override; //原本new了FGameplayEffectContext 改成自己的context
 };

@@ -7,14 +7,14 @@
 
 UAuraAssetManager& UAuraAssetManager::GetInstance()
 {
-	check(GEngine)
-	return *Cast<UAuraAssetManager>(GEngine->AssetManager);
+    check(GEngine)
+    return *Cast<UAuraAssetManager>(GEngine->AssetManager);
 }
 
 void UAuraAssetManager::StartInitialLoading()
 {
-	Super::StartInitialLoading();
+    Super::StartInitialLoading();
 
-	FAuraGmaeplayTags::InitNativeGameplayTags();
+    FAuraGmaeplayTags::InitNativeGameplayTags();
 
 }

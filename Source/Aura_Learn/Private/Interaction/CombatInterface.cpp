@@ -5,15 +5,15 @@
 
 FHitResult* ICombatInterface::GetCursorHitRes()
 {
-	return nullptr;
+    return nullptr;
 }
 
 bool ICombatInterface::IsHeroCharacter() const
 {
-	return false;
+    return false;
 }
 
 bool ICombatInterface::GetIsStunded()
 {
-	return false;
+    return false;
 }

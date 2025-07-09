@@ -6,8 +6,7 @@
 
 namespace Aura
 {
-	extern const uint16 CUSTOM_DEPTH_RED;
-	extern const uint16 CUSTOM_DEPTH_BLUE;//蓝色轮廓的值
-	extern const uint16 CUSTOM_DEPTH_TAN;//浅棕色轮廓的值
+    extern const uint16 CUSTOM_DEPTH_RED;
+    extern const uint16 CUSTOM_DEPTH_BLUE; //蓝色轮廓的值
+    extern const uint16 CUSTOM_DEPTH_TAN;  //浅棕色轮廓的值
 }
-

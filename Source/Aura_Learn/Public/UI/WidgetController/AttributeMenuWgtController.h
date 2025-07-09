@@ -12,27 +12,27 @@ struct FAuraAttributeInfo;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSingature, const FAuraAttributeInfo&, Info);
 
-UCLASS(BlueprintType,Blueprintable)
+UCLASS(BlueprintType, Blueprintable)
 class AURA_LEARN_API UAttributeMenuWgtController : public UAuraWidgetController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual void BindCallbackToDependencies() override;
-	virtual void BroadcastInitialValues() override;
+    virtual void BindCallbackToDependencies() override;
+    virtual void BroadcastInitialValues() override;
 
-	void BroadcastAttributeInfo(const FGameplayTag& Tag) const;//从Tag 找到 属性 广播其值
+    void BroadcastAttributeInfo(const FGameplayTag& Tag) const; //从Tag 找到 属性 广播其值
 
-	UPROPERTY(BlueprintAssignable,Category="GAS|Attribute")
-	FAttributeInfoSingature OnAttributeInfoChangeDel;
+    UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
+    FAttributeInfoSingature OnAttributeInfoChangeDel;
 
-	UPROPERTY(BlueprintAssignable, Category = "State|Attributes")
-	FOnPlayerStateChangedSignature AttributePointsChangedDelegate;
+    UPROPERTY(BlueprintAssignable, Category = "State|Attributes")
+    FOnPlayerStateChangedSignature AttributePointsChangedDelegate;
 
 protected:
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UAttributeInfo> AttributeInfo;//Data Asset 类
+    UPROPERTY(EditDefaultsOnly)
+    TObjectPtr<UAttributeInfo> AttributeInfo; //Data Asset 类
 
-	UFUNCTION(BlueprintCallable)
-	void UpgradeAttribute(const FGameplayTag& AttributeTag);
+    UFUNCTION(BlueprintCallable)
+    void UpgradeAttribute(const FGameplayTag& AttributeTag);
 };

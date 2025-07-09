@@ -11,20 +11,22 @@ class AAuraProjectile;
 UCLASS()
 class AURA_LEARN_API UAuraProjectileSpell : public UAuraDamageGameplayAbility
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
 public:
-	virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag,const int32 Level) override;
+    virtual FString GetDescription(const UAuraAbilitySystemComponent* AuraGAS, const FGameplayTag& GATag, const int32 Level) override;
+
 protected:
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	                             const FGameplayAbilityActivationInfo ActivationInfo,
-	                             const FGameplayEventData* TriggerEventData) override;
+    virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+        const FGameplayAbilityActivationInfo ActivationInfo,
+        const FGameplayEventData* TriggerEventData) override;
 
-	UFUNCTION(BlueprintCallable,Category="Projectile")
-	void SpawnProjectile(const FVector& TargetLocation,bool bOveridePitch=false,float PitchOverride=0.f);
+    UFUNCTION(BlueprintCallable, Category="Projectile")
+    void SpawnProjectile(const FVector& TargetLocation, bool bOveridePitch = false, float PitchOverride = 0.f);
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	TSubclassOf<AAuraProjectile> ProjectfileClass;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    TSubclassOf<AAuraProjectile> ProjectfileClass;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, DisplayName = "发射物最大数量")
-	int32 NumProjectiles{ 5 };//最大发射火焰数量
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "发射物最大数量")
+    int32 NumProjectiles{ 5 }; //最大发射火焰数量
 };

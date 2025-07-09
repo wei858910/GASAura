@@ -3,226 +3,224 @@
 
 bool FAuraGameEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
 {
-	/**
-	 * ¶ş½øÖÆ µÄ Óë& »ò| Î»<< >> ÔËËã
-	 * ÓÃRepBit±äÁ¿µ±×÷±êÊ¶£¬¸Ã±äÁ¿Ã¿¸öÎ»±êÊ¶ÊÇ·ñÓĞĞ§  ÀàËÆlinuxµÄselcetÓÃfdµÄÎ»±êÊ¶ÊÇ·ñÓĞÊÂ¼ş
-	 */
+    /**
+     * äºŒè¿›åˆ¶ çš„ ä¸& æˆ–| ä½<< >> è¿ç®—
+     * ç”¨RepBitå˜é‡å½“ä½œæ ‡è¯†ï¼Œè¯¥å˜é‡æ¯ä¸ªä½æ ‡è¯†æ˜¯å¦æœ‰æ•ˆ  ç±»ä¼¼linuxçš„selcetç”¨fdçš„ä½æ ‡è¯†æ˜¯å¦æœ‰äº‹ä»¶
+     */
 
-	uint32 RepBits{ 0 };
-	if (Ar.IsSaving())
-	{
-		if (bReplicateInstigator && Instigator.IsValid())
-		{
-			RepBits |= 1 << 0;
-		}
-		if (bReplicateEffectCauser && EffectCauser.IsValid())
-		{
-			RepBits |= 1 << 1;
-		}
-		if (AbilityCDO.IsValid())
-		{
-			RepBits |= 1 << 2;
-		}
-		if (bReplicateSourceObject && SourceObject.IsValid())
-		{
-			RepBits |= 1 << 3;
-		}
-		if (Actors.Num() > 0)
-		{
-			RepBits |= 1 << 4;
-		}
-		if (HitResult.IsValid())
-		{
-			RepBits |= 1 << 5;
-		}
-		if (bHasWorldOrigin)
-		{
-			RepBits |= 1 << 6;
-		}
+    uint32 RepBits{ 0 };
+    if (Ar.IsSaving())
+    {
+        if (bReplicateInstigator && Instigator.IsValid())
+        {
+            RepBits |= 1 << 0;
+        }
+        if (bReplicateEffectCauser && EffectCauser.IsValid())
+        {
+            RepBits |= 1 << 1;
+        }
+        if (AbilityCDO.IsValid())
+        {
+            RepBits |= 1 << 2;
+        }
+        if (bReplicateSourceObject && SourceObject.IsValid())
+        {
+            RepBits |= 1 << 3;
+        }
+        if (Actors.Num() > 0)
+        {
+            RepBits |= 1 << 4;
+        }
+        if (HitResult.IsValid())
+        {
+            RepBits |= 1 << 5;
+        }
+        if (bHasWorldOrigin)
+        {
+            RepBits |= 1 << 6;
+        }
 
-		//¸ÃÀà×Ô¼ºµÄÊı¾İĞòÁĞ»¯
-		if(bIsBlockedHit)
-		{
-			RepBits |= 1 << 7;//´ÓµÍÎ»ÊıµÄµÚÆßÎ»±êÊ¶ ÊÇ·ñ¸ñµ²
-		}
-		if (bIsCriticalHit)
-		{
-			RepBits |= 1 << 8;
-		}
-		if(bIsSucessfulDebuff)
-		{
-			RepBits |= 1 << 9;
+        //è¯¥ç±»è‡ªå·±çš„æ•°æ®åºåˆ—åŒ–
+        if (bIsBlockedHit)
+        {
+            RepBits |= 1 << 7; //ä»ä½ä½æ•°çš„ç¬¬ä¸ƒä½æ ‡è¯† æ˜¯å¦æ ¼æŒ¡
+        }
+        if (bIsCriticalHit)
+        {
+            RepBits |= 1 << 8;
+        }
+        if (bIsSucessfulDebuff)
+        {
+            RepBits |= 1 << 9;
 
-			if (DebuffDamage > 0.f)
-			{
-				RepBits |= 1 << 10;
-			}
-			if (DebuffDuration > 0.f)
-			{
-				RepBits |= 1 << 11;
-			}
-			if (DebuffFrequency > 0.f)
-			{
-				RepBits |= 1 << 12;
-			}
-		}
-		if (DamageType.IsValid())
-		{
-			RepBits |= 1 << 13;
-		}
-		if(!DeathImpulse.IsZero())
-		{
-			RepBits |= 1 << 14;
-		}
-		if (!KnockbackForce.IsZero())
-		{
-			RepBits |= 1 << 15;
-		}
-		if (bActiveHitReact)
-		{
-			RepBits |= 1 << 16;
-		}
+            if (DebuffDamage > 0.f)
+            {
+                RepBits |= 1 << 10;
+            }
+            if (DebuffDuration > 0.f)
+            {
+                RepBits |= 1 << 11;
+            }
+            if (DebuffFrequency > 0.f)
+            {
+                RepBits |= 1 << 12;
+            }
+        }
+        if (DamageType.IsValid())
+        {
+            RepBits |= 1 << 13;
+        }
+        if (!DeathImpulse.IsZero())
+        {
+            RepBits |= 1 << 14;
+        }
+        if (!KnockbackForce.IsZero())
+        {
+            RepBits |= 1 << 15;
+        }
+        if (bActiveHitReact)
+        {
+            RepBits |= 1 << 16;
+        }
 
-		if (bIsRadialDamage)
-		{
-			RepBits |= 1 << 17;
+        if (bIsRadialDamage)
+        {
+            RepBits |= 1 << 17;
 
-			if (RadialDamageInnerRadius > 0.f)
-			{
-				RepBits |= 1 << 18;
-			}
-			if (RadialDamageOuterRadius > 0.f)
-			{
-				RepBits |= 1 << 19;
-			}
-			if (!RadialDamageOrigin.IsZero())
-			{
-				RepBits |= 1 << 20;
-			}
-		}
+            if (RadialDamageInnerRadius > 0.f)
+            {
+                RepBits |= 1 << 18;
+            }
+            if (RadialDamageOuterRadius > 0.f)
+            {
+                RepBits |= 1 << 19;
+            }
+            if (!RadialDamageOrigin.IsZero())
+            {
+                RepBits |= 1 << 20;
+            }
+        }
 
-	}
-	Ar.SerializeBits(&RepBits, 21);//ÒªĞòÁĞ»¯µÄÎ»Êı
+    }
+    Ar.SerializeBits(&RepBits, 21); //è¦åºåˆ—åŒ–çš„ä½æ•°
 
-	//¶ÔÓĞ±êÊ¶µÄÎ» Ó³ÉäÊı¾İ
-	if (RepBits & (1 << 0))
-	{
-		Ar << Instigator;
-	}
-	if (RepBits & (1 << 1))
-	{
-		Ar << EffectCauser;
-	}
-	if (RepBits & (1 << 2))
-	{
-		Ar << AbilityCDO;
-	}
-	if (RepBits & (1 << 3))
-	{
-		Ar << SourceObject;
-	}
-	if (RepBits & (1 << 4))
-	{
-		SafeNetSerializeTArray_Default<31>(Ar, Actors);
-	}
-	if (RepBits & (1 << 5))
-	{
-		if (Ar.IsLoading())
-		{
-			if (!HitResult.IsValid())
-			{
-				HitResult = TSharedPtr<FHitResult>(new FHitResult());
-			}
-		}
-		HitResult->NetSerialize(Ar, Map, bOutSuccess);
-	}
-	if (RepBits & (1 << 6))
-	{
-		Ar << WorldOrigin;
-		bHasWorldOrigin = true;
-	}
-	else
-	{
-		bHasWorldOrigin = false;
-	}
-	//¸ÃÀà±äÁ¿
-	if (RepBits & (1 << 7))
-	{
-		Ar << bIsBlockedHit;
-		
-	}
-	if (RepBits & (1 << 8))
-	{
-		Ar << bIsCriticalHit;
-		
-	}
+    //å¯¹æœ‰æ ‡è¯†çš„ä½ æ˜ å°„æ•°æ®
+    if (RepBits & (1 << 0))
+    {
+        Ar << Instigator;
+    }
+    if (RepBits & (1 << 1))
+    {
+        Ar << EffectCauser;
+    }
+    if (RepBits & (1 << 2))
+    {
+        Ar << AbilityCDO;
+    }
+    if (RepBits & (1 << 3))
+    {
+        Ar << SourceObject;
+    }
+    if (RepBits & (1 << 4))
+    {
+        SafeNetSerializeTArray_Default<31>(Ar, Actors);
+    }
+    if (RepBits & (1 << 5))
+    {
+        if (Ar.IsLoading())
+        {
+            if (!HitResult.IsValid())
+            {
+                HitResult = MakeShared<FHitResult>();
+            }
+        }
+        HitResult->NetSerialize(Ar, Map, bOutSuccess);
+    }
+    if (RepBits & (1 << 6))
+    {
+        Ar << WorldOrigin;
+        bHasWorldOrigin = true;
+    }
+    else
+    {
+        bHasWorldOrigin = false;
+    }
+    //è¯¥ç±»å˜é‡
+    if (RepBits & (1 << 7))
+    {
+        Ar << bIsBlockedHit;
 
-	if (RepBits & (1 << 9))
-	{
-		Ar << bIsSucessfulDebuff;
+    }
+    if (RepBits & (1 << 8))
+    {
+        Ar << bIsCriticalHit;
 
-		if (RepBits & (1 << 10))
-		{
-			Ar << DebuffDamage;
-		}
-		if (RepBits & (1 << 11))
-		{
-			Ar << DebuffDuration;
-		}
-		if (RepBits & (1 << 12))
-		{
-			Ar << DebuffFrequency;
-		}
-	}
-	if (RepBits & (1 << 13))
-	{
-		if (Ar.IsLoading())
-		{
-			if (!DamageType.IsValid())
-			{
-				DamageType = TSharedPtr<FGameplayTag>(new FGameplayTag());
-			}
-		}
-		DamageType->NetSerialize(Ar, Map, bOutSuccess);
-	}
-	if (RepBits & (1 << 14))
-	{
-		DeathImpulse.NetSerialize(Ar, Map, bOutSuccess);//Fvector×Ô´øµÄÍøÂçĞòÁĞ»¯
-	}
-	if (RepBits & (1 << 15))
-	{
-		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
-	}
-	if (RepBits & (1 << 16))
-	{
-		Ar << bActiveHitReact;
-	}
+    }
 
-	if (RepBits & (1 << 17))
-	{
-		Ar << bIsRadialDamage;
+    if (RepBits & (1 << 9))
+    {
+        Ar << bIsSucessfulDebuff;
 
-		if (RepBits & (1 << 18))
-		{
-			Ar << RadialDamageInnerRadius;
-		}
-		if (RepBits & (1 << 19))
-		{
-			Ar << RadialDamageOuterRadius;
-		}
-		if (RepBits & (1 << 20))
-		{
-			RadialDamageOrigin.NetSerialize(Ar, Map, bOutSuccess);
-		}
-	}
+        if (RepBits & (1 << 10))
+        {
+            Ar << DebuffDamage;
+        }
+        if (RepBits & (1 << 11))
+        {
+            Ar << DebuffDuration;
+        }
+        if (RepBits & (1 << 12))
+        {
+            Ar << DebuffFrequency;
+        }
+    }
+    if (RepBits & (1 << 13))
+    {
+        if (Ar.IsLoading())
+        {
+            if (!DamageType.IsValid())
+            {
+                DamageType = MakeShared<FGameplayTag>();
+            }
+        }
+        DamageType->NetSerialize(Ar, Map, bOutSuccess);
+    }
+    if (RepBits & (1 << 14))
+    {
+        DeathImpulse.NetSerialize(Ar, Map, bOutSuccess); //Fvectorè‡ªå¸¦çš„ç½‘ç»œåºåˆ—åŒ–
+    }
+    if (RepBits & (1 << 15))
+    {
+        KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
+    }
+    if (RepBits & (1 << 16))
+    {
+        Ar << bActiveHitReact;
+    }
 
-	if (Ar.IsLoading())
-	{
-		AddInstigator(Instigator.Get(), EffectCauser.Get()); // 
-	}
+    if (RepBits & (1 << 17))
+    {
+        Ar << bIsRadialDamage;
 
+        if (RepBits & (1 << 18))
+        {
+            Ar << RadialDamageInnerRadius;
+        }
+        if (RepBits & (1 << 19))
+        {
+            Ar << RadialDamageOuterRadius;
+        }
+        if (RepBits & (1 << 20))
+        {
+            RadialDamageOrigin.NetSerialize(Ar, Map, bOutSuccess);
+        }
+    }
 
+    if (Ar.IsLoading())
+    {
+        AddInstigator(Instigator.Get(), EffectCauser.Get()); // 
+    }
 
-	bOutSuccess = true;
-	return true;
+    bOutSuccess = true;
+    return true;
 }

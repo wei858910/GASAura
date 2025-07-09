@@ -8,7 +8,7 @@
 UINTERFACE(MinimalAPI)
 class USaveInterface : public UInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 };
 
 /**
@@ -16,14 +16,13 @@ class USaveInterface : public UInterface
  */
 class AURA_LEARN_API ISaveInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+    // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+    bool ShouldLoadTransform(); //是否应该保存ActorTransform
 
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	bool ShouldLoadTransform();//是否应该保存ActorTransform
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void LoadActor();//根据数据加载一些状态
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+    void LoadActor(); //根据数据加载一些状态
 };

@@ -12,21 +12,21 @@ class ULoadScreenWgt;
 UCLASS()
 class AURA_LEARN_API ALoadScreenHUD : public AHUD
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
+    UPROPERTY(EditDefaultsOnly, DisplayName="加载存档界面类")
+    TSubclassOf<ULoadScreenWgt> LoadScreenWidgetClass;
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="加载存档界面类")
-	TSubclassOf<ULoadScreenWgt> LoadScreenWidgetClass;
+    UPROPERTY(BlueprintReadOnly)
+    TObjectPtr<ULoadScreenWgt> LoadScreenWidget;
 
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<ULoadScreenWgt> LoadScreenWidget;
+    UPROPERTY(EditDefaultsOnly, DisplayName="视图模型类")
+    TSubclassOf<UMVVM_LoadScreen> LoadScreenViewModelClass;
 
-	UPROPERTY(EditDefaultsOnly,DisplayName="视图模型类")
-	TSubclassOf<UMVVM_LoadScreen> LoadScreenViewModelClass;
+    UPROPERTY(BlueprintReadOnly)
+    TObjectPtr<UMVVM_LoadScreen> LoadScreenViewModel;
 
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UMVVM_LoadScreen> LoadScreenViewModel;
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 };

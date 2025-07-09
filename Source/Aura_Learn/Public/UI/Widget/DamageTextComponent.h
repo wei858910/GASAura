@@ -12,10 +12,9 @@
 UCLASS()
 class AURA_LEARN_API UDamageTextComponent : public UWidgetComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-
-	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
-	void SetDamageText(float Damage,const bool bBlocked=false, const bool bCriticalHit=false);
+    UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+    void SetDamageText(float Damage, const bool bBlocked = false, const bool bCriticalHit = false);
 };

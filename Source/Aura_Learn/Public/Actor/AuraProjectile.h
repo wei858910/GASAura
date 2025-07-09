@@ -14,65 +14,65 @@ class UNiagaraSystem;
 UCLASS()
 class AURA_LEARN_API AAuraProjectile : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AAuraProjectile();
-	virtual void Destroyed() override;
+    GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere);
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+public:
+    AAuraProjectile();
+    virtual void Destroyed() override;
 
-	UPROPERTY(BlueprintReadWrite,meta=(ExposeOnSpawn = true))
-	FDamageEffectParams DamageEffectParams;
+    UPROPERTY(VisibleAnywhere)
+    ;
+    TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
-	UPROPERTY(Replicated)
-	TObjectPtr<USceneComponent>HomingTargetSceneCmpt;
+    UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn = true))
+    FDamageEffectParams DamageEffectParams;
 
-	UPROPERTY(Replicated)
-	FVector HomingTargetLocation;
+    UPROPERTY(Replicated)
+    TObjectPtr<USceneComponent> HomingTargetSceneCmpt;
 
-	UPROPERTY(Replicated)
-	bool bHomingProjectile = false;//是否启用制导
+    UPROPERTY(Replicated)
+    FVector HomingTargetLocation;
 
-	UPROPERTY(Replicated)
-	float HomingAccelerationMagnitude = 800.f;//加速度
+    UPROPERTY(Replicated)
+    bool bHomingProjectile = false; //是否启用制导
 
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UAuraDamageGameplayAbility> CallerAbility;//生成这个的技能
+    UPROPERTY(Replicated)
+    float HomingAccelerationMagnitude = 800.f; //加速度
+
+    UPROPERTY(BlueprintReadWrite)
+    TObjectPtr<UAuraDamageGameplayAbility> CallerAbility; //生成这个的技能
 protected:
-	virtual void BeginPlay() override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	UFUNCTION()
-	virtual void OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
-	                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-	                     const FHitResult& SweepResult);
+    virtual void BeginPlay() override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    UFUNCTION()
+    virtual void OnSphereOverlap(UPrimitiveComponent* OverlapPrimitiveComponent, AActor* OtherActor,
+        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+        const FHitResult& SweepResult);
 
-	UFUNCTION(BlueprintCallable)
-	virtual void OnHit();
+    UFUNCTION(BlueprintCallable)
+    virtual void OnHit();
 
-	bool IsValidOverlay(AActor* OtherActor) const;//该次碰撞是否有效
+    bool IsValidOverlay(AActor* OtherActor) const; //该次碰撞是否有效
 
-	bool bHit{ false };//是否已经处理碰撞到目标之后的事件
+    bool bHit{ false }; //是否已经处理碰撞到目标之后的事件
 
-	UPROPERTY()
-	TObjectPtr<UAudioComponent> ProjectileLoopSoundCmpt{ nullptr };
+    UPROPERTY()
+    TObjectPtr<UAudioComponent> ProjectileLoopSoundCmpt{ nullptr };
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<USoundBase> ProjectileSound;
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<USoundBase> ProjectileSound;
 
 private:
+    UPROPERTY(EditAnywhere)
+    float LifeSpan{ 15.f }; //该ACtor最大生命周期
 
-	UPROPERTY(EditAnywhere)
-	float LifeSpan{ 15.f };//该ACtor最大生命周期
+    UPROPERTY(VisibleAnywhere)
+    TObjectPtr<USphereComponent> Sphere;
 
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<UNiagaraSystem> ImpactEffect; //飞射物击中目标的特效
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UNiagaraSystem> ImpactEffect;//飞射物击中目标的特效
-
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<USoundBase> ImpactSound;
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<USoundBase> ImpactSound;
 
 };

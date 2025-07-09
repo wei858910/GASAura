@@ -12,24 +12,23 @@ class UInputAction;
 USTRUCT(BlueprintType)
 struct FAuraInputAction
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly)
-	const UInputAction* InputAction {nullptr};
+    UPROPERTY(EditDefaultsOnly)
+    const UInputAction* InputAction{ nullptr };
 
-	UPROPERTY(EditDefaultsOnly)
-	FGameplayTag InputTag{};
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag InputTag{};
 };
 
 UCLASS()
 class AURA_LEARN_API UAuraInputConfig : public UDataAsset
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
+    const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& Tag, bool bLogNotFound = false) const;
 
-	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& Tag, bool bLogNotFound = false)const;
-
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TArray<FAuraInputAction> AbilityInputActions;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TArray<FAuraInputAction> AbilityInputActions;
 };

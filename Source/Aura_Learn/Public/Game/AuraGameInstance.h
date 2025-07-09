@@ -10,15 +10,15 @@
 UCLASS()
 class AURA_LEARN_API UAuraGameInstance : public UGameInstance
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UPROPERTY()
-	FName PlayerStartTag{""};//采用哪个玩家起点实例
+    UPROPERTY()
+    FName PlayerStartTag{ "" }; //采用哪个玩家起点实例
 
-	UPROPERTY()
-	FString  LoadSlotName{ "" };
+    UPROPERTY()
+    FString LoadSlotName{ "" };
 
-	UPROPERTY()
-	uint8 LoadSlotIdx{0};
+    UPROPERTY()
+    uint8 LoadSlotIdx{ 0 };
 };

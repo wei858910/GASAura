@@ -12,12 +12,11 @@
 UCLASS()
 class AURA_LEARN_API UAuraAssetManager : public UAssetManager
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-
-	static UAuraAssetManager& GetInstance();
+    static UAuraAssetManager& GetInstance();
 
 protected:
-	virtual void StartInitialLoading() override;//引擎初始化期间被调用 旨在处理游戏启动时的初始资源加载
+    virtual void StartInitialLoading() override; //引擎初始化期间被调用 旨在处理游戏启动时的初始资源加载
 };

@@ -10,13 +10,13 @@
 UCLASS()
 class AURA_LEARN_API UAuraPassiveAbility : public UAuraGameplayAbility
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	                             const FGameplayAbilityActorInfo* ActorInfo,
-	                             const FGameplayAbilityActivationInfo ActivationInfo,
-	                             const FGameplayEventData* TriggerEventData) override;
+    virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle,
+        const FGameplayAbilityActorInfo* ActorInfo,
+        const FGameplayAbilityActivationInfo ActivationInfo,
+        const FGameplayEventData* TriggerEventData) override;
 
-	void ReceiveDeActive(const FGameplayTag& AbilityTag);//Õ£÷π±ª∂Øººƒ‹
+    void ReceiveDeActive(const FGameplayTag& AbilityTag); //ÂÅúÊ≠¢Ë¢´Âä®ÊäÄËÉΩ
 };
