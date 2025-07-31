@@ -49,7 +49,6 @@ AAuraCharacterBase::AAuraCharacterBase()
     LifeSiphonNiagaraComponent->SetupAttachment(EffectAttachComponent);
     ManaSiphonNiagaraComponent = CreateDefaultSubobject<UPassiveNiagaraComponent>("ManaSiphonNiagaraComponent");
     ManaSiphonNiagaraComponent->SetupAttachment(EffectAttachComponent);
-
 }
 
 void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -182,7 +181,6 @@ bool AAuraCharacterBase::IsBeingShocked_Implementation() const
     return bIsBeingShoked;
 }
 
-
 void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 {
     Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true)); //分离武器
@@ -197,7 +195,6 @@ TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() co
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation(const FVector& DeathImpulse)
 {
-
     UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());
 
     //开启布娃娃

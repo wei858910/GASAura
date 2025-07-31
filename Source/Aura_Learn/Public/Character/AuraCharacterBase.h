@@ -29,24 +29,24 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-    UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-    virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
-    virtual FHitResult* GetCursorHitRes() override;
-    virtual UAnimMontage* GetHitReactMontage_Implementation() const override; //获取受击动画
-    virtual bool IsDead_Implementation() const override;
-    virtual AActor* GetAvatar_Implementation() override;
-    virtual UNiagaraSystem* GetBloodEffect_Implementation() const override;
-    virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
-    virtual int32 GetMinionCount_Implementation() override;
-    virtual int32 IncrementMinionCount_Implementation(int32 DeltaCount) override;
-    virtual ECharacterClass GetCharacterClassType_Implementation() override;
-    virtual FOnASCRegistered& GetOnASCRegisteredDel() override;
-    virtual FOnDeathDel& GetOnDeathDel() override;
-    virtual bool IsHeroCharacter() const override;
-    virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
-    virtual bool GetIsStunned() override;
-    virtual void SetIsBeingShocked_Implementation(const bool ShockLoop) override;
-    virtual bool IsBeingShocked_Implementation() const override;
+    UAttributeSet*                   GetAttributeSet() const { return AttributeSet; };
+    virtual FVector                  GetCombatSocketLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
+    virtual FHitResult*              GetCursorHitRes() override;
+    virtual UAnimMontage*            GetHitReactMontage_Implementation() const override; //获取受击动画
+    virtual bool                     IsDead_Implementation() const override;
+    virtual AActor*                  GetAvatar_Implementation() override;
+    virtual UNiagaraSystem*          GetBloodEffect_Implementation() const override;
+    virtual FTaggedMontage           GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
+    virtual int32                    GetMinionCount_Implementation() override;
+    virtual int32                    IncrementMinionCount_Implementation(int32 DeltaCount) override;
+    virtual ECharacterClass          GetCharacterClassType_Implementation() override;
+    virtual FOnASCRegistered&        GetOnASCRegisteredDel() override;
+    virtual FOnDeathDel&             GetOnDeathDel() override;
+    virtual bool                     IsHeroCharacter() const override;
+    virtual USkeletalMeshComponent*  GetWeapon_Implementation() override;
+    virtual bool                     GetIsStunned() override;
+    virtual void                     SetIsBeingShocked_Implementation(const bool ShockLoop) override;
+    virtual bool                     IsBeingShocked_Implementation() const override;
 
     /*
      *  NetMulticast 此函数将在服务器上本地执行，也将复制到所有客户端上，无论该Actor的 NetOwner 为何。
@@ -55,9 +55,9 @@ public:
     UFUNCTION(NetMulticast, Reliable)
     virtual void MulticastHandleDeath(const FVector& DeathImpulse = FVector::Zero()); //死亡时进行
 
-    virtual void Die(const FVector& DeathImpulse) override;
+    virtual void                   Die(const FVector& DeathImpulse) override;
     virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
-    virtual void StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
+    virtual void                   StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
 
     void SetCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; }; //职业设置
 
@@ -84,7 +84,7 @@ protected:
 
     virtual void InitAbilityActorInfo() {};
 
-    void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& InitializeGEClass, float Level = 1.f) const;
+    void         ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& InitializeGEClass, float Level = 1.f) const;
     virtual void InitDefaultAttribute() const; //根据GE初始化对应的属性
 
     void AddCharacterAbilities();
@@ -147,7 +147,6 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat", DisplayName = "死亡音效")
     USoundBase* DeathSound;
 
-
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults", DisplayName = "职业类型")
     ECharacterClass CharacterClass{ ECharacterClass::Warrior }; //敌人种类
 
@@ -159,7 +158,7 @@ protected:
     int16 MinionCount{ 0 }; //召唤物的数量
 
     FOnASCRegistered OnASCRegistered; //ASC组件有效时广播
-    FOnDeathDel OnSelfDead;
+    FOnDeathDel      OnSelfDead;
 
     UPROPERTY(VisibleAnywhere, DisplayName="火焰减益特效组件")
     TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;

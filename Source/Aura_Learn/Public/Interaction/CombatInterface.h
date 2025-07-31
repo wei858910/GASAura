@@ -21,7 +21,7 @@ struct FTaggedMontage
     GENERATED_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="攻击蒙太奇")
-    UAnimMontage* Montage{nullptr}; //攻击动画
+    UAnimMontage* Montage{ nullptr }; //攻击动画
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="攻击类型标签")
     FGameplayTag MontageTag;
@@ -30,7 +30,7 @@ struct FTaggedMontage
     FGameplayTag SocketTag;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="受击音效")
-    USoundBase* ImpactSound{nullptr};
+    USoundBase* ImpactSound{ nullptr };
 };
 
 class UAnimMontage;
@@ -107,7 +107,7 @@ public:
     void SetIsBeingShocked(const bool ShockLoop);
 
     virtual FOnASCRegistered& GetOnASCRegisteredDel() = 0; //设置了ASC，ASC有效时的代理
-    virtual FOnDeathDel& GetOnDeathDel() = 0;
+    virtual FOnDeathDel&      GetOnDeathDel() = 0;
 
     virtual bool GetIsStunned(); //是否眩晕中
 };

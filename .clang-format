@@ -1,109 +1,91 @@
+# Clang-Format配置文件：定义C++代码格式化规则，确保项目代码风格一致性
+# 基于LLVM风格修改，适配Unreal Engine项目特性
+
+# 声明宏：指定需要被识别为语句的宏（UE反射系统常用宏）
 StatementMacros: ['UPROPERTY', 'UFUNCTION', 'UCLASS', 'USTRUCT', 'UENUM', 'UINTERFACE', 'GENERATED_BODY']
-# 基于 Unreal Engine 代码规范的 .clang-format 配置
-# 适用于 UE 4.27+ 和 UE5 项目
-
+# 目标语言：C++
 Language: Cpp
-BasedOnStyle: Microsoft
+# 基础风格：继承LLVM默认风格，后续配置将覆盖特定规则
+BasedOnStyle: LLVM
 
-# 基础格式设置
+# 访问修饰符缩进偏移：访问修饰符(public/private等)向左缩进4个空格
 AccessModifierOffset: -4
-AlignAfterOpenBracket: Align
-AlignConsecutiveMacros: false
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
-AlignEscapedNewlines: Right
-AlignOperands: Align
-AlignTrailingComments: true
-AllowAllArgumentsOnNextLine: true
-AllowAllConstructorInitializersOnNextLine: true
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: InlineOnly
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-AlwaysBreakAfterDefinitionReturnType: None
-AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: false
-BinPackParameters: false
+# 括号后对齐方式：不对齐括号后的内容
+AlignAfterOpenBracket: DontAlign
+# 连续声明对齐
+AlignConsecutiveDeclarations: true  
+# 换行转义符对齐：左对齐换行的转义字符(\)
+AlignEscapedNewlines: Left
+# 操作数对齐：不对齐运算符两侧的操作数
+AlignOperands: DontAlign
+# 尾随注释对齐：对齐行尾注释
+AlignTrailingComments: true  
+
+# 短代码块单行化：仅允许空代码块({})单行显示
+AllowShortBlocksOnASingleLine: Empty
+# 短枚举单行化：禁止短枚举写在单行
+AllowShortEnumsOnASingleLine: false
+# 短函数单行化：仅允许内联函数(inline)写在单行
+AllowShortFunctionsOnASingleLine: Inline
+# 短Lambda单行化：允许所有短Lambda表达式写在单行
+AllowShortLambdasOnASingleLine: All  
+
+# 大括号换行配置：控制不同语法结构后大括号的换行行为
 BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: true
-  AfterControlStatement: Never
-  AfterEnum: true
-  AfterFunction: true
-  AfterNamespace: true
-  AfterObjCDeclaration: true
-  AfterStruct: true
-  AfterUnion: true
-  BeforeCatch: true
-  BeforeElse: true
-  IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
+  AfterCaseLabel: true          # case标签后换行（case后大括号另起一行）
+  AfterClass: true              # 类定义后换行（class后大括号另起一行）
+  AfterControlStatement: true   # 控制语句(if/for等)后换行
+  AfterEnum: true               # 枚举定义后换行  
+  AfterFunction: true           # 函数定义后换行（函数体大括号另起一行）
+  AfterNamespace: true          # 命名空间后换行
+  AfterObjCDeclaration: true    # Objective-C声明后换行（预留配置）
+  AfterStruct: true             # 结构体定义后换行
+  AfterUnion: true              # 联合体定义后换行
+  AfterExternBlock: true        # extern块后换行
+  BeforeCatch: true             # catch前换行（try后大括号另起一行，catch前换行）
+  BeforeElse: true              # else前换行（if块后else另起一行）
+  BeforeLambdaBody: false       # Lambda体前不换行（Lambda表达式体紧跟在[]后不换行）
+  BeforeWhile: true             # while前换行（do-while的while另起一行）
+  IndentBraces: false           # 大括号自身不缩进（保持与上下文同缩进）
+
+# 二元运算符换行位置：非赋值运算符前换行（如a + b + c过长时，在+前换行）
 BreakBeforeBinaryOperators: NonAssignment
+# 大括号换行风格：使用自定义风格（由BraceWrapping配置控制）
 BreakBeforeBraces: Custom
-BreakBeforeInheritanceComma: false
+# 继承列表换行位置；在冒号后换行（class A : public B, public C → 冒号后B另起一行）
+BreakInheritanceList: AfterColon
+# 三元运算符换行位置：在?和:前换行
 BreakBeforeTernaryOperators: true
+# 构造函数初始化列表换行：在逗号前换行（每个成员初始化项另起一行）
 BreakConstructorInitializers: BeforeComma
-BreakStringLiterals: true
-ColumnLimit: 100
-CommentPragmas: '^ IWYU pragma:'
-CompactNamespaces: false
+# 字符串字面量换行：禁止拆分字符串字面量
+BreakStringLiterals: false  
+
+# 行宽限制：0表示不限制行宽（由开发者自行控制换行）
+ColumnLimit: 0
+# 构造函数初始化列表排版：要么所有初始化项在一行，要么每项一行
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
-Cpp11BracedListStyle: true
-DerivePointerAlignment: false
-DisableFormat: false
-ExperimentalAutoDetectBinPacking: false
-FixNamespaceComments: true
-ForEachMacros:
-  - foreach
-  - UE_FOREACH
-IncludeBlocks: Regroup
-IncludeCategories:
-  - Regex: '^".*"'
-    Priority: 1
-  - Regex: '^<.*\.h>'
-    Priority: 2
-  - Regex: '^<.*'
-    Priority: 3
-IncludeIsMainRegex: '(Test)?$'
+# C++11初始化列表风格：禁用C++11大括号初始化风格（保持传统初始化格式）
+Cpp11BracedListStyle: false
+# 访问修饰符前空行：逻辑块前添加空行（如在public前添加一空行分隔不同逻辑块）
+EmptyLineBeforeAccessModifier: LogicalBlock
+# case块缩进：case块内容不缩进（case标签缩进，内容与case同缩进）
+IndentCaseBlocks: false
+# case标签缩进：case标签缩进（与switch同层级缩进）
 IndentCaseLabels: true
-IndentPPDirectives: None
+# 预处理指令缩进：在#前缩进（#include等指令与代码保持相同缩进层级）
+IndentPPDirectives: BeforeHash
+# 缩进宽度：4个空格（每次缩进为4空格）
 IndentWidth: 4
-IndentWrappedFunctionNames: false
-KeepEmptyLinesAtTheStartOfBlocks: false
-MacroBlockBegin: ''
-MacroBlockEnd: ''
-MaxEmptyLinesToKeep: 1
+# 命名空间缩进：所有命名空间内代码缩进（namespace内内容缩进4空格）
 NamespaceIndentation: All
+# 指针对齐方式：指针符号(*)靠左对齐（如int* ptr而非int *ptr）
 PointerAlignment: Left
-ReflowComments: true
-SortIncludes: true
-SortUsingDeclarations: true
-SpaceAfterCStyleCast: false
-SpaceAfterLogicalNot: false
-SpaceAfterTemplateKeyword: false
-SpaceAroundAssignmentOperators: true
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeCtorInitializerColon: true
-SpaceBeforeInheritanceColon: true
-SpaceBeforeParens: ControlStatements
-SpaceBeforeRangeBasedForLoopColon: true
-SpacesInCurlyBraces: true  
-SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 1
-SpacesInAngles: false
-SpacesInContainerLiterals: false
-SpacesInCStyleCastParentheses: false
-SpacesInParentheses: false
-SpaceBeforeCpp11BracedList: true
-SpacesInCpp11BracedList: true  
-Standard: Cpp11
+# 包含文件排序：不自动排序#include头文件（保持开发者手动排序）
+SortIncludes: false
+# case冒号前空格：case标签与冒号间无空格（case X:而非case X :）
+SpaceBeforeCaseColon: false
+# 制表符宽度：4个空格（若使用制表符，宽度为4空格）
 TabWidth: 4
+# 使用制表符：禁止使用制表符（统一改用空格缩进）
 UseTab: Never
