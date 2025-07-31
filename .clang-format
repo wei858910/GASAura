@@ -13,7 +13,7 @@ AccessModifierOffset: -4
 # 括号后对齐方式：不对齐括号后的内容
 AlignAfterOpenBracket: DontAlign
 # 连续声明对齐
-AlignConsecutiveDeclarations: true  
+AlignConsecutiveDeclarations: false  
 # 换行转义符对齐：左对齐换行的转义字符(\)
 AlignEscapedNewlines: Left
 # 操作数对齐：不对齐运算符两侧的操作数
