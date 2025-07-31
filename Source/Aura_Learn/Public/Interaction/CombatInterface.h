@@ -13,7 +13,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnASCRegistered, UAbilitySystemComponent*);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathDel, AActor*, DeadActor);
 
 /**
- * 用以给蒙太奇带个标签，方便从标签识别不同类型进行分别处理u'ra
+ * 用以给蒙太奇带个标签，方便从标签识别不同类型进行分别处理
  */
 USTRUCT(BlueprintType)
 struct FTaggedMontage
@@ -21,34 +21,30 @@ struct FTaggedMontage
     GENERATED_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="攻击蒙太奇")
-    UAnimMontage* Montage{ nullptr }; //攻击动画
+    UAnimMontage* Montage{nullptr}; //攻击动画
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="攻击类型标签")
     FGameplayTag MontageTag;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "插槽类型标签")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="插槽类型标签")
     FGameplayTag SocketTag;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName="受击音效")
-    USoundBase* ImpactSound{ nullptr };
+    USoundBase* ImpactSound{nullptr};
 };
 
 class UAnimMontage;
-// This class does not need to be modified.
+
 UINTERFACE(MinimalAPI, BlueprintType)
 class UCombatInterface : public UInterface
 {
     GENERATED_BODY()
 };
 
-/**
- * 
- */
 class AURA_LEARN_API ICombatInterface
 {
     GENERATED_BODY()
 
-    // Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
     UFUNCTION(BlueprintNativeEvent)
     int32 GetPlayerLevel();
@@ -61,7 +57,7 @@ public:
     USkeletalMeshComponent* GetWeapon();
 
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-    void SetFacingTargetLoc(const FVector& FacingLoction);
+    void SetFacingTargetLoc(const FVector& FacingLocation);
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     UAnimMontage* GetHitReactMontage() const;
@@ -84,7 +80,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
     TArray<FTaggedMontage> GetAttackMontages() const;
 
-    virtual void Die(const FVector& DeathImpulse = FVector::Zero()) =0;
+    virtual void Die(const FVector& DeathImpulse = FVector::Zero()) = 0;
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     UNiagaraSystem* GetBloodEffect() const;
@@ -104,14 +100,13 @@ public:
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
     void SetShockLoop(const bool bInLoop); //处于持续放电施法中
 
-
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     bool IsBeingShocked() const; //处于被持续电中
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     void SetIsBeingShocked(const bool ShockLoop);
 
-    virtual FOnASCRegistered& GetOnASCRegisteredDel() =0; //设置了ASC，ASC有效时的代理
+    virtual FOnASCRegistered& GetOnASCRegisteredDel() = 0; //设置了ASC，ASC有效时的代理
     virtual FOnDeathDel& GetOnDeathDel() = 0;
 
     virtual bool GetIsStunned(); //是否眩晕中
