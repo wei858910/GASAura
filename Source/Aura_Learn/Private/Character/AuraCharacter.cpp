@@ -55,9 +55,9 @@ AAuraCharacter::AAuraCharacter()
 
 int32 AAuraCharacter::GetPlayerLevel_Implementation()
 {
-    auto AutaPlayerState = CastChecked<AAuraPlayerState>(GetPlayerState());
-    check(AutaPlayerState)
-    return AutaPlayerState->GetPlayerLevel();
+    auto AuraPlayerState = CastChecked<AAuraPlayerState>(GetPlayerState());
+    check(AuraPlayerState)
+    return AuraPlayerState->GetPlayerLevel();
 }
 
 void AAuraCharacter::Die(const FVector& DeathImpulse)
@@ -356,12 +356,12 @@ void AAuraCharacter::OnRep_Burned()
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
-    auto AutaPlayerState = CastChecked<AAuraPlayerState>(GetPlayerState());
-    check(AutaPlayerState)
-    AbilitySystemComponent = AutaPlayerState->GetAbilitySystemComponent();
-    AbilitySystemComponent->InitAbilityActorInfo(AutaPlayerState, this);
+    auto AuraPlayerState = CastChecked<AAuraPlayerState>(GetPlayerState());
+    check(AuraPlayerState)
+    AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+    AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
     Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSeted();
-    AttributeSet = AutaPlayerState->GetAttributeSet();
+    AttributeSet = AuraPlayerState->GetAttributeSet();
 
     OnASCRegistered.Broadcast(AbilitySystemComponent);
 
@@ -373,7 +373,7 @@ void AAuraCharacter::InitAbilityActorInfo()
     {
         if (auto AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
         {
-            AuraHUD->InitOverlay(AuraPlayerController, AutaPlayerState, AbilitySystemComponent, AttributeSet);
+            AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
         }
     }
 
