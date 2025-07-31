@@ -72,7 +72,7 @@ void AAuraCharacter::Die(const FVector& DeathImpulse)
         }
 
     });
-    GetWorldTimerManager().SetTimer(DeatTimer, DeathTimeDel, DeathTime, false);
+    GetWorldTimerManager().SetTimer(DeathTimer, DeathTimeDel, DeathTime, false);
 
     Camera->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform); //相机保持变化，不跟随角色
 }

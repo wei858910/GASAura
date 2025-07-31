@@ -60,7 +60,7 @@ protected:
     UPROPERTY(EditDefaultsOnly, DisplayName="亡后重载存档倒计时")
     float DeathTime{ 5.f };
 
-    FTimerHandle DeatTimer; //死亡计时器
+    FTimerHandle DeathTimer; //死亡计时器
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
