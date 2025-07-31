@@ -131,7 +131,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Inp
     }
 
     FScopedAbilityListLock ActiveScopedLock(*this); //上锁
-    //遍历 拿到可以激活的GA
+    // 遍历 拿到可以激活的GA
     for (auto& GASpec : GetActivatableAbilities()) //GetActivatableAbilities返回的变量有客户端收到回调的函数版本，因此客户端的需要的相应内容需要在onrep函数处理
     {
         if (GASpec.GetDynamicSpecSourceTags().HasTag(InputTag))
@@ -141,7 +141,20 @@ void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Inp
 
             if (GASpec.IsActive()) //激活状态才进行下一步调用，用于抬起施法类
             {
-                InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, GASpec.ActivationInfo.GetActivationPredictionKey());
+                // InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, GASpec.ActivationInfo.GetActivationPredictionKey());
+                // 获取能力实例
+                if (const UGameplayAbility* AbilityInstance = GASpec.GetPrimaryInstance())
+                {
+                    // 从能力实例获取预测键
+                    const FPredictionKey PredictionKey = AbilityInstance->GetCurrentActivationInfo().GetActivationPredictionKey();
+                    InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, PredictionKey);
+                }
+                else if (GASpec.Ability)
+                {
+                    // 非实例化能力(已弃用)的兼容处理
+                    const FPredictionKey PredictionKey = GASpec.Ability->GetCurrentActivationInfo().GetActivationPredictionKey();
+                    InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, PredictionKey);
+                }
             }
         }
     }
@@ -184,8 +197,21 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
         if (GASpec.GetDynamicSpecSourceTags().HasTag(InputTag) && GASpec.IsActive())
         {
 
-            AbilitySpecInputReleased(GASpec);                                                                                                        //告知GA 目前操作状态在 已经取消
-            InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, GASpec.Handle, GASpec.ActivationInfo.GetActivationPredictionKey()); //本地回调已注册的通用事件 这里是按键松绑
+            AbilitySpecInputReleased(GASpec); //告知GA 目前操作状态在 已经取消
+            // InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, GASpec.Handle, GASpec.ActivationInfo.GetActivationPredictionKey()); //本地回调已注册的通用事件 这里是按键松绑
+
+            if (const UGameplayAbility* AbilityInstance = GASpec.GetPrimaryInstance())
+            {
+                // 从能力实例获取预测键
+                const FPredictionKey PredictionKey = AbilityInstance->GetCurrentActivationInfo().GetActivationPredictionKey();
+                InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, PredictionKey);
+            }
+            else if (GASpec.Ability)
+            {
+                // 非实例化能力(已弃用)的兼容处理
+                const FPredictionKey PredictionKey = GASpec.Ability->GetCurrentActivationInfo().GetActivationPredictionKey();
+                InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, GASpec.Handle, PredictionKey);
+            }
         }
     }
 }
