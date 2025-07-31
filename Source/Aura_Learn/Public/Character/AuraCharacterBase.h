@@ -55,11 +55,9 @@ public:
     UFUNCTION(NetMulticast, Reliable)
     virtual void MulticastHandleDeath(const FVector& DeathImpulse = FVector::Zero()); //死亡时进行
 
-    virtual void Die(const FVector& DeathImpulse) override;
-
+    virtual void                   Die(const FVector& DeathImpulse) override;
     virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
-
-    virtual void StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
+    virtual void                   StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
 
     void SetCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; }; //职业设置
 
@@ -73,7 +71,7 @@ public:
     bool bIsBurned{ false }; //是否处于灼烧
 
     UPROPERTY(Replicated, BlueprintReadOnly)
-    bool bIsBeingShocked{ false }; //被电中？
+    bool bIsBeingShoked{ false }; //被电中？
 
     UFUNCTION()
     virtual void OnRep_Stunned();

@@ -57,7 +57,7 @@ void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 
     DOREPLIFETIME(AAuraCharacterBase, bStun)
     DOREPLIFETIME(AAuraCharacterBase, bIsBurned)
-    DOREPLIFETIME(AAuraCharacterBase, bIsBeingShocked)
+    DOREPLIFETIME(AAuraCharacterBase, bIsBeingShoked)
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -164,7 +164,7 @@ USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
 
 void AAuraCharacterBase::SetIsBeingShocked_Implementation(const bool ShockLoop)
 {
-    bIsBeingShocked = ShockLoop;
+    bIsBeingShoked = ShockLoop;
     if (ShockLoop)
     {
         GetCharacterMovement()->StopMovementImmediately();
@@ -178,7 +178,7 @@ void AAuraCharacterBase::SetIsBeingShocked_Implementation(const bool ShockLoop)
 
 bool AAuraCharacterBase::IsBeingShocked_Implementation() const
 {
-    return bIsBeingShocked;
+    return bIsBeingShoked;
 }
 
 void AAuraCharacterBase::Die(const FVector& DeathImpulse)
