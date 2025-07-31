@@ -19,7 +19,7 @@ void UAuraFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, bo
         return;
     }
 
-    const auto SocketLocation = ICombatInterface::Execute_GetCombatSocktLocation
+    const auto SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation
         (GetAvatarActorFromActorInfo(), FAuraGmaeplayTags::GetInstance().CombatSocket_Weapon);
 
     FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation(); //获取两个位置的旋转差

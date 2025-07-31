@@ -66,7 +66,7 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
     return AbilitySystemComponent;
 }
 
-FVector AAuraCharacterBase::GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag)
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& AttackMontageTag)
 {
     if (AttackMontageTag.MatchesTagExact(FAuraGmaeplayTags::GetInstance().CombatSocket_Weapon))
     {
@@ -95,7 +95,7 @@ FHitResult* AAuraCharacterBase::GetCursorHitRes()
     return &(Cast<AAuraPlayerController>(GetController())->CursorHit);
 }
 
-UAnimMontage* AAuraCharacterBase::GetHitRecatMontag_Implementation() const
+UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation() const
 {
     return HitReactMontage;
 }
@@ -256,9 +256,9 @@ void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& I
 
 void AAuraCharacterBase::InitDefaultAttribute() const
 {
-    ApplyEffectToSelf(DefaultPrimaryAtributes);
-    ApplyEffectToSelf(DefaultSecondaryAtributes);
-    ApplyEffectToSelf(DefaultVitalAtributes);
+    ApplyEffectToSelf(DefaultPrimaryAttributes);
+    ApplyEffectToSelf(DefaultSecondaryAttributes);
+    ApplyEffectToSelf(DefaultVitalAttributes);
 }
 
 void AAuraCharacterBase::AddCharacterAbilities()
@@ -280,13 +280,13 @@ void AAuraCharacterBase::Dissolve()
         DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialOfMesh, this);
         GetMesh()->SetMaterial(0, DynamicMatInst);
 
-        StartDissolveTimlineOfMesh(DynamicMatInst);
+        StartDissolveTimelineOfMesh(DynamicMatInst);
     }
     if (IsValid(DissolveMaterialOfWeapon))
     {
         DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialOfWeapon, this);
         Weapon->SetMaterial(0, DynamicMatInst);
 
-        StartDissolveTimlineOfWeapon(DynamicMatInst);
+        StartDissolveTimelineOfWeapon(DynamicMatInst);
     }
 }

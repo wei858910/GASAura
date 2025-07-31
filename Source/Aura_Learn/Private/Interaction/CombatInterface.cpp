@@ -13,7 +13,7 @@ bool ICombatInterface::IsHeroCharacter() const
     return false;
 }
 
-bool ICombatInterface::GetIsStunded()
+bool ICombatInterface::GetIsStunned()
 {
     return false;
 }

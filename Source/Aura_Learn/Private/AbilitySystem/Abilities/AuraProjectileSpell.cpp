@@ -46,7 +46,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& TargetLocation, bool b
         return;
     }
 
-    const auto SocketLocation = ICombatInterface::Execute_GetCombatSocktLocation
+    const auto SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation
         (GetAvatarActorFromActorInfo(), FAuraGmaeplayTags::GetInstance().CombatSocket_Weapon);
 
     FRotator Rotation = (TargetLocation - SocketLocation).Rotation(); //获取两个位置的旋转差

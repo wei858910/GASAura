@@ -30,9 +30,9 @@ public:
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-    virtual FVector GetCombatSocktLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
+    virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& AttackMontageTag) override;
     virtual FHitResult* GetCursorHitRes() override;
-    virtual UAnimMontage* GetHitRecatMontag_Implementation() const override; //获取受击动画
+    virtual UAnimMontage* GetHitReactMontage_Implementation() const override; //获取受击动画
     virtual bool IsDead_Implementation() const override;
     virtual AActor* GetAvatar_Implementation() override;
     virtual UNiagaraSystem* GetBloodEffect_Implementation() const override;
@@ -44,7 +44,7 @@ public:
     virtual FOnDeathDel& GetOnDeathDel() override;
     virtual bool IsHeroCharacter() const override;
     virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
-    virtual bool GetIsStunded() override;
+    virtual bool GetIsStunned() override;
     virtual void SetIsBeingShocked_Implementation(const bool ShockLoop) override;
     virtual bool IsBeingShocked_Implementation() const override;
 
@@ -59,7 +59,7 @@ public:
     virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;
     virtual void StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount);
 
-    void setCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; }; //职业设置
+    void SetCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; }; //职业设置
 
     UPROPERTY(EditAnywhere, Category="Combat")
     TArray<FTaggedMontage> AttackMontages;
@@ -94,10 +94,10 @@ protected:
     void Dissolve(); //将材质替换为溶解材质
 
     UFUNCTION(BlueprintImplementableEvent)
-    void StartDissolveTimlineOfMesh(UMaterialInstanceDynamic* DynamicMaterialInstance);
+    void StartDissolveTimelineOfMesh(UMaterialInstanceDynamic* DynamicMaterialInstance);
 
     UFUNCTION(BlueprintImplementableEvent)
-    void StartDissolveTimlineOfWeapon(UMaterialInstanceDynamic* DynamicMaterialInstance);
+    void StartDissolveTimelineOfWeapon(UMaterialInstanceDynamic* DynamicMaterialInstance);
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
     TObjectPtr<USkeletalMeshComponent> Weapon; //武器组件
@@ -119,13 +119,13 @@ protected:
     TObjectPtr<UAttributeSet> AttributeSet;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Attribute")
-    TSubclassOf<UGameplayEffect> DefaultPrimaryAtributes;
+    TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attribute")
-    TSubclassOf<UGameplayEffect> DefaultSecondaryAtributes;
+    TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attribute")
-    TSubclassOf<UGameplayEffect> DefaultVitalAtributes;
+    TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     TArray<TSubclassOf<UGameplayAbility>> StartupAbilities; //角色默认具备的技能
@@ -180,7 +180,7 @@ protected:
     TObjectPtr<USceneComponent> EffectAttachComponent; //被动技能特效套接到此
 };
 
-inline bool AAuraCharacterBase::GetIsStunded()
+inline bool AAuraCharacterBase::GetIsStunned()
 {
     return bStun;
 }

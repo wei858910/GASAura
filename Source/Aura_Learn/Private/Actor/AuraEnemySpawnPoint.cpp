@@ -9,7 +9,7 @@ void AAuraEnemySpawnPoint::SpawnEnemy()
 
     auto AuraEnemy = GetWorld()->SpawnActorDeferred<AAuraEnemy>(SpawnEnemyClass, GetActorTransform());
     AuraEnemy->SetEnemyLevel(EnemyLevel);
-    AuraEnemy->setCharacterClass(EnemyClass);
+    AuraEnemy->SetCharacterClass(EnemyClass);
     AuraEnemy->FinishSpawning(GetActorTransform());
     AuraEnemy->SpawnDefaultController();
 }

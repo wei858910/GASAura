@@ -61,10 +61,10 @@ public:
     USkeletalMeshComponent* GetWeapon();
 
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-    void SetFaceingTargetLoc(const FVector& FaceingLoction);
+    void SetFacingTargetLoc(const FVector& FacingLoction);
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-    UAnimMontage* GetHitRecatMontag() const;
+    UAnimMontage* GetHitReactMontage() const;
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
     void SetCombatTarget(AActor* InCombatTarget);
@@ -73,7 +73,7 @@ public:
     AActor* GetCombatTarget();
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-    FVector GetCombatSocktLocation(const FGameplayTag& AttackMontageTag); //获取武器发射物品的插槽位置
+    FVector GetCombatSocketLocation(const FGameplayTag& AttackMontageTag); //获取武器发射物品的插槽位置
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
     AActor* GetAvatar();
@@ -114,5 +114,5 @@ public:
     virtual FOnASCRegistered& GetOnASCRegisteredDel() =0; //设置了ASC，ASC有效时的代理
     virtual FOnDeathDel& GetOnDeathDel() = 0;
 
-    virtual bool GetIsStunded(); //是否眩晕中
+    virtual bool GetIsStunned(); //是否眩晕中
 };

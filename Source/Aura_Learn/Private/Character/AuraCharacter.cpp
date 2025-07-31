@@ -272,8 +272,8 @@ void AAuraCharacter::LoadProgress()
 
             //非首次加载按质设置属性
             UAuraAbilitySystemBPLibary::InitAttributesFormLoadData(this, AbilitySystemComponent, SaveData);
-            ApplyEffectToSelf(DefaultSecondaryAtributes);
-            ApplyEffectToSelf(DefaultVitalAtributes);
+            ApplyEffectToSelf(DefaultSecondaryAttributes);
+            ApplyEffectToSelf(DefaultVitalAttributes);
 
             //技能加载
             if (auto AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
