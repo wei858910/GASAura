@@ -34,8 +34,8 @@ public:
     virtual void AddToAttributePoints_Implementation(int32 InAttributePoint) const override;
     virtual int32 GetCurrentAttributePoint_Implementation() const override;
     virtual int32 GetCurrentSpellPoint_Implementation() const override;
-    virtual void HideMagicCricle_Implementation() override;
-    virtual void ShowMagicCricle_Implementation(UMaterialInterface* DecalMaterial = nullptr) override;
+    virtual void HideMagicCircle_Implementation() override;
+    virtual void ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial = nullptr) override;
     virtual void SaveProgress_Implementation(const FName& PlayerStartName) override;
     /*PlayerInterface*/
 

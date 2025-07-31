@@ -55,10 +55,10 @@ public:
     int32 GetCurrentSpellPoint() const; //获取当前的咒法点数
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-    void ShowMagicCricle(UMaterialInterface* DecalMaterial = nullptr);
+    void ShowMagicCircle(UMaterialInterface* DecalMaterial = nullptr);
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-    void HideMagicCricle();
+    void HideMagicCircle();
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     void SaveProgress(const FName& PlayerStartName); //储存进度

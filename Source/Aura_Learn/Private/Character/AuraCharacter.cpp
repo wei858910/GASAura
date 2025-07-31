@@ -162,7 +162,7 @@ int32 AAuraCharacter::GetCurrentSpellPoint_Implementation() const
     return AuraPlayerState->GetSpellPoints();
 }
 
-void AAuraCharacter::HideMagicCricle_Implementation()
+void AAuraCharacter::HideMagicCircle_Implementation()
 {
     if (auto AuraPC = Cast<AAuraPlayerController>(GetController()))
     {
@@ -170,7 +170,7 @@ void AAuraCharacter::HideMagicCricle_Implementation()
     }
 }
 
-void AAuraCharacter::ShowMagicCricle_Implementation(UMaterialInterface* DecalMaterial)
+void AAuraCharacter::ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial)
 {
     if (auto AuraPC = Cast<AAuraPlayerController>(GetController()))
     {
